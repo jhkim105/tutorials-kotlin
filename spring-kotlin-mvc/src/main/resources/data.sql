@@ -1,0 +1,1 @@
+INSERT INTO user (id, description, name, password, username) VALUES (-99, null, 'User Name', '111111', 'user01');
