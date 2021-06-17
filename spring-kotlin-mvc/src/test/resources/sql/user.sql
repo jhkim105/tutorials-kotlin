@@ -1,1 +1,1 @@
-INSERT INTO demo.user (id, description, name, password, username) VALUES (-99, null, 'User Name', '111111', 'user01');
+INSERT INTO user (id, description, name, password, username) VALUES ('test-id01', null, 'User Name', '111111', 'testuser01');

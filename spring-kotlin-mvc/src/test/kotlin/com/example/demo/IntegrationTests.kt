@@ -1,19 +1,24 @@
-package com.example.springkotlinmvc
+package com.example.demo
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.client.getForEntity
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 //@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class IntegrationTests(@Autowired val restTemplate: TestRestTemplate) {
+@AutoConfigureMockMvc
+class IntegrationTests(@Autowired val restTemplate: TestRestTemplate, @Autowired val mockMvc: MockMvc) {
 
   @BeforeAll
   fun setup() {
@@ -29,8 +34,9 @@ class IntegrationTests(@Autowired val restTemplate: TestRestTemplate) {
   }
 
   @Test
-  fun `Assert article page title, content and status code`() {
-    println(">> TODO")
+  fun testByMockMvc() {
+    mockMvc.perform(get("/hello").accept(MediaType.APPLICATION_JSON))
+      .andExpect(status().isOk)
   }
 
   @AfterAll

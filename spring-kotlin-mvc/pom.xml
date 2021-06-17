@@ -16,8 +16,9 @@
   <properties>
     <java.version>11</java.version>
     <kotlin.version>1.5.10</kotlin.version>
+    <querydsl.version>4.4.0</querydsl.version>
     <db.address>localhost</db.address>
-    <db.name>demo</db.name>
+    <db.name>demo_kotlin_mvc</db.name>
     <db.url><![CDATA[jdbc:mariadb://${db.address}/${db.name}?createDatabaseIfNotExist=true&serverTimezone=Asia/Seoul]]></db.url>
     <db.driverClassName>org.mariadb.jdbc.Driver</db.driverClassName>
     <db.username>root</db.username>
@@ -54,6 +55,19 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- querydsl -->
+    <dependency>
+      <groupId>com.querydsl</groupId>
+      <artifactId>querydsl-jpa</artifactId>
+      <version>${querydsl.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.querydsl</groupId>
+      <artifactId>querydsl-apt</artifactId>
+      <version>${querydsl.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <!-- querydsl -->
   </dependencies>
 
   <build>
@@ -74,8 +88,38 @@
           <compilerPlugins>
             <plugin>spring</plugin>
             <plugin>jpa</plugin>
+            <plugin>all-open</plugin>
+            <plugin>no-arg</plugin>
           </compilerPlugins>
+          <pluginOptions>
+            <option>all-open:annotation=javax.persistence.Entity</option>
+            <option>all-open:annotation=javax.persistence.Embeddable</option>
+            <option>all-open:annotation=javax.persistence.MappedSuperclass</option>
+            <option>no-arg:annotation=javax.persistence.Entity</option>
+          </pluginOptions>
         </configuration>
+        <executions>
+          <execution>
+            <id>kapt</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>kapt</goal>
+            </goals>
+            <configuration>
+              <sourceDirs>
+                <sourceDir>src/main/kotlin</sourceDir>
+              </sourceDirs>
+              <annotationProcessorPaths>
+                <annotationProcessorPath>
+                  <groupId>com.querydsl</groupId>
+                  <artifactId>querydsl-apt</artifactId>
+                  <version>${querydsl.version}</version>
+                  <classifier>jpa</classifier>
+                </annotationProcessorPath>
+              </annotationProcessorPaths>
+            </configuration>
+          </execution>
+        </executions>
         <dependencies>
           <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

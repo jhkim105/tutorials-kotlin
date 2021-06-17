@@ -1,13 +1,27 @@
-package com.example.springkotlinmvc.user
+package com.example.demo.user
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
+import com.example.demo.ColumnLengths
+import org.hibernate.annotations.GenericGenerator
+import javax.persistence.*
 
-//@Entity
+@Entity
 class User(
+    @Id
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+    @Column(name = "id", length = ColumnLengths.UUID)
+    var id: String? = null,
+
     var username: String,
     var password: String,
     var name: String,
     var description: String? = null,
-    @Id @GeneratedValue var id: Long? = null)
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    var company: Company? = null
+
+) {
+    override fun toString(): String {
+        return "User(id=$id, username='$username', password='$password', name='$name', description=$description)"
+    }
+}
