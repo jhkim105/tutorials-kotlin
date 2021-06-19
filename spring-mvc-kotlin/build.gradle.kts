@@ -31,6 +31,8 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("com.querydsl:querydsl-jpa")
     kapt("com.querydsl:querydsl-apt:4.4.0:jpa")
+    implementation("au.com.console:kassava:2.1.0")
+
 }
 
 tasks.withType<KotlinCompile> {
