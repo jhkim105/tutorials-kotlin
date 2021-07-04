@@ -1,3 +1,3 @@
 rootProject.name = "kotlin-examples"
 include("spring-mvc-kotlin")
-include("crawling-kotlin")
+include("scraping-selenium-kotlin")

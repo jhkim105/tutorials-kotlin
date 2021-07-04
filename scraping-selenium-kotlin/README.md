@@ -1,5 +1,5 @@
-Crawling Examples
-===================
+Scraping Examples With Selenium
+==============================
 
 ### Selenium
 * Chrome Driver Download: https://chromedriver.chromium.org/downloads
