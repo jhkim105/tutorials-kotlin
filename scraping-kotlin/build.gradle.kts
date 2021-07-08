@@ -22,6 +22,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.seleniumhq.selenium:selenium-java:4.0.0-beta-4")
     implementation("net.sourceforge.htmlcleaner:htmlcleaner:2.24")
+    implementation("org.jsoup:jsoup:1.13.1")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

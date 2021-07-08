@@ -16,6 +16,12 @@ implementation("org.seleniumhq.selenium:selenium-java:4.0.0-beta-4")
 implementation("net.sourceforge.htmlcleaner:htmlcleaner:2.24")
 ```
 
+### Jsoup
+* https://jsoup.org/
+```kotlin
+implementation("org.jsoup:jsoup:1.13.1")
+```  
+
 
       
 

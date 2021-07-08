@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test
 
 class KotlinTest {
 
-//    @Test
-//    fun test() {
-//        val user = User()
-//    }
+    @Test
+    fun test() {
+        println("This is Test")
+    }
 }
