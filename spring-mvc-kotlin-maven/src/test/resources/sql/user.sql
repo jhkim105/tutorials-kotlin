@@ -1,1 +1,0 @@
-INSERT INTO user (id, description, name, password, username) VALUES ('test-id01', null, 'User Name', '111111', 'testuser01');
