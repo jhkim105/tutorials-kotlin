@@ -1,0 +1,7 @@
+logging:
+  level:
+    "jhkim105.tutorials": info
+
+
+service:
+  name: Sample
