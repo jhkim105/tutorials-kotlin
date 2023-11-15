@@ -28,8 +28,12 @@ dependencies {
 	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	// querydsl
-	implementation("com.querydsl:querydsl-jpa:5.0.0:jakarta")
-	kapt("com.querydsl:querydsl-apt:5.0.0:jakarta")
+	implementation("com.querydsl:querydsl-jpa:${dependencyManagement.importedProperties["querydsl.version"]}:jakarta")
+	implementation("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties["querydsl.version"]}:jakarta")
+	kapt("com.querydsl:querydsl-apt:${dependencyManagement.importedProperties["querydsl.version"]}:jakarta")
+
+
+
 }
 
 tasks.withType<KotlinCompile> {
