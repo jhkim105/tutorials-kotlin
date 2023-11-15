@@ -27,6 +27,13 @@ class UserRepositoryTests @Autowired constructor (
     }
 
     @Test
+    @Sql(scripts = ["/sql/user.sql"], config = SqlConfig(encoding = "UTF8"))
+    fun getReferenceById() {
+        val user = userRepository.getReferenceById("test-id01");
+        Assertions.assertThat(user).isNotNull;
+    }
+
+    @Test
     fun findAll() {
         val pageRequest = PageRequest.of(0, 10);
         val page = userRepository.findAll(pageRequest)
