@@ -2,6 +2,7 @@ package jhkim105.tutorials.domain
 
 import jakarta.persistence.*
 import jhkim105.tutorials.ColumnLengths
+import org.hibernate.Length
 import org.hibernate.annotations.GenericGenerator
 
 
@@ -16,6 +17,9 @@ class User(
     var username: String,
     var password: String,
     var name: String,
+
+    @Column(length = Length.LONG32)
+    // column size 에 따라 tinytext, mediumtext, longtext 로 생성됨
     var description: String? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
