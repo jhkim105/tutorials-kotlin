@@ -1,0 +1,9 @@
+POST http://localhost:8080/follow
+Content-Type: application/json
+
+{
+  "from": "foo",
+  "to": "bar"
+}
+
+###
