@@ -3,14 +3,13 @@ package jhkim105.tutorials.domain
 import jakarta.persistence.*
 import jhkim105.tutorials.ColumnLengths
 import org.hibernate.Length
-import org.hibernate.annotations.GenericGenerator
+import org.hibernate.annotations.UuidGenerator
 
 
 @Entity
 class User(
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid2")
+    @UuidGenerator
     @Column(length = ColumnLengths.UUID)
     var id: String? = null,
 
@@ -23,7 +22,16 @@ class User(
     var description: String? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    var company: Company? = null
+    var company: Company? = null,
+
+    // https://hibernate.atlassian.net/browse/HHH-17180
+//    @Enumerated(EnumType.STRING)
+//    @JdbcTypeCode(SqlTypes.VARCHAR)
+    // https://discourse.hibernate.org/t/hibernate-6-cannot-persist-enum-as-ordinal-in-varchar-column/7775/10
+    @Convert(converter = UserTypeConverter::class)
+    @Column(length = 10)
+    var userType: UserType? = null
+
 
 ) {
 
@@ -40,3 +48,9 @@ class User(
         return id?.hashCode() ?: 0
     }
 }
+
+enum class UserType {
+    ADMIN, USER
+}
+
+class UserTypeConverter: EnumConverter<UserType>(UserType::class.java)

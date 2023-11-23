@@ -2,6 +2,7 @@ package jhkim105.tutorials.repository
 
 import jhkim105.tutorials.JpaConfig
 import jhkim105.tutorials.domain.User
+import jhkim105.tutorials.domain.UserType
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -44,6 +45,7 @@ class UserRepositoryTests @Autowired constructor (
     @Test
     fun save() {
         val user = User(username = "user01", password="pass1111", name ="User 01")
+        user.userType = UserType.ADMIN
         userRepository.save(user)
         Assertions.assertThat(user.id).isNotNull
     }
