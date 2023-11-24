@@ -21,6 +21,11 @@ class User(
     // column size 에 따라 tinytext, mediumtext, longtext 로 생성됨
     var description: String? = null,
 
+    @Lob
+    @Column(length = 1000)
+    // column size 에 따라 tinytext, mediumtext, longtext 로 생성됨
+    var memo: String? = null,
+
     @ManyToOne(fetch = FetchType.LAZY)
     var company: Company? = null,
 
@@ -30,8 +35,11 @@ class User(
     // https://discourse.hibernate.org/t/hibernate-6-cannot-persist-enum-as-ordinal-in-varchar-column/7775/10
     @Convert(converter = UserTypeConverter::class)
     @Column(length = 10)
-    var userType: UserType? = null
+    var userType: UserType? = null,
 
+    @Convert(converter = StringListConverter::class)
+    @Column(length = 1000) // 컬럼의 길이를 적절하게 조절하세요.
+    var stringList: List<String>? = null
 
 ) {
 
@@ -47,6 +55,12 @@ class User(
     override fun hashCode(): Int {
         return id?.hashCode() ?: 0
     }
+
+    override fun toString(): String {
+        return "User(id=$id, username='$username', password='$password', name='$name', description=$description, memo=$memo, company=$company, userType=$userType, stringList=$stringList)"
+    }
+
+
 }
 
 enum class UserType {

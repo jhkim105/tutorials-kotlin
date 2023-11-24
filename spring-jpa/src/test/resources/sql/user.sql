@@ -1,1 +1,1 @@
-INSERT INTO user (id, description, name, password, username) VALUES ('test-id01', null, 'User Name', '111111', 'testuser01');
+INSERT INTO user (id, description, name, password, username, string_list) VALUES ('test-id01', null, 'User Name', '111111', 'testuser01', 'a, b');

@@ -5,6 +5,8 @@ import jhkim105.tutorials.domain.User
 import jhkim105.tutorials.domain.UserType
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -20,11 +22,14 @@ import org.springframework.test.context.jdbc.SqlConfig
 class UserRepositoryTests @Autowired constructor (
     val userRepository: UserRepository) {
 
+    val log:Logger = LoggerFactory.getLogger(javaClass)
     @Test
     @Sql(scripts = ["/sql/user.sql"], config = SqlConfig(encoding = "UTF8"))
     fun findByUsername() {
         val user = userRepository.findByUsername("testuser01");
+        log.info("$user")
         Assertions.assertThat(user).isNotNull;
+        Assertions.assertThat(user!!.stringList).hasSize(2);
     }
 
     @Test
