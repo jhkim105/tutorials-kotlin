@@ -27,7 +27,7 @@ class User(
     var memo: String? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    var company: Company? = null,
+    val company: Company? = null,
 
     // https://hibernate.atlassian.net/browse/HHH-17180
 //    @Enumerated(EnumType.STRING)
@@ -35,10 +35,10 @@ class User(
     // https://discourse.hibernate.org/t/hibernate-6-cannot-persist-enum-as-ordinal-in-varchar-column/7775/10
     @Convert(converter = UserTypeConverter::class)
     @Column(length = 10)
-    var userType: UserType? = null,
+    val userType: UserType? = null,
 
     @Convert(converter = StringListConverter::class)
-    @Column(length = 1000) // 컬럼의 길이를 적절하게 조절하세요.
+    @Column(length = 1000)
     var stringList: List<String>? = null
 
 ) {

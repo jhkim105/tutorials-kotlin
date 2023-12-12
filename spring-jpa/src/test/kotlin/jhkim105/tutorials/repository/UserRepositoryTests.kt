@@ -49,8 +49,7 @@ class UserRepositoryTests @Autowired constructor (
 
     @Test
     fun save() {
-        val user = User(username = "user01", password="pass1111", name ="User 01")
-        user.userType = UserType.ADMIN
+        val user = User(username = "user01", password="pass1111", name ="User 01", userType = UserType.ADMIN)
         userRepository.save(user)
         Assertions.assertThat(user.id).isNotNull
     }
