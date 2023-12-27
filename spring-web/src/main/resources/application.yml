@@ -1,0 +1,30 @@
+logging:
+  level:
+    'jhkim105.tutorials': trace
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+    password: 111111
+    url: jdbc:mariadb://localhost/demo_web?createDatabaseIfNotExist=true
+    username: root
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create
+
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+        globally_quoted_identifiers_skip_column_definitions: true
+
+  sql:
+    init:
+      mode: always
+
+blog:
+  title: Blog
+  banner:
+    title: Warning
+    content: The blog will be down tomorrow.
+
