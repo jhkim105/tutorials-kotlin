@@ -6,7 +6,6 @@ spring:
         hikari:
             maximum-pool-size: 10
         password: 111111
-        type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:mariadb://localhost/demo_jpa_kotlin?createDatabaseIfNotExist=true
         username: root
     jpa:

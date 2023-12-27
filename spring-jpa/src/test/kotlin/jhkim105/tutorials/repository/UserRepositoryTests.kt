@@ -60,4 +60,14 @@ class UserRepositoryTests @Autowired constructor (
         Assertions.assertThat(list).isNotEmpty
     }
 
+    @Test
+    fun create() {
+        (1..10).forEach {
+            val formattedIndex = String.format("%02d", it)
+            userRepository.save(User(username = "user$formattedIndex", password="pass1111", name ="User $formattedIndex", userType = UserType.ADMIN))
+        }
+        val list = userRepository.findAll()
+        log.debug("$list")
+    }
+
 }
