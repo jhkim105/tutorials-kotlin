@@ -1,11 +1,11 @@
-package jhkim105.tutorials.kotlin.kotlin_core
+package jhkim105.tutorials.kotlin.spring_cloud_aws
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class KotlinCoreApplication
+class SpringAwsApplication
 
 fun main(args: Array<String>) {
-    runApplication<KotlinCoreApplication>(*args)
+	runApplication<SpringAwsApplication>(*args)
 }
