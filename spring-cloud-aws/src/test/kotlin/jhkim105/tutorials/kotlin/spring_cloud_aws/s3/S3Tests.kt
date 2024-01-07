@@ -23,6 +23,7 @@ class S3Tests {
     log.debug("{}", resource.exists())
     log.debug("{}", resource.filename)
     log.debug("{}", resource.url)
+    log.debug("{}", resource.contentLength())
   }
 
 }

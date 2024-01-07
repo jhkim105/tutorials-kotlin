@@ -34,7 +34,7 @@ class User(
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(length = 10)
-    val userType: UserType? = null,
+    val userType: UserType? = null, //not null 인 경우 제약조건 에러 발생함
 
     @Convert(converter = StringListConverter::class)
     @Column(length = 1000)
