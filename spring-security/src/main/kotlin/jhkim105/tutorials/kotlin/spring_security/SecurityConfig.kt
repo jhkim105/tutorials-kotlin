@@ -1,9 +1,12 @@
 package jhkim105.tutorials.kotlin.spring_security
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
+import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.core.userdetails.User
@@ -24,12 +27,13 @@ class SecurityConfig {
         return manager
     }
 
+
     @Order(1)
     @Bean
     fun apiFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             securityMatcher("/api/**")
-            authorizeRequests {
+            authorizeHttpRequests {
                 authorize(anyRequest, hasRole("USER"))
             }
             httpBasic { }
@@ -40,16 +44,30 @@ class SecurityConfig {
     @Bean
     fun formLoginFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
-            authorizeRequests {
-                authorize("/public", permitAll)
+            authorizeHttpRequests {
+                authorize("/public/**", permitAll)
+                authorize(PathRequest.toStaticResources().atCommonLocations(), permitAll)
                 authorize("/user", hasRole("USER"))
                 authorize("/admin", hasRole("ADMIN"))
                 authorize(anyRequest, authenticated)
             }
+
             formLogin { }
         }
         return http.build()
     }
 
+
+
+    // TODO: 동작안함
+    @Bean
+    fun webSecurityCustomizer(): Customizer<WebSecurity> {
+        return Customizer { web ->
+            web.ignoring() // 실행이 안된다. 2024/10/10
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                .requestMatchers("/public/**")
+
+        }
+    }
 
 }

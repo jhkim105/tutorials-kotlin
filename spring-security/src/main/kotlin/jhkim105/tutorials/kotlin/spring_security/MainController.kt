@@ -2,6 +2,7 @@ package jhkim105.tutorials.kotlin.spring_security
 
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ResponseBody
 
 /**
  * @author Eleftheria Stein
@@ -23,5 +24,6 @@ class MainController {
     fun admin(): String {
         return "admin/index"
     }
+
 
 }
