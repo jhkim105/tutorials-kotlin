@@ -8,6 +8,7 @@ import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer
 import org.springframework.security.config.annotation.web.invoke
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -57,17 +58,15 @@ class SecurityConfig {
         return http.build()
     }
 
-
-
-    // TODO: 동작안함
     @Bean
-    fun webSecurityCustomizer(): Customizer<WebSecurity> {
-        return Customizer { web ->
-            web.ignoring() // 실행이 안된다. 2024/10/10
+    fun webSecurityCustomizer(): WebSecurityCustomizer {
+        return WebSecurityCustomizer { web ->
+            web
+                .ignoring()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                 .requestMatchers("/public/**")
-
         }
     }
+
 
 }
