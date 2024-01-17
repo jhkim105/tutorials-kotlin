@@ -1,5 +1,6 @@
 package jhkim105.tutorials.kotlin.spring_web
 
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus.*
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
@@ -8,8 +9,12 @@ import org.springframework.web.server.ResponseStatusException
 @RequestMapping("/api/article")
 class ArticleController(private val repository: ArticleRepository) {
 
+  private val log = LoggerFactory.getLogger(javaClass)
   @GetMapping("/")
-  fun findAll() = repository.findAllByOrderByAddedAtDesc()
+  fun findAll() {
+    log.info("findAll")
+    repository.findAllByOrderByAddedAtDesc()
+  }
 
   @GetMapping("/{slug}")
   fun findOne(@PathVariable slug: String) =
