@@ -1,0 +1,11 @@
+### upload
+POST http://localhost:8080/files
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="jetbrains-toolbox-2.4.2.32922-arm64.dmg"
+
+< ./jetbrains-toolbox-2.4.2.32922-arm64.dmg
+--WebAppBoundary--
+
+###
