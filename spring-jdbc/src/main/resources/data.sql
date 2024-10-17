@@ -1,0 +1,28 @@
+truncate table score;
+INSERT INTO score (user_id, item_code, score)
+VALUES ('user1', 'ITEM001', 85),
+       ('user1', 'ITEM002', 90),
+       ('user1', 'ITEM003', 75),
+       ('user1', 'ITEM004', 88),
+       ('user1', 'ITEM005', 92),
+       ('user2', 'ITEM001', 54),
+       ('user2', 'ITEM002', 78),
+       ('user2', 'ITEM003', 45),
+       ('user2', 'ITEM004', 89),
+       ('user2', 'ITEM005', 83),
+       ('user3', 'ITEM001', 67),
+       ('user3', 'ITEM002', 74),
+       ('user3', 'ITEM003', 81),
+       ('user3', 'ITEM004', 62),
+       ('user3', 'ITEM005', 77),
+       ('user4', 'ITEM001', 93),
+       ('user4', 'ITEM002', 88),
+       ('user4', 'ITEM003', 79),
+       ('user4', 'ITEM004', 95),
+       ('user4', 'ITEM005', 84),
+       ('user5', 'ITEM001', 71),
+       ('user5', 'ITEM002', 65),
+       ('user5', 'ITEM003', 80),
+       ('user5', 'ITEM004', 73),
+       ('user5', 'ITEM005', 68);
+;
