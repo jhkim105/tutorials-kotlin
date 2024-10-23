@@ -20,7 +20,7 @@ class CustomPagingItemReaderJobConfig(
 ) {
 
     companion object {
-        const val JOB_NAME = "custom-item-reader"
+        const val JOB_NAME = "custom-paging-reader"
         private val log = LoggerFactory.getLogger(CustomPagingItemReaderJobConfig::class.java)
     }
 

@@ -12,11 +12,10 @@ import org.springframework.context.annotation.Import
 import org.springframework.test.context.TestPropertySource
 
 
-@SpringBootTest(classes = [BatchTestConfig::class, CustomPagingItemReaderJobConfig::class])
-@Import(UseCaseConfig::class)
+@SpringBootTest(classes = [BatchTestConfig::class, ExistingServiceReaderJobConfig::class])
 @SpringBatchTest
-@TestPropertySource(properties = ["job.name=${CustomPagingItemReaderJobConfig.JOB_NAME}"])
-class CustomPagingItemReaderJobConfigTest {
+@TestPropertySource(properties = ["job.name=${ExistingServiceReaderJobConfig.JOB_NAME}"])
+class ExistingServiceReaderJobConfigTest {
     @Autowired
     lateinit var jobLauncherTestUtils: JobLauncherTestUtils
 
