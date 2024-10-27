@@ -1,4 +1,4 @@
-package jhkim105.tutorials.jdbc.rowtocol
+package jhkim105.tutorials.jdbc.repository
 
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
@@ -38,5 +38,8 @@ class ScoreRepository(
 
         return userScoreMap.values.toList()
     }
+
+
+
 }
 
