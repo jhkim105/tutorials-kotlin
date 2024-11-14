@@ -1,0 +1,39 @@
+<beanio xmlns="http://www.beanio.org/2012/03">
+
+    <!-- 'strict' enforces record order and record sizes -->
+    <stream name="csvStream" format="csv" strict="true">
+        <!-- 'occurs' enforces minimum and maximum record occurrences -->
+        <record name="header" class="map" occurs="1">
+            <field name="recordType" rid="true" literal="H" />
+            <!-- 'required' indicates a field value is required -->
+            <field name="fileDate" type="date" format="yyyy-MM-dd" required="true"/>
+        </record>
+
+        <record name="contact" class="map">
+            <!-- 'ignore' indicates this field is not bound to a bean property -->
+            <field name="recordType" rid="true" literal="D" ignore="true" />
+            <field name="firstName" />
+            <field name="lastName" />
+            <field name="street" />
+            <field name="city" />
+            <field name="state" />
+            <field name="zip" />
+        </record>
+        <record name="trailer" target="recordCount" occurs="1">
+            <field name="recordType" rid="true" literal="T" />
+            <field name="recordCount" type="int" required="true" />
+        </record>
+
+    </stream>
+
+
+    <!-- 'strict' enforces record order and record sizes -->
+    <stream name="fixedlengthStream" format="fixedlength">
+        <record name="contact" class="jhkim105.tutorials.beanio.Contact">
+            <field name="firstName" length="20" />
+            <field name="lastName" length="30" />
+            <field name="number" length="11" regex="\d{11}" />
+        </record>
+    </stream>
+
+</beanio>
