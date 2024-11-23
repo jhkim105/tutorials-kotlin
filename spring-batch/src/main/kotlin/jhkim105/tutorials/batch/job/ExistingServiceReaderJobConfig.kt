@@ -1,6 +1,5 @@
-package jhkim105.tutorials.batch.adapter.`in`.job
+package jhkim105.tutorials.batch.job
 
-import org.slf4j.LoggerFactory
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.job.builder.JobBuilder
@@ -9,11 +8,8 @@ import org.springframework.batch.core.step.builder.StepBuilder
 import org.springframework.batch.item.ItemProcessor
 import org.springframework.batch.item.ItemReader
 import org.springframework.batch.item.ItemWriter
-import org.springframework.batch.item.adapter.ItemReaderAdapter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.stereotype.Component
-import org.springframework.stereotype.Service
 import org.springframework.transaction.PlatformTransactionManager
 
 @Configuration

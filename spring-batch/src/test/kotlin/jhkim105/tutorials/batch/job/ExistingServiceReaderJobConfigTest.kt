@@ -1,26 +1,29 @@
-package jhkim105.tutorials.batch.adapter.`in`.job
+package jhkim105.tutorials.batch.job
 
-import jhkim105.tutorials.batch.adapter.UseCaseConfig
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.batch.core.ExitStatus
 import org.springframework.batch.test.JobLauncherTestUtils
+import org.springframework.batch.test.JobRepositoryTestUtils
 import org.springframework.batch.test.context.SpringBatchTest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.Import
 import org.springframework.test.context.TestPropertySource
 
 
 @SpringBootTest(classes = [BatchTestConfig::class, ExistingServiceReaderJobConfig::class])
 @SpringBatchTest
 @TestPropertySource(properties = ["job.name=${ExistingServiceReaderJobConfig.JOB_NAME}"])
-class ExistingServiceReaderJobConfigTest {
-    @Autowired
-    lateinit var jobLauncherTestUtils: JobLauncherTestUtils
+class ExistingServiceReaderJobConfigTest(
+    @Autowired private val jobLauncherTestUtils: JobLauncherTestUtils,
+    @Autowired private val jobRepositoryTestUtils: JobRepositoryTestUtils,
+) {
 
-    @Autowired
-    lateinit var jobRepositoryTestUtils: JobLauncherTestUtils
+    @BeforeEach
+    fun clearJobExecutions() {
+        jobRepositoryTestUtils.removeJobExecutions()
+    }
 
     @Test
     fun test() {

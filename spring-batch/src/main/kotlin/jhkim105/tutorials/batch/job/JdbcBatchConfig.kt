@@ -1,4 +1,4 @@
-package jhkim105.tutorials.batch.adapter.`in`.job
+package jhkim105.tutorials.batch.job
 
 import org.slf4j.LoggerFactory
 import org.springframework.batch.core.Job
@@ -15,12 +15,13 @@ import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilde
 import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.transaction.PlatformTransactionManager
 import javax.sql.DataSource
 
 
-//@Configuration
+@Configuration
 class JdbcBatchConfig(
     private val dataSource: DataSource,
     private val jobRepository: JobRepository,
@@ -34,7 +35,7 @@ class JdbcBatchConfig(
     }
 
     @Bean(JOB_NAME)
-    fun job(step: Step): Job {
+    fun job(): Job {
         log.info("Starting job: $JOB_NAME")
         return JobBuilder(JOB_NAME, jobRepository)
             .incrementer(RunIdIncrementer())

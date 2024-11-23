@@ -8,7 +8,7 @@ import org.hibernate.annotations.UuidGenerator
 import org.hibernate.type.SqlTypes
 
 @Entity
-@Table(indexes = [Index (name = "", columnList = "name")])
+@Table(name = "user", indexes = [Index (columnList = "name")])
 class User(
     @Id
     @UuidGenerator(style = UuidGenerator.Style.TIME)
