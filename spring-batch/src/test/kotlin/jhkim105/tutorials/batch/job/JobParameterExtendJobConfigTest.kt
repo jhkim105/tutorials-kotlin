@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.TestPropertySource
 import java.time.LocalDate
 
-@SpringBootTest(classes = [BatchTestConfig::class, JobParameterExtendJobConfig::class])
+@SpringBootTest(classes = [BatchTestConfig::class, JobParamTestConfig::class, JobParameterExtendJobConfig::class])
 @SpringBatchTest
 @TestPropertySource(properties = ["job.name=${JobParameterExtendJobConfig.JOB_NAME}"])
 class JobParameterExtendJobConfigTest(
@@ -29,7 +29,7 @@ class JobParameterExtendJobConfigTest(
     @Test
     fun test() {
         val jobParameters = JobParametersBuilder()
-            .addLocalDate("createdDate", LocalDate.now())
+            .addLocalDate("createdDate", LocalDate.now().minusDays(1))
             .addString("name", "name01")
             .toJobParameters()
         val jobExecution = jobLauncherTestUtils.launchJob(jobParameters)

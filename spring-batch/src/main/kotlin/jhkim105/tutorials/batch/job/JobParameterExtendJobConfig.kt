@@ -1,5 +1,6 @@
 package jhkim105.tutorials.batch.job
 
+import jhkim105.tutorials.batch.job.param.JobParam
 import org.slf4j.LoggerFactory
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
@@ -19,7 +20,9 @@ import java.time.LocalDate
 class JobParameterExtendJobConfig(
     private val jobRepository: JobRepository,
     private val transactionManager: PlatformTransactionManager,
-    private val jobParameterExtendJobParameter: JobParameterExtendJobParameter
+    private val jobParameterExtendJobParameter: JobParameterExtendJobParameter,
+    private val jobParameterExtendJobParameter2: JobParameterExtendJobParameter2,
+    private val jobParam: JobParam,
 ) {
 
     companion object {
@@ -40,7 +43,9 @@ class JobParameterExtendJobConfig(
     fun step1(): Step {
         return StepBuilder("simpleStep", jobRepository)
             .tasklet({ _, _ ->
-                log.info("hello, world. jobParameterExtendJobParameter: $jobParameterExtendJobParameter")
+                log.info("jobParameterExtendJobParameter: $jobParameterExtendJobParameter")
+                log.info("jobParameterExtendJobParameter2: $jobParameterExtendJobParameter2")
+                log.info("jobParam: $jobParam")
                 RepeatStatus.FINISHED
             }, transactionManager)
             .build()
@@ -53,8 +58,16 @@ class JobParameterExtendJobConfig(
         @Value("#{jobParameters[createdDate]}") createdDate: LocalDate,
         @Value("#{jobParameters[name]}") name: String
     ): JobParameterExtendJobParameter {
-        return JobParameterExtendJobParameter(LocalDate.now(), name)
+        return JobParameterExtendJobParameter(createdDate, name)
     }
+
+    @Bean("${JOB_NAME}jobParameter2")
+    @JobScope
+    fun jobParameterExtendJobParameter2(
+    ): JobParameterExtendJobParameter2 {
+        return JobParameterExtendJobParameter2()
+    }
+
 
 }
 
@@ -68,6 +81,15 @@ open class JobParameterExtendJobParameter(
     override fun toString(): String {
         return "JobParameterExtendJobParameter(createdDate=$createdDate, name='$name')"
     }
-
 }
+
+
+open class JobParameterExtendJobParameter2{
+    @Value("#{jobParameters[createdDate]}") open val createdDate: LocalDate? = null
+    @Value("#{jobParameters[name]}") open val name: String? = null
+    override fun toString(): String {
+        return "JobParameterExtendJobParameter2(createdDate=$createdDate, name='$name')"
+    }
+}
+
 
