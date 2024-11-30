@@ -1,0 +1,24 @@
+spring:
+  application.name: spring-profiles
+
+  profiles:
+    active: local
+service:
+  name: default
+  version: 1.0.1
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+service:
+  name: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: staging
+service:
+  name: staging
+  version: 1.0.0
