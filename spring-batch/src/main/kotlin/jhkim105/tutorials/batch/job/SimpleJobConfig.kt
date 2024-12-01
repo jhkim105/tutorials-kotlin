@@ -1,8 +1,8 @@
 package jhkim105.tutorials.batch.job
 
+import jhkim105.tutorials.batch.job.listener.LoggingJobExecutionListener
 import org.slf4j.LoggerFactory
-import org.springframework.batch.core.Job
-import org.springframework.batch.core.Step
+import org.springframework.batch.core.*
 import org.springframework.batch.core.configuration.annotation.JobScope
 import org.springframework.batch.core.job.builder.JobBuilder
 import org.springframework.batch.core.launch.support.RunIdIncrementer
@@ -30,19 +30,46 @@ class SimpleJobConfig(
     fun job(): Job {
         return JobBuilder(JOB_NAME, jobRepository)
             .incrementer(RunIdIncrementer())
+            .listener(jobExecutionListener())
+            .listener(LoggingJobExecutionListener())
             .start(step1(null))
             .build()
+    }
+
+    private fun jobExecutionListener(): JobExecutionListener {
+        return object : JobExecutionListener {
+            override fun beforeJob(jobExecution: JobExecution) {
+                log.info("beforeJob")
+            }
+            override fun afterJob(jobExecution: JobExecution) {
+                log.info("afterJob")
+            }
+        }
     }
 
     @Bean("${JOB_NAME}_step1")
     @JobScope
     fun step1(@Value("#{jobParameters[requestDate]}") requestDate: LocalDateTime?): Step {
         return StepBuilder("simpleStep", jobRepository)
+            .listener(stepExecutionListener())
             .tasklet({ _, _ ->
                 log.info("hello, world. requestDate: $requestDate")
                 RepeatStatus.FINISHED
             }, transactionManager)
             .build()
+    }
+
+    private fun stepExecutionListener(): StepExecutionListener {
+        return object : StepExecutionListener {
+            override fun beforeStep(stepExecution: StepExecution) {
+                log.info("beforeStep")
+            }
+
+            override fun afterStep(stepExecution: StepExecution): ExitStatus? {
+                log.info("afterStep")
+                return super.afterStep(stepExecution)
+            }
+        }
     }
 
 
