@@ -1,6 +1,6 @@
 package jhkim105.tutorials.batch.adapter.`in`.batch
 
-import jhkim105.tutorials.batch.application.domain.model.User
+import jhkim105.tutorials.batch.application.domain.entity.User
 import jhkim105.tutorials.batch.application.port.`in`.UserGetUseCase
 import jhkim105.tutorials.batch.application.port.`in`.UserSaveUseCase
 import org.springframework.batch.core.Job

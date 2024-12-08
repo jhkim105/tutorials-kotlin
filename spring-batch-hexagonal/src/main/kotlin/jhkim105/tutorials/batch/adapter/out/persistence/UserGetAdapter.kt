@@ -1,6 +1,6 @@
 package jhkim105.tutorials.batch.adapter.out.persistence
 
-import jhkim105.tutorials.batch.application.domain.model.User
+import jhkim105.tutorials.batch.application.domain.entity.User
 import jhkim105.tutorials.batch.application.port.out.UserGetPort
 import org.springframework.stereotype.Repository
 

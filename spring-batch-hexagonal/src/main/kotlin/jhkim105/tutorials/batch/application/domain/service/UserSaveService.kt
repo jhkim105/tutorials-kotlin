@@ -1,6 +1,6 @@
 package jhkim105.tutorials.batch.application.domain.service
 
-import jhkim105.tutorials.batch.application.domain.model.User
+import jhkim105.tutorials.batch.application.domain.entity.User
 import jhkim105.tutorials.batch.application.port.`in`.UserSaveUseCase
 import jhkim105.tutorials.batch.application.port.out.UserSavePort
 import org.springframework.stereotype.Service
