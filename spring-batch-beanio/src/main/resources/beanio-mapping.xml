@@ -1,0 +1,13 @@
+<beanio xmlns="http://www.beanio.org/2012/03">
+
+    <stream name="userFile" format="delimited" strict="true">
+        <parser>
+            <property name="delimiter" value="|"/>
+        </parser>
+        <record name="user" class="map">
+            <field name="username" />
+            <field name="name" />
+        </record>
+    </stream>
+
+</beanio>
