@@ -1,7 +1,6 @@
-package jhkim105.tutorials.controller
+package jhkim105.tutorials.user.controller
 
-import jhkim105.tutorials.repository.UserRepository
-import jhkim105.tutorials.service.UserService
+import jhkim105.tutorials.user.service.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.RestController

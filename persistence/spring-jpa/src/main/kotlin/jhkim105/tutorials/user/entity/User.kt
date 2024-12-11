@@ -1,4 +1,4 @@
-package jhkim105.tutorials.domain
+package jhkim105.tutorials.user.entity
 
 import jakarta.persistence.*
 import jhkim105.tutorials.ColumnLengths

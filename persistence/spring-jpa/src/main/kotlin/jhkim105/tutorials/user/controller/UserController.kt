@@ -1,7 +1,7 @@
-package jhkim105.tutorials.controller
+package jhkim105.tutorials.user.controller
 
-import jhkim105.tutorials.domain.User
-import jhkim105.tutorials.repository.UserRepository
+import jhkim105.tutorials.user.entity.User
+import jhkim105.tutorials.user.repository.UserJpaRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.stream.Collectors
 
 @RestController
-class UserController(private val repository: UserRepository) {
+class UserController(private val repository: UserJpaRepository) {
 
     @GetMapping("/users")
     fun list(pageable: Pageable): ResponseEntity<Page<UserDto>> {

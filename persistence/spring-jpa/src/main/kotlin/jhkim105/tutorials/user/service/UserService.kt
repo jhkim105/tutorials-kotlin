@@ -1,7 +1,7 @@
-package jhkim105.tutorials.service
+package jhkim105.tutorials.user.service
 
 import jakarta.transaction.Transactional
-import jhkim105.tutorials.repository.UserRepository
+import jhkim105.tutorials.user.repository.UserRepository
 import org.springframework.stereotype.Service
 
 
