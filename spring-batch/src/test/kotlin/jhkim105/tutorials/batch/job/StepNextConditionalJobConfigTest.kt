@@ -10,11 +10,13 @@ import org.springframework.batch.test.JobRepositoryTestUtils
 import org.springframework.batch.test.context.SpringBatchTest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.TestPropertySource
 
 @SpringBootTest(classes = [BatchTestConfig::class, StepNextConditionalJobConfig::class])
 @SpringBatchTest
 @TestPropertySource(properties = ["job.name=" + StepNextConditionalJobConfig.JOB_NAME])
+@ActiveProfiles("test")
 class StepNextConditionalJobConfigTest(
     @Autowired private val jobLauncherTestUtils: JobLauncherTestUtils,
     @Autowired private val jobRepositoryTestUtils: JobRepositoryTestUtils,

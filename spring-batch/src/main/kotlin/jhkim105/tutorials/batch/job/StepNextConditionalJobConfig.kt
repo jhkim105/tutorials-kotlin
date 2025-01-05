@@ -50,7 +50,7 @@ class StepNextConditionalJobConfig(
     fun step1(): Step {
         return StepBuilder("${JOB_NAME}_step1", jobRepository)
             .tasklet({ contribution, _ ->
-                log.info("step2")
+                log.info("step1")
                 contribution.exitStatus = ExitStatus.FAILED
                 RepeatStatus.FINISHED
             }, transactionManager)

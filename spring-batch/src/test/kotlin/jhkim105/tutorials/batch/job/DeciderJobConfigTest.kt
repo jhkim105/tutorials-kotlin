@@ -1,6 +1,5 @@
 package jhkim105.tutorials.batch.job
 
-import jhkim105.tutorials.batch.job.SimpleJobConfig
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.batch.core.ExitStatus
@@ -13,11 +12,11 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.TestPropertySource
 import kotlin.test.Test
 
-@SpringBootTest(classes = [BatchTestConfig::class, SimpleJobConfig::class])
+@SpringBootTest(classes = [BatchTestConfig::class, DeciderJobConfig::class])
 @SpringBatchTest
-@TestPropertySource(properties = ["job.name=${SimpleJobConfig.JOB_NAME}"])
+@TestPropertySource(properties = ["job.name=${DeciderJobConfig.JOB_NAME}"])
 @ActiveProfiles("test")
-class SimpleJobConfigTest(
+class DeciderJobConfigTest(
     @Autowired private val jobLauncherTestUtils: JobLauncherTestUtils,
     @Autowired private val jobRepositoryTestUtils: JobRepositoryTestUtils,
 ) {
