@@ -1,0 +1,4 @@
+### SAVE
+POST http://localhost:8080/redis/set?key=k1&value=v1
+
+###

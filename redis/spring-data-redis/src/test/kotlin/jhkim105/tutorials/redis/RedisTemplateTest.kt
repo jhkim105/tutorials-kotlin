@@ -36,8 +36,6 @@ class RedisTemplateTest(
         }
     }
 
-
-
 }) {
     @TestConfiguration
     class TestConfig {

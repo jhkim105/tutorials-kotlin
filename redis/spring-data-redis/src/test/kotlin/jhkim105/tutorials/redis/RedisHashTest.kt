@@ -39,6 +39,7 @@ class RedisHashTest(
 
         val person = Person("name 1", 21)
         val map = hashMapper.toHash(person) // 변환 (String 변환 X)
+        println(map.map { (k, v) -> String(k) to String(v) })
         hashOperations.putAll("person1", map)
 
         val savedData = hashOperations.entries("person1") // Hash 데이터 가져오기
