@@ -17,3 +17,4 @@ cluster nodes
 - cluster 초기화
 ```shell
 redis-cli --cluster call 127.0.0.1:7000 cluster reset
+```

@@ -15,4 +15,10 @@ class RedisController(
         redisTemplate.opsForValue().set(key, value)
         return "Saved: $key -> ${redisTemplate.opsForValue().get(key)}"
     }
+
+    @PostMapping("/get")
+    fun getValue(key: String): String {
+        val value = redisTemplate.opsForValue().get(key)
+        return "Value: $value"
+    }
 }

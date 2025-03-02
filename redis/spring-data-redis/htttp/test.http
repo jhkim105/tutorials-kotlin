@@ -1,4 +1,5 @@
 ### SAVE
-POST http://localhost:8080/redis/set?key=k1&value=v1
+POST http://localhost:8080/redis/set?key=kk&value=v1
 
-###
+### GET
+POST http://localhost:8080/redis/get?key=k1
