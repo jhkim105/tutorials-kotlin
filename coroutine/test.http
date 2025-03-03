@@ -1,0 +1,10 @@
+
+###
+GET http://localhost:8080/blocking?delay=1000
+Accept: application/json
+
+###
+GET http://localhost:8080/coroutine?delay=1000
+Accept: application/json
+
+###
