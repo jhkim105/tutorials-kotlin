@@ -1,0 +1,34 @@
+@startuml
+class jhkim105.tutorials.domain.StringListConverter {
+-  delimiter
++ String? convertToDatabaseColumn(List<String>?)
++ List<String>? convertToEntityAttribute(String?)
+}
+
+
+abstract class jhkim105.tutorials.domain.EnumConverter {
++ void convertToDatabaseColumn(T?)
++ T? convertToEntityAttribute(String?)
+}
+
+class jhkim105.tutorials.domain.Company {
++ Boolean equals(Any?)
++ Int hashCode()
+}
+
+class jhkim105.tutorials.domain.User {
++ Boolean equals(Any?)
++ Int hashCode()
++ String toString()
+}
+
+enum jhkim105.tutorials.domain.UserType {
++  ADMIN
++  USER
+}
+
+
+
+jakarta.persistence.AttributeConverter <|.. jhkim105.tutorials.domain.StringListConverter
+jakarta.persistence.AttributeConverter <|.. jhkim105.tutorials.domain.EnumConverter
+@enduml
