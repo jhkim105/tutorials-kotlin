@@ -4,7 +4,6 @@ import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
-import org.springframework.boot.test.context.SpringBootTest
 import kotlin.test.Test
 
 @DataMongoTest
