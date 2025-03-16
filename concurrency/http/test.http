@@ -1,0 +1,10 @@
+
+###
+GET http://localhost:8080/users/blocking?delay=1000
+Accept: application/json
+
+###
+GET http://localhost:8080/users/nonblocking?delay=1000
+Accept: application/json
+
+###
