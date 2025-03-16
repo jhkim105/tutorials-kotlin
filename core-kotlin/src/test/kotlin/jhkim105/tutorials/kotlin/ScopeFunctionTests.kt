@@ -1,4 +1,4 @@
-package jhkim105.tutorials.core_kotlin
+package jhkim105.tutorials.kotlin
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested

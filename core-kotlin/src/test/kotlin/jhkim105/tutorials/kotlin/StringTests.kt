@@ -1,6 +1,5 @@
-package jhkim105.tutorials.core_kotlin
+package jhkim105.tutorials.kotlin
 
-import org.apache.commons.lang3.StringUtils
 import org.junit.jupiter.api.Disabled
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -26,7 +25,7 @@ class StringTests {
     val str =
       """
       getString: {
-        v: ${s?.let { StringUtils.upperCase(s) }}
+        v: ${s?.let { s.uppercase() } ?: ""}
       }
     """.trimIndent()
 

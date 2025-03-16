@@ -1,4 +1,4 @@
-package jhkim105.tutorials.core_kotlin.constants
+package jhkim105.tutorials.kotlin.constants
 
 
 private const val PRIVATE = "private value"
