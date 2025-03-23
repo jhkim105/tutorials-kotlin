@@ -20,9 +20,9 @@ class UserRepositoryTest(
     fun test() {
         val user = User(username= "user01", email = EmailAddress("test@test.com"))
         userRepository.save(user)
-
         val savedUser = userRepository.findByUsername("user01")!!
         savedUser.username shouldBeEqual user.username
 
+        userRepository.save(User(username= "user01", email = EmailAddress("test@test.com")))
     }
 }
