@@ -2,7 +2,9 @@ package jhkim105.tutorials.concurrency
 
 import jhkim105.tutorials.concurrency.common.UserService
 import kotlinx.coroutines.*
+import kotlinx.coroutines.slf4j.MDCContext
 import org.slf4j.LoggerFactory
+import org.slf4j.MDC
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.GetMapping
@@ -63,9 +65,10 @@ class UserController {
     @ResponseBody
     fun nonblockingWithCoroutine(delay: Long): String {
         val dispatcher = Dispatchers.IO
+        MDC.put("caller", "nonblockingWithCoroutine")
 //        val dispatcher = Executors.newFixedThreadPool(128).asCoroutineDispatcher()
         val executeTime = measureTimeMillis {
-            runBlocking(dispatcher) {
+            runBlocking(dispatcher + MDCContext()) {
                 launch {
                     userService.getNowSomeSleep(delay)
                 }
@@ -84,18 +87,19 @@ class UserController {
 
     @GetMapping("/nonblocking-coroutine-new-scope")
     @ResponseBody
-    // 아래와 같이 쓰는 건 의미가 없음.
+    // 아래와 같은 코드는 의미가 없음
     fun nonblockingWithNewCoroutineScope(delay: Long): String {
         val dispatcher = Dispatchers.IO
+        MDC.put("caller", "nonblockingWithNewCoroutineScope")
         val executeTime = measureTimeMillis {
-            runBlocking(dispatcher) {
-                val job1 = CoroutineScope(dispatcher).launch {
+            runBlocking {
+                val job1 = CoroutineScope(dispatcher + MDCContext()).launch {
                     userService.getNowSomeSleep(delay)
                 }
-                val job2 = CoroutineScope(dispatcher).launch {
+                val job2 = CoroutineScope(dispatcher + MDCContext()).launch {
                     userService.getNowSomeSleep(delay)
                 }
-                val job3 = CoroutineScope(dispatcher).launch {
+                val job3 = CoroutineScope(dispatcher + MDCContext()).launch {
                     userService.getNowSomeSleep(delay)
                 }
                 job1.join()
