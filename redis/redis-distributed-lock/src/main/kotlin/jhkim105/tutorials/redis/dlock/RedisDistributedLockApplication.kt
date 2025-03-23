@@ -1,11 +1,11 @@
-package jhkim105.tutorials.mongodb
+package jhkim105.tutorials.redis.dlock
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class SpringMongodbMvnApplication
+class RedisDistributedLockApplication
 
 fun main(args: Array<String>) {
-    runApplication<SpringMongodbMvnApplication>(*args)
+    runApplication<RedisDistributedLockApplication>(*args)
 }
