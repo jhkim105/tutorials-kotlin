@@ -22,12 +22,12 @@ class MessageEntity(
     @Column(nullable = false)
     val createdAt: Instant,
     @Column(nullable = false)
-    val duration: Duration,
+    val durationMillis: Long,
 ) {
     companion object {
         fun of(key: String, publishAt: Instant): MessageEntity {
             val now = Instant.now()
-            return MessageEntity(key = key, publishAt = publishAt, createdAt = now, duration = Duration.between(publishAt, now))
+            return MessageEntity(key = key, publishAt = publishAt, createdAt = now, durationMillis = Duration.between(publishAt, now).toMillis())
         }
     }
 }

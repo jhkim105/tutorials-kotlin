@@ -8,10 +8,9 @@ import org.springframework.stereotype.Service
 @Service
 class RedisMessagePublisher(
     private val redisTemplate: RedisTemplate<String, String>,
-    private val topic: ChannelTopic
 ) {
 
-    fun publish(message: String) {
-        redisTemplate.convertAndSend(topic.topic, message)
+    fun publish(topic:String, message: String) {
+        redisTemplate.convertAndSend(topic, message)
     }
 }

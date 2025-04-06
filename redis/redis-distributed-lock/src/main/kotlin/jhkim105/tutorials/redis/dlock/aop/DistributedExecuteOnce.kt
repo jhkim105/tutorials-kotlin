@@ -24,7 +24,7 @@ class DistributedExecuteOnceAspect(private val redissonClient: RedissonClient) {
             atomicLong.expire(Duration.ofSeconds(distributedExecuteOnce.leaseTime))
             return joinPoint.proceed()
         }
-        log.debug("Already locked. key: $key")
+        log.info("Already locked. key: $key")
         return null
     }
 

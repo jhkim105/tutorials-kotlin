@@ -12,7 +12,7 @@ class MessageService(
 ) {
 
 
-    @DistributedExecuteOnce(key= "#key", leaseTime = 100)
+    @DistributedExecuteOnce(key= "#key", leaseTime = 10000)
     fun saveMessage(key: String, publishedAt: Instant) {
         val messageEntity = MessageEntity.of(key, publishedAt)
         messageJpaRepository.save(messageEntity)
