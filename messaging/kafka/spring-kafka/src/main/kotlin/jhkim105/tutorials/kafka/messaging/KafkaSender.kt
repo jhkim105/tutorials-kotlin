@@ -1,7 +1,7 @@
 package jhkim105.tutorials.kafka.messaging
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.slf4j.LoggerFactory
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
 
@@ -13,7 +13,12 @@ class KafkaSender(
 
     fun send(topic: String, message: Any) {
         kafkaTemplate.send(topic, toJson(message))
-        logger.debug("message sent. topic: {}, message: {}", topic, message)
+        log.debug {"message sent. topic: $topic, message: $message"}
+    }
+
+    fun send(topic: String, key:String, message: Any) {
+        kafkaTemplate.send(topic, key, toJson(message))
+        log.debug { "message sent. topic: $topic, key: $key, message: $message" }
     }
 
     private fun toJson(obj: Any): String {
@@ -21,6 +26,6 @@ class KafkaSender(
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(KafkaSender::class.java)
+        private val log = KotlinLogging.logger {}
     }
 }

@@ -4,6 +4,7 @@
 - cleanup.policy=compact
 - 메시지 전송시 메시지 키를 같이 보내야 한다
 - 각 키에 대한 최신값을 유지, 이전 값은 삭제 (log compaction) -> 공간 절약
+  - segment 크기나 dirty ration 비율이 정해진 값을 초과하면 clean up 수행
 - https://kafka.apache.org/documentation/#compaction
 - ![log-compaction.png](log-compaction.png)
 ## References

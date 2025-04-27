@@ -14,7 +14,7 @@ import java.time.Instant
 class MessageEntity(
     @Id @Tsid
     var id: String? = null,
-    @Column(name = "message_key", length = 64, unique = true, nullable = false)
+    @Column(name = "message_key", length = 64, nullable = false)
     val key: String,
     @Column(nullable = false)
     val publishAt: Instant,
