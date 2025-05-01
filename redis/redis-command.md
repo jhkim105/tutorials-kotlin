@@ -3,10 +3,10 @@
 ## Redis lists
 Implement stacks and queues.
 
-### Commands
+## Commands
 https://redis.io/docs/latest/commands/?group=list
 
-#### Basic Commands
+### Basic Commands
 - LPUSH
 - LPOP
 - LLEN
@@ -20,8 +20,8 @@ https://redis.io/docs/latest/commands/?group=list
 
 ### Push
 LPUSH
-- LIFO, Stack
+- Insert all the specified values at the tail of the list stored at key
 
 RPUSH
-- FIFO, Queue
+- Insert all the specified values at the head of the list stored at key. 
 
