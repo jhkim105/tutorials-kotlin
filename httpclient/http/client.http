@@ -1,0 +1,5 @@
+### test-api
+GET http://localhost:8080/client
+
+### 504
+GET http://localhost:8080/client?delay=4000

@@ -1,0 +1,10 @@
+### test-api
+GET http://localhost:9090/api/test
+
+### nginx
+GET http://localhost:8888/api/test
+Accept: application/json
+
+### nginx 504 Gateway Timoe-out
+GET http://localhost:8888/api/test?delay=21000
+Accept: application/json
