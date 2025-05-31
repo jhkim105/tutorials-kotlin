@@ -1,0 +1,50 @@
+### 1. 그룹 생성
+POST http://localhost:8080/groups
+Content-Type: application/json
+
+{
+  "id": null,
+  "name": "백엔드팀"
+}
+
+###
+
+### 2. 전체 그룹 조회
+GET http://localhost:8080/groups
+
+###
+
+### 3. 특정 그룹 조회 (ID: 1)
+GET http://localhost:8080/groups/1
+
+###
+
+### 4. 그룹 수정 (ID: 1)
+PUT http://localhost:8080/groups/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "풀스택팀"
+}
+
+###
+
+### 5. 그룹 삭제 (ID: 1)
+DELETE http://localhost:8080/groups/1
+
+###
+
+### 6. 그룹에 사용자 추가 (ID: 1)
+POST http://localhost:8080/groups/1/users
+Content-Type: application/json
+
+{
+  "id": null,
+  "username": "alice"
+}
+
+###
+
+### 7. 그룹에서 사용자 제거 (groupId: 1, userId: 1)
+DELETE http://localhost:8080/groups/1/users/1
