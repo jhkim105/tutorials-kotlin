@@ -5,6 +5,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import org.springframework.data.repository.CrudRepository
 import java.time.Duration
 import java.time.Instant
 import java.time.OffsetDateTime
@@ -30,4 +31,7 @@ class MessageEntity(
             return MessageEntity(key = key, publishAt = publishAt, createdAt = now, durationMillis = Duration.between(publishAt, now).toMillis())
         }
     }
+}
+
+interface MessageJpaRepository : CrudRepository<MessageEntity, String> {
 }

@@ -1,7 +1,6 @@
-package jhkim105.tutorials.redis.dlock
+package jhkim105.tutorials.redis.dlock.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.hypersistence.utils.hibernate.id.TsidGenerator
 import jhkim105.tutorials.redis.dlock.config.MessageTopicConfig.Companion.TOPIC
 import jhkim105.tutorials.redis.dlock.messaging.RedisMessagePublisher
 import jhkim105.tutorials.redis.dlock.persistence.IdGenerator

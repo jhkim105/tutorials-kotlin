@@ -1,4 +1,4 @@
-package jhkim105.tutorials.redis.dlock
+package jhkim105.tutorials.redis.dlock.service
 
 import jhkim105.tutorials.redis.dlock.aop.DistributedExecuteOnce
 import jhkim105.tutorials.redis.dlock.persistence.MessageEntity

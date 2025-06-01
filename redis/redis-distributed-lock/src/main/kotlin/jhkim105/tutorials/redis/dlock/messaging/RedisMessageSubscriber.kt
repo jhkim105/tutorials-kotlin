@@ -2,13 +2,11 @@ package jhkim105.tutorials.redis.dlock.messaging
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.oshai.kotlinlogging.KotlinLogging
-import jhkim105.tutorials.redis.dlock.MessageService
-import jhkim105.tutorials.redis.dlock.SampleMessage
-import jhkim105.tutorials.redis.dlock.persistence.IdGenerator
+import jhkim105.tutorials.redis.dlock.service.MessageService
+import jhkim105.tutorials.redis.dlock.controller.SampleMessage
 import org.springframework.data.redis.connection.Message
 import org.springframework.data.redis.connection.MessageListener
 import org.springframework.stereotype.Component
-import java.time.Instant
 
 @Component
 class RedisMessageSubscriber(

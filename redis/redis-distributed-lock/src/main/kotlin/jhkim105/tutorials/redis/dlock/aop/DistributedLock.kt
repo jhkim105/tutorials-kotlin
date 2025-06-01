@@ -5,6 +5,8 @@ import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 import org.redisson.api.RLock
 import org.redisson.api.RedissonClient
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
 
@@ -14,6 +16,7 @@ annotation class DistributedLock(val key: String, val waitTime: Long = 3000, val
 
 @Aspect
 @Component
+@Order(Ordered.LOWEST_PRECEDENCE - 1) // Transaction aop 보다 먼저 실행하고 나중에 끝나야 한다.
 class DistributedLockAspect(private val redissonClient: RedissonClient) {
 
     @Around("@annotation(distributedLock)")
@@ -25,14 +28,28 @@ class DistributedLockAspect(private val redissonClient: RedissonClient) {
             if (!rLock.tryLock(distributedLock.waitTime, distributedLock.leaseTime, TimeUnit.MILLISECONDS)) {
                 throw IllegalStateException("Could not acquire lock for key: $key")
             }
-            joinPoint.proceed()  //
+            joinPoint.proceed()
         }.onFailure {
             throw IllegalStateException("Lock execution failed. key: $key", it)
         }.also {
             if (rLock.isHeldByCurrentThread) {
-                rLock.unlock()  // 락 해제
+                rLock.unlock()
             }
         }.getOrThrow()
     }
 
+//    @Around("@annotation(distributedLock)")
+    fun executeWithLock(joinPoint: ProceedingJoinPoint, distributedLock: DistributedLock): Any? {
+        val key = KeyExtractor.extractKey(joinPoint, distributedLock.key) ?:  return joinPoint.proceed()
+
+        val lock: RLock = redissonClient.getLock(key)
+
+        if (lock.tryLock(distributedLock.waitTime, distributedLock.leaseTime, TimeUnit.MILLISECONDS)) {
+            return runCatching { joinPoint.proceed() }
+                .also { if (lock.isHeldByCurrentThread) lock.unlock() }
+                .getOrThrow()
+        }
+
+        throw IllegalStateException("distributed lock failed. key: $key")
+    }
 }
