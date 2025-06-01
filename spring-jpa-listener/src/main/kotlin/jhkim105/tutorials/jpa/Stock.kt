@@ -31,11 +31,15 @@ class StockEntityListener(
 
     private lateinit var stockHistoryRepository: StockHistoryRepository
 
-    @PostPersist
-    fun onPostPersist(stock: Stock) {
+    private fun initializeRepository() {
         if (!::stockHistoryRepository.isInitialized) {
             stockHistoryRepository = applicationContext.getBean(StockHistoryRepository::class.java)
         }
+    }
+
+    @PostPersist
+    fun onPostPersist(stock: Stock) {
+        initializeRepository()
 
         val stockHistory = StockHistory(
             stockId = stock.id,
@@ -50,9 +54,7 @@ class StockEntityListener(
 
     @PostUpdate
     fun onPostUpdate(stock: Stock) {
-        if (!::stockHistoryRepository.isInitialized) {
-            stockHistoryRepository = applicationContext.getBean(StockHistoryRepository::class.java)
-        }
+        initializeRepository()
 
         val stockHistory = StockHistory(
             stockId = stock.id,
