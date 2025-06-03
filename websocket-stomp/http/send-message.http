@@ -1,0 +1,7 @@
+### STOMP 서버에 메시지 전송
+POST http://localhost:7070/api/send
+Content-Type: application/json
+
+{
+  "message": "Hello from STOMP client!"
+}
