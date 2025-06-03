@@ -12,22 +12,48 @@ class StockHistoryCreateTest @Autowired constructor(
     val stockHistoryRepository: StockHistoryRepository
 ) : StringSpec({
 
-    "should create stock history on stock update" {
+    beforeTest {
+        stockHistoryRepository.deleteAll()
+        stockRepository.deleteAll()
+    }
+
+    "should create stock history on exchangeCode Or stockCode update" {
         // Given
         val stock = Stock(
-            exchangeCode = "FE",
-            stockCode = "201",
+            exchangeCode = "201",
+            stockCode = "FE",
+            stockName = "Stock A",
         )
         stockRepository.save(stock)
 
         // When
-        stock.exchangeCode = "META"
+        stock.stockCode = "META"
         stockRepository.save(stock)
 
         // Then
-        val stockHistory = stockHistoryRepository.findAll().maxByOrNull { it.createdAt }!!
-        stockHistory.exchangeCode shouldBe "META"
-        stockHistory.stockCode shouldBe "201"
+        val stockHistories = stockHistoryRepository.findAll()
+        val stockHistory = stockHistories.maxByOrNull { it.createdAt }!!
+        stockHistories.size shouldBe 2
+        stockHistory.exchangeCode shouldBe "201"
+        stockHistory.stockCode shouldBe "META"
         stockHistory.createdAt.isBefore(LocalDateTime.now()) shouldBe true
+    }
+
+    "should not create stock history on stockName update" {
+        // Given
+        val stock = Stock(
+            exchangeCode = "201",
+            stockCode = "FE",
+            stockName = "Stock A",
+        )
+        stockRepository.save(stock)
+
+        // When
+        stock.stockName = "Stock B"
+        stockRepository.save(stock)
+
+        // Then
+        val stockHistories = stockHistoryRepository.findAll()
+        stockHistories.size shouldBe 1
     }
 })

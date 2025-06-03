@@ -11,9 +11,9 @@ class StockServiceTest : StringSpec({
 
     val stockHistoryRepository = mockk<StockHistoryRepository>()
     val stockPriceRepository = mockk<StockPriceRepository>()
-    
+
     val stockService = StockService(stockHistoryRepository, stockPriceRepository)
-    
+
     "should return correct stock prices based on business date" {
         // given
         val exchangeCode = "META"
@@ -23,8 +23,8 @@ class StockServiceTest : StringSpec({
         val stockHistory = StockHistory(
             id = 1,
             stockId = 1,
-            exchangeCode = "META",
-            stockCode = "201",
+            stockCode = "META",
+            exchangeCode = "201",
             createdAt = LocalDate.of(2023, 6, 5).atStartOfDay(),
             businessDate = LocalDate.of(2023, 6, 5)
         )
@@ -32,15 +32,15 @@ class StockServiceTest : StringSpec({
         val stockPrices = listOf(
             StockPrice(
                 id = 1,
-                exchangeCode = "META",
-                stockCode = "201",
+                stockCode = "META",
+                exchangeCode = "201",
                 price = 105.0.toBigDecimal(),
                 businessDate = LocalDate.of(2023, 6, 4)
             ),
             StockPrice(
                 id = 2,
-                exchangeCode = "META",
-                stockCode = "201",
+                stockCode = "META",
+                exchangeCode = "201",
                 price = 110.0.toBigDecimal(),
                 businessDate = LocalDate.of(2023, 6, 5)
             )
@@ -70,8 +70,8 @@ class StockServiceTest : StringSpec({
 
     "should return empty list when no stock history is found" {
         // given
-        val exchangeCode = "META"
-        val stockCode = "201"
+        val stockCode = "META"
+        val exchangeCode = "201"
         val businessDate = LocalDate.of(2023, 6, 5)
 
         every {
@@ -81,7 +81,11 @@ class StockServiceTest : StringSpec({
         } returns null
 
         // when
-        val result = stockService.findPriceByStockCodeAndExchangeCode(exchangeCode, stockCode, businessDate)
+        val result = stockService.findPriceByStockCodeAndExchangeCode(
+            exchangeCode = exchangeCode,
+            stockCode = stockCode,
+            businessDate = businessDate
+        )
 
         // then
         result.shouldBeEmpty()
