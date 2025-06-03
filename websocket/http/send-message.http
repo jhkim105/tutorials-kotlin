@@ -1,0 +1,7 @@
+### WebSocket 서버에 메시지 보내기
+POST http://localhost:7070/api/send
+Content-Type: application/json
+
+{
+  "message": "Hello from IntelliJ HTTP client!"
+}
