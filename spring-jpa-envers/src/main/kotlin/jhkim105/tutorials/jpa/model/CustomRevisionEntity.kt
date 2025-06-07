@@ -10,7 +10,7 @@ import org.hibernate.envers.RevisionTimestamp
 
 @Entity
 @RevisionEntity
-class CustomRevision(
+class CustomRevisionEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @RevisionNumber

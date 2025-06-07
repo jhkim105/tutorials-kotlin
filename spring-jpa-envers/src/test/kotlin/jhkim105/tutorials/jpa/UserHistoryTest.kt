@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestMethodOrder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
 @TestMethodOrder(OrderAnnotation::class)
@@ -71,4 +72,6 @@ class UserHistoryTest @Autowired constructor(
 
         assertThat(history).containsExactly("alice", "alice-updated", "alice-updated")
     }
+
+
 }
