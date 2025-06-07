@@ -1,0 +1,4 @@
+### DELETE ALL in transaction
+DELETE http://localhost:8080/users/all
+
+###
