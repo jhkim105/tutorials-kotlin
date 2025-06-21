@@ -1,14 +1,6 @@
-package jhkim105.tutorials.jpa.event
+package jhkim105.tutorials.jpa.model.listener
 
-object EntityChangeDetector {
-
-    /**
-     * 변경된 필드명을 반환합니다.
-     * @param propertyNames 엔티티의 속성 이름 배열
-     * @param oldState 변경 전 값 배열 (DB 기준)
-     * @param newState 변경 후 값 배열 (엔티티 기준)
-     * @return 변경된 필드 이름 목록
-     */
+object JpaListenerUtils {
     fun detectChangedFields(
         propertyNames: Array<String>,
         oldState: Array<Any?>?,
@@ -25,5 +17,15 @@ object EntityChangeDetector {
             }
         }
         return changed
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T> getOldValue(
+        propertyName: String,
+        propertyNames: Array<String>,
+        oldState: Array<Any?>?
+    ): T? {
+        val index = propertyNames.indexOf(propertyName)
+        return if (index >= 0 && oldState != null) oldState[index] as? T else null
     }
 }

@@ -1,6 +1,8 @@
-package jhkim105.tutorials.jpa.event
+package jhkim105.tutorials.jpa
 
 import jakarta.persistence.EntityManagerFactory
+import jhkim105.tutorials.jpa.model.listener.StockCommitEventListener
+import jhkim105.tutorials.jpa.model.listener.StockEventListener
 import org.hibernate.engine.spi.SessionFactoryImplementor
 import org.hibernate.event.service.spi.EventListenerRegistry
 import org.hibernate.event.spi.EventType
@@ -20,8 +22,8 @@ class JpaListenerConfig(
         val sessionFactory = entityManagerFactory.unwrap(SessionFactoryImplementor::class.java)
         val registry = sessionFactory.serviceRegistry.getService(EventListenerRegistry::class.java)!!
         registry.appendListeners(EventType.POST_INSERT, stockEventListener)
-        registry.appendListeners(EventType.PRE_UPDATE, stockEventListener)
         registry.appendListeners(EventType.POST_UPDATE, stockEventListener)
         registry.appendListeners(EventType.POST_COMMIT_UPDATE, stockCommitEventListener)
+        registry.appendListeners(EventType.POST_COMMIT_INSERT, stockCommitEventListener)
     }
 }
