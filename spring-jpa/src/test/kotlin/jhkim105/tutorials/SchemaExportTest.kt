@@ -18,7 +18,7 @@ class SchemaExportTest {
 
     private fun generateSchema() {
         val settings = mapOf(
-            Environment.DIALECT to "org.hibernate.dialect.MySQL8Dialect", // ✅ MySQL Dialect 지정
+            Environment.DIALECT to "org.hibernate.dialect.MySQL8Dialect",
             Environment.HBM2DDL_AUTO to "none",
             Environment.SHOW_SQL to false,
             Environment.FORMAT_SQL to true
