@@ -1,0 +1,13 @@
+### 1. Upload File
+POST http://localhost:8080/files/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="test.txt"
+Content-Type: text/plain
+
+This is a test file.
+--WebAppBoundary--
+
+### 2. Download File
+GET http://localhost:8080/files/download/test.txt
