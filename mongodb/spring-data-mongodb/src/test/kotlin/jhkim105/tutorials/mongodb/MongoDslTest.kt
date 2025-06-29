@@ -10,10 +10,12 @@ import org.springframework.data.mongodb.core.dropCollection
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.isEqualTo
+import org.springframework.test.context.ActiveProfiles
 import kotlin.test.Test
 
 
 @DataMongoTest
+@ActiveProfiles("cluster")
 class MongoDslTest {
 
 
