@@ -1,0 +1,11 @@
+server.port: 8081
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: consumer-app
+      auto-offset-reset: earliest
+    listener:
+      missing-topics-fatal: false
+#  main:
+#    allow-bean-definition-overriding: true

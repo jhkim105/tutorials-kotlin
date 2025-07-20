@@ -1,0 +1,10 @@
+server.port: 8082
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    streams:
+      application-id: streams-app
+      default-key-serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+      default-value-serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+#  main:
+#    allow-bean-definition-overriding: true
