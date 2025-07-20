@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: testcontainers-mariadb
+  jpa:
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+    open-in-view: false
+
+logging:
+  level:
+    "[org.hibernate.SQL]": debug
+    "[org.hibernate.type.descriptor.sql.BasicBinder]": trace

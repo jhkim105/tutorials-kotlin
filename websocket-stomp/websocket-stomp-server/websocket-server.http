@@ -1,0 +1,7 @@
+### Get Token
+POST http://localhost:7070/api/token
+Content-Type: application/json
+
+{
+  "username": "client01"
+}

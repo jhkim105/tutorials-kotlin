@@ -1,0 +1,29 @@
+
+
+## Troubleshooting
+
+```text
+Container startup failed for image testcontainers/ryuk:0.12.0
+org.testcontainers.containers.ContainerLaunchException: Container startup failed for image testcontainers/ryuk:0.12.0
+```
+->
+```shell
+export TESTCONTAINERS_RYUK_DISABLED=true
+```
+
+```text
+Caused by: org.rnorth.ducttape.RetryCountExceededException: Retry limit hit with exception
+	at app//org.rnorth.ducttape.unreliables.Unreliables.retryUntilSuccess(Unreliables.java:88)
+	at app//org.testcontainers.containers.GenericContainer.doStart(GenericContainer.java:336)
+	... 87 more
+Caused by: org.testcontainers.containers.ContainerLaunchException: Could not create/start container
+	at app//org.testcontainers.containers.GenericContainer.tryStart(GenericContainer.java:556)
+	at app//org.testcontainers.containers.GenericContainer.lambda$doStart$0(GenericContainer.java:346)
+	at app//org.rnorth.ducttape.unreliables.Unreliables.retryUntilSuccess(Unreliables.java:81)
+	... 88 more
+Caused by: org.testcontainers.shaded.org.awaitility.core.ConditionTimeoutException: org.testcontainers.containers.GenericContainer$$Lambda/0x000000980164e920 expected the predicate to return <true> but it returned <false> for input of <InspectContainerResponse(args=[mysqld], config=ContainerConfig(attachStderr=false, attachStdin=false, attachStdout=false, cmd=[mysqld], domainName=, entrypoint=[docker-entrypoint.sh], env=[MYSQL_DATABASE=test, MYSQL_PASSWORD=test, MYSQL_USER=test, MYSQL_ROOT_PASSWORD=test, PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin, GOSU_VERSION=1.16, MYSQL_MAJOR=8.0, MYSQL_VERSION=8.0.33-1.el8, MYSQL_SHELL_VERSION=8.0.33-1.el8], exposedPorts=[3306/tcp, 33060/tcp], hostName=68e1331082ca, image=mysql:8.0.33, labels={org.testcontainers=true, org.testcontainers.lang=java, org.testcontainers.sessionId=4bb2c8b0-d6c1-4354-97ba-d7d83c2bc8d5, org.testcontainers.version=1.21.2}, macAddress=null, networkDisabled=true, onBuild=null, stdinOpen=false, portSpecs=null, stdInOnce=false, tty=false, user=, volumes={/var/lib/mysql={}}, workingDir=, healthCheck=null), created=2025-06-22T00:58:40.178227304Z, driver=overlay2, execDriver=null, hostConfig=HostConfig(binds=[], blkioWeight=0, blkioWeightDevice=null, blkioDeviceReadBps=null, blkioDeviceWriteBps=null, blkioDeviceReadIOps=null, blkioDeviceWriteIOps=null, memorySwappiness=null, nanoCPUs=0, capAdd=null, capDrop=null, containerIDFile=, cpuPeriod=0, cpuRealtimePeriod=0, cpuRealtimeRuntime=0, cpuShares=0, cpuQuota=0, cpusetCpus=, cpusetMems=, devices=null, deviceCgroupRules=null, deviceRequests=null, diskQuota=null, dns=null, dnsOptions=null, dnsSearch=null, extraHosts=[], groupAdd=null, ipcMode=shareable, cgroup=, links=[], logConfig=LogConfig(type=json-file, config={}), lxcConf=null, memory=0, memorySwap=0, memoryReservation=0, kernelMemory=null, networkMode=bridge, oomKillDisable=null, init=null, autoRemove=false, oomScoreAdj=0, portBindings={3306/tcp=[Lcom.github.dockerjava.api.model.Ports$Binding;@1e7d3d87}, privileged=false, publishAllPorts=false, readonlyRootfs=false, restartPolicy=no, ulimits=null, cpuCount=0, cpuPercent=0, ioMaximumIOps=0, ioMaximumBandwidth=0, volumesFrom=[], mounts=null, pidMode=, isolation=null, securityOpts=null, storageOpt=null, cgroupParent=, volumeDriver=, shmSize=67108864, pidsLimit=null, runtime=runc, tmpFs=null, utSMode=, usernsMode=, sysctls=null, consoleSize=[0, 0], cgroupnsMode=private), hostnamePath=/var/lib/docker/containers/68e1331082ca5c2a4a25ef0b5993c973509d071253e4468fdfe80503c2b367fe/hostname, hostsPath=/var/lib/docker/containers/68e1331082ca5c2a4a25ef0b5993c973509d071253e4468fdfe80503c2b367fe/hosts, logPath=/var/lib/docker/containers/68e1331082ca5c2a4a25ef0b5993c973509d071253e4468fdfe80503c2b367fe/68e1331082ca5c2a4a25ef0b5993c973509d071253e4468fdfe80503c2b367fe-json.log, id=68e1331082ca5c2a4a25ef0b5993c973509d071253e4468fdfe80503c2b367fe, sizeRootFs=null, sizeRw=null, imageId=sha256:a5e6f938c13843277ec4fe0b165319ad8fad9d5638dfc42245e56638314cbae8, mountLabel=, name=/pedantic_bhabha, restartCount=0, networkSettings=NetworkSettings(bridge=, sandboxId=86a01d41ec7f665981fa2790b5156324128b2d22c7cb6a76d46a8775ac31382b, hairpinMode=false, linkLocalIPv6Address=, linkLocalIPv6PrefixLen=0, ports={}, sandboxKey=/var/run/docker/netns/86a01d41ec7f, secondaryIPAddresses=null, secondaryIPv6Addresses=null, endpointID=, gateway=, portMapping=null, globalIPv6Address=, globalIPv6PrefixLen=0, ipAddress=, ipPrefixLen=0, ipV6Gateway=, macAddress=, networks={bridge=ContainerNetwork(ipamConfig=null, links=[], aliases=null, networkID=, endpointId=, gateway=, ipAddress=, ipPrefixLen=0, ipV6Gateway=, globalIPv6Address=, globalIPv6PrefixLen=0, macAddress=)}), path=docker-entrypoint.sh, processLabel=, resolvConfPath=/var/lib/docker/containers/68e1331082ca5c2a4a25ef0b5993c973509d071253e4468fdfe80503c2b367fe/resolv.conf, execIds=null, state=InspectContainerResponse.ContainerState(status=running, running=true, paused=false, restarting=false, oomKilled=false, dead=false, pid=3461, exitCode=0, error=, startedAt=2025-06-22T00:58:40.233040971Z, finishedAt=0001-01-01T00:00:00Z, health=null), volumes=null, volumesRW=null, node=null, mounts=[InspectContainerResponse.Mount(name=d46397c70dedd636a335016f963e98b1071ab294d2171848f8fad2d77907f724, source=/var/lib/docker/volumes/d46397c70dedd636a335016f963e98b1071ab294d2171848f8fad2d77907f724/_data, destination=/var/lib/mysql, driver=local, mode=, rw=true)], graphDriver=GraphDriver(name=overlay2, data=GraphData(rootDir=null, deviceId=null, deviceName=null, deviceSize=null, dir=null)), platform=linux)> within 5 seconds.
+```
+->
+```shell
+
+```

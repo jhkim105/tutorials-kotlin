@@ -3,9 +3,13 @@ package jhkim105.tutorials.websocket.client
 import jakarta.annotation.PostConstruct
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.messaging.converter.StringMessageConverter
 import org.springframework.messaging.simp.stomp.*
 import org.springframework.stereotype.Component
+import org.springframework.web.client.RestTemplate
 import org.springframework.web.socket.client.standard.StandardWebSocketClient
 import org.springframework.web.socket.messaging.WebSocketStompClient
 import java.lang.reflect.Type
@@ -15,11 +19,14 @@ import java.util.concurrent.TimeUnit
 @Component
 class StompWebSocketClientRunner(
     @Value("\${websocket.server-url}") private val serverUrl: String,
-    @Value("\${websocket.topic}") private val topic: String
+    @Value("\${websocket.topic}") private val topic: String,
+    @Value("\${websocket.token-url}") private val tokenUrl: String,
+    @Value("\${websocket.username}") private val username: String
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
     private val scheduler = Executors.newSingleThreadScheduledExecutor()
+    private val restTemplate = RestTemplate()
 
     @PostConstruct
     fun connect() {
@@ -28,8 +35,24 @@ class StompWebSocketClientRunner(
 
     fun connectInternal() {
         val stompClient = WebSocketStompClient(StandardWebSocketClient())
-        val sessionHandler = object : StompSessionHandlerAdapter() {
 
+        // 1. JWT 토큰 발급 요청
+        val token = try {
+            requestToken(username)
+        } catch (e: Exception) {
+            log.error("❌ Failed to get token: ${e.message}")
+            reconnect()
+            return
+        }
+
+        // 2. STOMP 헤더에 Authorization 추가
+        val connectHeaders = StompHeaders().apply {
+            add("Authorization", "Bearer $token")
+        }
+
+
+        stompClient.messageConverter = StringMessageConverter()
+        val sessionHandler = object : StompSessionHandlerAdapter() {
             override fun afterConnected(session: StompSession, connectedHeaders: StompHeaders) {
                 log.info("✅ Connected to STOMP server at $serverUrl")
                 session.subscribe(topic, object : StompFrameHandler {
@@ -55,16 +78,30 @@ class StompWebSocketClientRunner(
                 log.error("❌ Exception", exception)
                 reconnect()
             }
-
-            fun reconnect() {
-                scheduler.schedule({ connectInternal() }, 3, TimeUnit.SECONDS)
-            }
         }
 
-        stompClient.messageConverter = StringMessageConverter()
+        // 3. 비동기 연결 시도
         stompClient.connectAsync(serverUrl, sessionHandler).exceptionally {
             log.error("❌ Connection failed: ${it.message}")
             null
         }
+    }
+
+    private fun reconnect() {
+        scheduler.schedule({ connectInternal() }, 3, TimeUnit.SECONDS)
+    }
+
+    private fun requestToken(username: String): String {
+        val headers = HttpHeaders().apply {
+            contentType = MediaType.APPLICATION_JSON
+        }
+        val body = mapOf("username" to username)
+        val response = restTemplate.postForObject(
+            tokenUrl,
+            HttpEntity(body, headers),
+            Map::class.java
+        )
+        return response?.get("token") as? String
+            ?: throw IllegalArgumentException("Token not found in response")
     }
 }
