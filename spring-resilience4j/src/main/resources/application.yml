@@ -1,0 +1,17 @@
+spring:
+  application.name: spring-resilience4j
+  aop:
+    proxy-target-class: true
+resilience4j:
+  retry:
+    instances:
+      paymentRetry:
+        max-attempts: 5
+        wait-duration: 500ms
+  circuitbreaker:
+    instances:
+      paymentCircuitBreaker:
+        sliding-window-size: 5
+        failure-rate-threshold: 50
+        permitted-number-of-calls-in-half-open-state: 3
+        wait-duration-in-open-state: 5s
