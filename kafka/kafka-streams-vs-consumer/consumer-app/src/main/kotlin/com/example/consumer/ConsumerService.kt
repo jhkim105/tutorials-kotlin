@@ -1,6 +1,6 @@
 package com.example.consumer
 
-import com.example.common.PriceEvent
+import com.example.common.TradeEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.springframework.kafka.annotation.KafkaListener
@@ -13,9 +13,9 @@ class ConsumerService(
 ) {
     private val previousPrices = ConcurrentHashMap<String, Double>()
 
-    @KafkaListener(topics = ["stock-prices"], groupId = "consumer-app")
+    @KafkaListener(topics = ["stock-trades"], groupId = "consumer-app")
     fun listen(record: ConsumerRecord<String, String>) {
-        val event = objectMapper.readValue(record.value(), PriceEvent::class.java)
+        val event = objectMapper.readValue(record.value(), TradeEvent::class.java)
         val previous = previousPrices.put(event.symbol, event.price)
         if (previous != null && event.price >= previous * 1.05) {
             println("📈 상승 감지: ${event.symbol} ${previous} -> ${event.price}")

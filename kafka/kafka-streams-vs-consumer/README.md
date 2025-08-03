@@ -13,7 +13,7 @@
 #### 카프카 토픽 생성
 ```text
 # stock-prices 토픽 생성
-kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic stock-prices --replication-factor 1 --partitions 1
+kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic stock-trades --replication-factor 1 --partitions 1
 ```
 
 #### App 실행

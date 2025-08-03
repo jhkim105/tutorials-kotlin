@@ -1,6 +1,6 @@
 package com.example.streams
 
-import com.example.common.PriceEvent
+import com.example.common.TradeEvent
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.apache.kafka.common.serialization.Serdes
@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.kafka.annotation.EnableKafkaStreams
 import java.util.concurrent.ConcurrentHashMap
 
-@Configuration
-@EnableKafkaStreams
+//@Configuration
+//@EnableKafkaStreams
 class StreamsTopology {
 
     private val objectMapper = jacksonObjectMapper()
@@ -23,11 +23,11 @@ class StreamsTopology {
     @Bean
     fun kStream(streamsBuilder: StreamsBuilder): KStream<String, String> {
         return streamsBuilder
-            .stream("stock-prices", Consumed.with(Serdes.String(), Serdes.String()))
+            .stream("stock-trades", Consumed.with(Serdes.String(), Serdes.String()))
             .peek { key, value -> println("🔄 입력 수신: $key = $value") }
             .filter { _, value -> value != null }
             .mapValues { value ->
-                val event: PriceEvent = objectMapper.readValue(value)
+                val event: TradeEvent = objectMapper.readValue(value)
                 val previous = previousPrices.put(event.symbol, event.price)
                 if (previous != null && event.price >= previous * 1.05) {
                     println("📈 스트림 상승 감지: ${event.symbol} ${previous} -> ${event.price}")

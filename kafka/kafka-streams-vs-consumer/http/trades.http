@@ -6,3 +6,12 @@ Content-Type: application/json
   "symbol": "AAPL",
   "price": 312.5
 }
+
+###
+POST http://localhost:8080/api/trades
+Content-Type: application/json
+
+{
+"symbol": "AAPL",
+"price": 332.5
+}
