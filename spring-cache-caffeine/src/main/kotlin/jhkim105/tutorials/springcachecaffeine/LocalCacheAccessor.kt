@@ -15,7 +15,7 @@ class LocalCacheAccessor(
     companion object {
         private lateinit var advice: CacheService
 
-        fun <T> localCache(name: String, key: String, function: () -> T): T {
+        fun <T> getOrPut(name: String, key: String, function: () -> T): T {
             return advice.cache(name, key, function)
         }
     }

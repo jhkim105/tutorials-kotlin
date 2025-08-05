@@ -1,6 +1,6 @@
 package jhkim105.tutorials.springcachecaffeine
 
-import jhkim105.tutorials.springcachecaffeine.LocalCacheAccessor.Companion.localCache
+import jhkim105.tutorials.springcachecaffeine.LocalCacheAccessor.Companion.getOrPut
 import org.slf4j.LoggerFactory
 import org.springframework.cache.CacheManager
 import org.springframework.cache.annotation.CacheEvict
@@ -50,7 +50,7 @@ class SampleService(
     }
 
     fun getCachedByCall(pattern: String) {
-        return localCache(CacheConfig.CacheNames.CACHE_1, pattern) { getDate(pattern) }
+        return getOrPut(CacheConfig.CacheNames.CACHE_1, pattern) { getDate(pattern) }
 
     }
 }

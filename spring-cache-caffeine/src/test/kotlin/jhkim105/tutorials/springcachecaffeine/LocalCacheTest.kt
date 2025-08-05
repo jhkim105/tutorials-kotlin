@@ -14,21 +14,21 @@ class LocalCacheTest {
         val cacheKey = "testKey"
         
         // First call - should execute function and cache result
-        val result1 = LocalCacheAccessor.localCache(cacheName, cacheKey) {
+        val result1 = LocalCacheAccessor.getOrPut(cacheName, cacheKey) {
             println("[DEBUG_LOG] Function executed - first call")
             "result-${System.currentTimeMillis()}"
         }
         results.add(result1)
         
         // Second call - should return cached result (same value)
-        val result2 = LocalCacheAccessor.localCache(cacheName, cacheKey) {
+        val result2 = LocalCacheAccessor.getOrPut(cacheName, cacheKey) {
             println("[DEBUG_LOG] Function executed - second call")
             "result-${System.currentTimeMillis()}"
         }
         results.add(result2)
         
         // Third call - should return cached result (same value)
-        val result3 = LocalCacheAccessor.localCache(cacheName, cacheKey) {
+        val result3 = LocalCacheAccessor.getOrPut(cacheName, cacheKey) {
             println("[DEBUG_LOG] Function executed - third call")
             "result-${System.currentTimeMillis()}"
         }
@@ -45,12 +45,12 @@ class LocalCacheTest {
     fun localCacheWithDifferentKeysTest() {
         val cacheName = CacheConfig.CacheNames.LOCAL_CACHE
         
-        val result1 = LocalCacheAccessor.localCache(cacheName, "key1") {
+        val result1 = LocalCacheAccessor.getOrPut(cacheName, "key1") {
             println("[DEBUG_LOG] Function executed for key1")
             "value1"
         }
         
-        val result2 = LocalCacheAccessor.localCache(cacheName, "key2") {
+        val result2 = LocalCacheAccessor.getOrPut(cacheName, "key2") {
             println("[DEBUG_LOG] Function executed for key2")
             "value2"
         }

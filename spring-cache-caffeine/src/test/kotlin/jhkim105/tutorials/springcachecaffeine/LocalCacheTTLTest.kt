@@ -15,12 +15,12 @@ class LocalCacheTTLTest {
         val testKey = "ttlTestKey"
         
         // Test cache1 (5 seconds TTL)
-        val cache1Result1 = LocalCacheAccessor.localCache(cache1Name, testKey) {
+        val cache1Result1 = LocalCacheAccessor.getOrPut(cache1Name, testKey) {
             println("[DEBUG_LOG] Function executed for cache1 - first call")
             "cache1-result-${System.currentTimeMillis()}"
         }
         
-        val cache1Result2 = LocalCacheAccessor.localCache(cache1Name, testKey) {
+        val cache1Result2 = LocalCacheAccessor.getOrPut(cache1Name, testKey) {
             println("[DEBUG_LOG] Function executed for cache1 - second call")
             "cache1-result-${System.currentTimeMillis()}"
         }
@@ -30,12 +30,12 @@ class LocalCacheTTLTest {
         println("[DEBUG_LOG] Cache1 caching verified: $cache1Result1")
         
         // Test localCache (10 seconds TTL)
-        val localCacheResult1 = LocalCacheAccessor.localCache(localCacheName, testKey) {
+        val localCacheResult1 = LocalCacheAccessor.getOrPut(localCacheName, testKey) {
             println("[DEBUG_LOG] Function executed for localCache - first call")
             "localCache-result-${System.currentTimeMillis()}"
         }
         
-        val localCacheResult2 = LocalCacheAccessor.localCache(localCacheName, testKey) {
+        val localCacheResult2 = LocalCacheAccessor.getOrPut(localCacheName, testKey) {
             println("[DEBUG_LOG] Function executed for localCache - second call")
             "localCache-result-${System.currentTimeMillis()}"
         }
@@ -55,13 +55,13 @@ class LocalCacheTTLTest {
         val testKey = "expirationTestKey"
         
         // First call
-        val result1 = LocalCacheAccessor.localCache(cacheName, testKey) {
+        val result1 = LocalCacheAccessor.getOrPut(cacheName, testKey) {
             println("[DEBUG_LOG] Function executed - first call for TTL test")
             "result-${System.currentTimeMillis()}"
         }
         
         // Second call immediately - should be cached
-        val result2 = LocalCacheAccessor.localCache(cacheName, testKey) {
+        val result2 = LocalCacheAccessor.getOrPut(cacheName, testKey) {
             println("[DEBUG_LOG] Function executed - second call for TTL test")
             "result-${System.currentTimeMillis()}"
         }
@@ -74,7 +74,7 @@ class LocalCacheTTLTest {
         TimeUnit.SECONDS.sleep(6)
         
         // Third call after expiration - should execute function again
-        val result3 = LocalCacheAccessor.localCache(cacheName, testKey) {
+        val result3 = LocalCacheAccessor.getOrPut(cacheName, testKey) {
             println("[DEBUG_LOG] Function executed - third call after expiration")
             "result-${System.currentTimeMillis()}"
         }
