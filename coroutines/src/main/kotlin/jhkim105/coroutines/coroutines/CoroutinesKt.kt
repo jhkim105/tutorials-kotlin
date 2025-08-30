@@ -11,6 +11,16 @@ import java.util.concurrent.Executors
 private val log: Logger = LoggerFactory.getLogger("coroutines")
 
 
+// -Dkotlinx.coroutines.debug
+// since 1.3+
+suspend fun main(args: Array<String>) {
+    demonContextInheritance()
+}
+
+//fun main(args: Array<String>) = runBlocking {
+//    demonContextInheritance()
+//}
+
 suspend fun boilingWater() {
     log.info("Boiling water")
     delay(1000L)
@@ -131,7 +141,7 @@ suspend fun workHardRoutine() {
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
-suspend fun workHNicelyRoutine() {
+suspend fun workHardNicelyRoutine() {
     val dispatcher: CoroutineDispatcher = Dispatchers.Default.limitedParallelism(1)
     coroutineScope {
         launch(dispatcher) { workingNicely() }
@@ -244,9 +254,4 @@ suspend fun demonContextInheritance() {
         delay(200)
         log.info("[parent] Hi again")
     }
-}
-
-// -Dkotlinx.coroutines.debug
-suspend fun main(args: Array<String>) {
-    demonContextInheritance()
 }
