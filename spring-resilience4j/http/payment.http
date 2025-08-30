@@ -1,6 +1,0 @@
-###
-POST http://localhost:8080/payments/process/1?maxRetry=10
-Content-Type: application/json
-
-
-###

@@ -1,26 +1,21 @@
 package jhkim105.tutorials.springresilience4j.retry
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker
-import io.github.resilience4j.retry.RetryRegistry
 import io.github.resilience4j.retry.annotation.Retry
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 @Service
-class PaymentServiceImpl(
-    private val retryRegistry: RetryRegistry,
-) : PaymentService {
+class RetryServiceImpl() : RetryService {
 
     private val log = LoggerFactory.getLogger(javaClass)
     private val attempts = mutableMapOf<Int, Int>()
 
     @Retry(name = "paymentRetry", fallbackMethod = "fallback")
-    @CircuitBreaker(name = "paymentCircuitBreaker") // fallback 을 지정하면 retry 가 안된다.
-     override fun processPayment(id: Int, maxRetry: Int): String {
+     override fun processSomething(id: Int, maxRetry: Int): String {
         val attempt = attempts.getOrDefault(id, 0) + 1
         attempts[id] = attempt
-        log.info("Processing payment for $id, attempt $attempt")
+        log.info("Processing for $id, attempt $attempt")
 
-        if (attempt >= maxRetry) {
+        if (id == 1 && attempt >= maxRetry) {
             return "success"
         }
 

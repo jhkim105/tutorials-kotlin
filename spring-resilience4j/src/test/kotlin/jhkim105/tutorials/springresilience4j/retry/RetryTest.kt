@@ -1,13 +1,10 @@
 package jhkim105.tutorials.springresilience4j.retry
 
-import SampleService
 import io.github.resilience4j.retry.Retry
 import io.github.resilience4j.retry.RetryConfig
-import io.mockk.mockk
 import org.junit.jupiter.api.assertThrows
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import java.time.Duration
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -55,5 +52,17 @@ class RetryTest {
 
         assertEquals("Always failing (attempt 3)", ex.message)
         assertEquals(3, attempt)
+    }
+
+    class SampleService {
+        private val counter = AtomicInteger(0)
+
+        fun unreliableMethod(): String {
+            val attempt = counter.incrementAndGet()
+            if (attempt < 3) {
+                throw RuntimeException("Failure on attempt $attempt")
+            }
+            return "Success on attempt $attempt"
+        }
     }
 }

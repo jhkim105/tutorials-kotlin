@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController()
-@RequestMapping("/payments")
-class PaymentController(
-    private val paymentService: PaymentService
+@RequestMapping("/retries")
+class RetryController(
+    private val retryService: RetryService
 ) {
 
-    @PostMapping("/process/{id}")
+    @PostMapping("/{id}")
     fun process(@PathVariable id: Int, maxRetry:Int = 3): PaymentResponse{
-        val message = paymentService.processPayment(1, maxRetry)
+        val message = retryService.processSomething(1, maxRetry)
         return PaymentResponse(message)
     }
 
