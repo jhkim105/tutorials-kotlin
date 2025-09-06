@@ -4,7 +4,7 @@ spring:
     bootstrap-servers: localhost:9092
     consumer:
       group-id: consumer-app
-      auto-offset-reset: earliest
+      auto-offset-reset: latest
     listener:
       missing-topics-fatal: false
 #  main:
