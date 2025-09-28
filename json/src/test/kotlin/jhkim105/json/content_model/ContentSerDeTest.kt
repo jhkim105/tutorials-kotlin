@@ -1,0 +1,257 @@
+package jhkim105.json.content_model
+
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.fasterxml.jackson.module.kotlin.readValue
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+
+
+class ContentSerDeTest: StringSpec({
+
+    val mapper = jacksonObjectMapper()
+        .registerKotlinModule()
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+
+    // 주어진 JSON 원문 (질문에 제공된 그대로 복붙)
+    val sourceJson = """
+        [    
+            { "id":"9o8EWBlleJ1iEfnE3b6Kx","type":"INTRO","children":[{ "text":"" }]},
+            { "id":"ED6Xj--gzOW1Ev29eQmob","type":"INTRO","children":[
+                {"text":"인트로 컴포넌트입니다","weight":"bold"},{"text":" : "},
+                {"text":"커뮤니티에서","color":"red500"},{"text":" "},
+                {"text":"내가","color":"blue600"},{"text":" "},
+                {"text":"쓴 글이","weight":"bold","color":"red500"},{"text":" "},
+                {"text":"좋아요를","color":"blue600","weight":"bold"},{"text":" "},
+                {"text":"받으면","highlight":"highlight-yellow"},{"text":" "},
+                {"text":"알림을","weight":"bold","highlight":"highlight-yellow"},{"text":" "},
+                {"text":"통해","weight":"bold","color":"red500","highlight":"highlight-yellow"},{"text":" "},
+                {"text":"해당","weight":"bold","color":"blue600","highlight":"highlight-yellow"},
+                {"text":" 소식을 알 수 있어요. \n좋아요 알림을 이미 받은 글에 한해서는 10분동안 좋아요 알림이 오지 않아요. "}
+            ]},
+            { "id":"tqkXmmI8e4dQLIs43W3Cz","type":"PARAGRAPH","children":[
+                {"text":"본문 컴포넌트입니다","weight":"bold"},{"text":" : "},
+                {"text":"커뮤니티에서","color":"red500"},{"text":" "},
+                {"text":"내가","color":"blue600"},{"text":" "},
+                {"text":"쓴 글이","weight":"bold","color":"red500"},{"text":" "},
+                {"text":"좋아요를","color":"blue600","weight":"bold"},{"text":" "},
+                {"text":"받으면","highlight":"highlight-yellow"},{"text":" "},
+                {"text":"알림을","weight":"bold","highlight":"highlight-yellow"},{"text":" "},
+                {"text":"통해","weight":"bold","color":"red500","highlight":"highlight-yellow"},{"text":" "},
+                {"text":"해당","weight":"bold","color":"blue600","highlight":"highlight-yellow"},
+                {"text":" 소식을 알 수 있어요. \n좋아요 알림을 이미 받은 글에 한해서는 10분동안 좋아요 알림이 오지 않아요. "}
+            ]},
+            { "id":"WeAPvLCg_OYc3YccPUSkS","type":"TITLE","children":[
+                {"text":"제목 컴포넌트입니다 : 제목은 볼드가 없어요. "},
+                {"text":"커뮤니티에서","color":"red500"},{"text":" "},
+                {"text":"내가","color":"blue600"},{"text":" "},
+                {"text":"쓴 글이","weight":"bold","color":"red500"},{"text":" "},
+                {"text":"좋아요를","color":"blue600","weight":"bold"},{"text":" "},
+                {"text":"받으면","highlight":"highlight-yellow"},{"text":" "},
+                {"text":"알림을","weight":"bold","highlight":"highlight-yellow"},{"text":" "},
+                {"text":"통해","weight":"bold","color":"red500","highlight":"highlight-yellow"},{"text":" "},
+                {"text":"해당","weight":"bold","color":"blue600","highlight":"highlight-yellow"},
+                {"text":" 소식을 알 수 있어요. \n좋아요 알림을 이미 받은 글에 한해서는 10분동안 좋아요 알림이 오지 않아요. "}
+            ]},
+            { "id":"s5RA72_bsNSYzm2NgGnnF","type":"CALL_OUT","children":[
+                {"text":"콜아웃 컴포넌트입니다","weight":"bold"},{"text":" : "},
+                {"text":"커뮤니티에서","color":"red500"},{"text":" "},
+                {"text":"내가","color":"blue600"},{"text":" "},
+                {"text":"쓴 글이","weight":"bold","color":"red500"},{"text":" "},
+                {"text":"좋아요를","color":"blue600","weight":"bold"},{"text":" "},
+                {"text":"받으면","highlight":"highlight-yellow"},{"text":" "},
+                {"text":"알림을","weight":"bold","highlight":"highlight-yellow"},{"text":" "},
+                {"text":"통해","weight":"bold","color":"red500","highlight":"highlight-yellow"},{"text":" "},
+                {"text":"해당","weight":"bold","color":"blue600","highlight":"highlight-yellow"},
+                {"text":" 소식을 알 수 있어요. \n좋아요 알림을 이미 받은 글에 한해서는 10분동안 좋아요 알림이 오지 않아요. "}
+            ]},
+            { "id":"Apij3zKHiZXhZ5iUJ762d","type":"PARAGRAPH","children":[
+                {"text":"단순 본문 영역입니다. 일반 본문 영역은 하단 여백이 18px입니다."}
+            ]},
+            { "id":"KyH7AHMajE7NQYpORlItY","type":"PARAGRAPH","children":[
+                {"text":"단순 본문 영역입니다. 본문 영역 바로 하단에 드롭다운이 오면 하단 여백이 10px이 됩니다."}
+            ]},
+            { "id":"YMwiu5zxyJ0tBBOJzptCb","type":"DROPDOWN","children":[
+                { "id":"XeYDHGLD3h8Pp4rTcNXbR","type":"SUMMARY","children":[
+                    {"text":"드롭다운 컴포넌트입니다 : "},
+                    {"text":"커뮤니티에서","color":"red500"},{"text":" "},
+                    {"text":"내가","color":"blue600"},{"text":" "},
+                    {"text":"쓴 글이","weight":"bold","color":"red500"},{"text":" "},
+                    {"text":"좋아요를","color":"blue600","weight":"bold"},{"text":" "},
+                    {"text":"받으면","highlight":"highlight-yellow"},{"text":" "},
+                    {"text":"알림을","weight":"bold","highlight":"highlight-yellow"},{"text":" "},
+                    {"text":"통해","weight":"bold","color":"red500","highlight":"highlight-yellow"},{"text":" "},
+                    {"text":"해당","weight":"bold","color":"blue600","highlight":"highlight-yellow"},
+                    {"text":" 소식을 알 수 있어요. "}
+                ]},
+                { "id":"fX7ifsuO5PoOtUBtA5NE_","type":"DESCRIPTIONS","children":[
+                    {"text":"- "},
+                    {"color":"red500","text":"커뮤니티에서"},{"text":" "},
+                    {"text":"내가","color":"blue600"},{"text":" "},
+                    {"text":"쓴 글이","weight":"bold","color":"red500"},{"text":" "},
+                    {"text":"좋아요를","color":"blue600","weight":"bold"},{"text":" "},
+                    {"text":"받으면","highlight":"highlight-yellow"},{"text":" "},
+                    {"text":"알림을","weight":"bold","highlight":"highlight-yellow"},{"text":" "},
+                    {"text":"통해","weight":"bold","color":"red500","highlight":"highlight-yellow"},{"text":" "},
+                    {"text":"해당","weight":"bold","color":"blue600","highlight":"highlight-yellow"},
+                    {"text":" 소식을 알 수 있어요. \n- 좋아요 알림을 이미 받은 글에 한해서는 10분동안 좋아요 알림이 오지 않아요. \n- 10분동안 좋아요 알림이 오지 않아요."}
+                ]}
+            ]},
+            { "id":"Zix2NXAcCZVS-_jtvluYc","type":"DROPDOWN","children":[
+                { "id":"8Iw-PSSKPkez6rBzRjJ_T","type":"SUMMARY","children":[{"text":"드롭다운 컴포넌트"}]},
+                { "id":"MKdPUJJ2SW8H3bSAdHtGV","type":"DESCRIPTIONS","children":[{"text":"볼드체 설정 입니다. ","weight":"bold"}]}
+            ]},
+            { "id":"9nVa90Ctqgo73gcCXvZko","type":"UNORDERED_LIST","children":[
+                { "id":"Nf_fNainlub_Z1i5sYGYh","type":"LIST_ITEM","children":[
+                    {"text":"불릿리스트 컴포넌트입니다","weight":"bold"},{"text":" : "},
+                    {"text":"커뮤니티에서","color":"red500"},{"text":" "},
+                    {"text":"내가","color":"blue600"},{"text":" "},
+                    {"text":"쓴 글이","weight":"bold","color":"red500"},{"text":" "},
+                    {"text":"좋아요를","color":"blue600","weight":"bold"},{"text":" "},
+                    {"text":"받으면","highlight":"highlight-yellow"},{"text":" "},
+                    {"text":"알림을","weight":"bold","highlight":"highlight-yellow"},{"text":" "},
+                    {"text":"통해","weight":"bold","color":"red500","highlight":"highlight-yellow"},{"text":" "},
+                    {"text":"해당","weight":"bold","color":"blue600","highlight":"highlight-yellow"},
+                    {"text":" 소식을 알 수 있어요.\n좋아요 알림을 이미 받은 글에 한해서는 10분동안 좋아요 알림이 오지 않아요. \n"}
+                ]},
+                { "id":"Nf_fNainlub_Z1i5sYGYh","type":"LIST_ITEM","children":[
+                    {"text":"불릿리스트 컴포넌트입니다","weight":"bold"},{"text":" : "},
+                    {"text":"커뮤니티에서","color":"red500"},{"text":" "},
+                    {"text":"내가","color":"blue600"},{"text":" "},
+                    {"text":"쓴 글이","weight":"bold","color":"red500"},{"text":" "},
+                    {"text":"좋아요를","color":"blue600","weight":"bold"},{"text":" "},
+                    {"text":"받으면","highlight":"highlight-yellow"},{"text":" "},
+                    {"text":"알림을","weight":"bold","highlight":"highlight-yellow"},{"text":" "},
+                    {"text":"통해","weight":"bold","color":"red500","highlight":"highlight-yellow"},{"text":" "},
+                    {"text":"해당","weight":"bold","color":"blue600","highlight":"highlight-yellow"},
+                    {"text":" 소식을 알 수 있어요. "}
+                ]}
+            ], "caption":"캡션"},
+            { "id":"DZgCogDUWbLtArleuoHVt","type":"MARGIN","height":"40"},
+            { "id":"o2UOlKrbEmqhorziZh12P","type":"PARAGRAPH","children":[{"text":"위 아래는 마진 컴포넌트입니다. 마진 40."}]},
+            { "id":"tz7EVWG8UjMwb4m2NAkEU","type":"MARGIN","height":"40"},
+            { "id":"FpvSRriBDqPmp4EmYNeis","type":"PARAGRAPH","children":[{"text":"아래는 이미지 상황별 사례입니다."}]},
+            { "id":"dIUfpA9EbW8T0I4-t2Vuv","type":"IMAGES","images":[
+                {"id":"6b9FOYR9-3NBn5ujfuFMq","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250610-a47aa794-c15a-4d1f-8a56-9ea822eb8954.blob","copyright":{
+                    "description":"단일 이미지 가로 비율 4:3 ©출처는 이제 별도 입력 영역 없이 수동 입력하기로 했어요","holder":""}}]},
+            { "id":"Z14j_eyewFTs9jhnNL6sS","type":"IMAGES","images":[
+                {"id":"QrarK6JGKuG1_7-QlSgWq","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250610-1d5422a5-7d66-4ce3-ab6a-b5427a568d6c.blob","copyright":{
+                    "description":"단일 이미지 세로 비율 길게 ©출처","holder":""}}]},
+            { "id":"cWrRdNAcJaq8lzYE1ofw_","type":"IMAGES","images":[
+                {"id":"o13z7dGFDtbZZMcwLndfI","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250610-8b3973b3-b25e-42b7-ae3e-5a0fc05c8040.blob","copyright":{
+                    "description":"4:3 비율 여러개","holder":"출처 영역에 넣으면"}},
+                {"id":"yINlXYoSeQ7krtxCH4Om3","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250610-2b5d5ce2-c390-43ed-8066-a8b53d0e8412.blob","copyright":{
+                    "description":"4:3 비율 여러개 ©출처는 이제 별도 입력 영역 없이 수동 입력하기로 했어요","holder":""}},
+                {"id":"B5ci50HcT41_Rf8ispEW2","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250610-beb33f23-e290-4719-9d9c-9763626d5bff.blob","copyright":{
+                    "description":"","holder":""}},
+                {"id":"iehjvca-KUWuh02vEHWQn","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250610-05e8eebf-7c9b-454a-b7be-df0c0a1a7d22.blob","copyright":{
+                    "description":"","holder":""}}
+            ]},
+            { "id":"Z3HMb20yQA5R3M2HOLxEb","type":"IMAGES","images":[
+                {"id":"KCc6ZI-JqnW3iiXji-fGo","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250610-776e6b23-de2c-4d42-a158-b1e0fbfe113d.blob","copyright":{
+                    "description":"16:9 비율 여러개 ©출처","holder":""}},
+                {"id":"oAJZXN_kBKzwBJpfyXOuG","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250610-34cea5b6-520c-4d25-816e-ca62f159cb9e.blob","copyright":{
+                    "description":"16:9 비율 여러개 16:9 비율 여러개16:9 비율 여러개16:9 비율 여러개16:9 비율 여러개16:9 비율 여러개16:9 비율 여러개16:9 비율 여러개16:9 비율 여러개16:9 비율 여러개 ©출처는 이제 별도 입력 영역 없이 수동 입력하기로 했어요","holder":""}}
+            ]},
+            { "id":"Tc1XYftriCGwZmnspQYCC","type":"IMAGES","images":[
+                {"id":"z0WvNKW4kGNJIhyZ1ZamQ","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250610-66484fb9-b70e-4b50-b680-ff3a2e26dfcb.blob","copyright":{
+                    "description":"4:3 비율 내 세로로 긴 이미지 하나 있을 때 ©출처","holder":""}},
+                {"id":"kPpSfo1aesXJao0uO0Zhv","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250610-29149089-74c5-4c86-b573-6cc49e4502d4.blob","copyright":{
+                    "description":"","holder":""}},
+                {"id":"bnZA-KlYoyZkm9x7_8HEw","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250610-57598dba-2370-44e9-ac39-561155a44913.blob","copyright":{
+                    "description":"","holder":""}},
+                {"id":"oz-v_jokZhksxJd1N_nIq","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250610-3516362a-dd47-4741-8858-1d9bc3c9f775.blob","copyright":{
+                    "description":"","holder":""}}
+            ]},
+            { "id":"R_0bmCvozQzuasFHiFt_Z","type":"IMAGES","images":[
+                {"id":"dnpqt12N0f3yNTKkGktms","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250610-99b7afb9-6631-478b-aae2-2b28d3ff2db9.blob","copyright":{
+                    "description":"4:3, 16:9, 세로로 긴 사진이 동시에 있을 때 ","holder":""}},
+                {"id":"EY0sTf-6AgWO8DH6QCEKh","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250610-364d2898-4322-45c0-b765-29cda3188711.blob","copyright":{
+                    "description":"","holder":""}},
+                {"id":"vpvz7oMDR37W8PAjGCJ3s","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250610-b9195f91-4fc9-4db7-9e40-36549ddcdf7f.blob","copyright":{
+                    "description":"","holder":""}}
+            ]},
+            { "id":"mlQHVxdxFcFrPHfXeXaIq","type":"INTRO","children":[{"text":""}]},
+            { "id":"xaPluM0iZReJukkkaY4iE","type":"PARAGRAPH","children":[{"text":"테스트"}]},
+            { "id":"TbvcUAANK-t7_J5wD2zbc","type":"IMAGES","images":[
+                {"id":"ZR_T2srRrptXcqm0ITsnJ","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250611-0232509e-baec-40a7-a7a5-e8aa4152964c.blob","copyright":{
+                    "description":"단일16:9단일16:9단일16:9단일16:9단일16:9단일16:9단일16:9","holder":"단일16:9단일16:9단일16:9단일16:9단일16:9단일16:9"}}
+            ]},
+            { "id":"ONulWtzdWsCK3GxPfZCbP","type":"IMAGES","images":[
+                {"id":"uN9L_8DCJioH2CU0hhBwh","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250611-3bee354c-3804-4b1d-a913-fb0e59f72e30.blob","copyright":{
+                    "description":"1수수수수수수수수수수수수수수수수수수수수수수숫","holder":"1정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정"}},
+                {"id":"8T_xp5FgcNdZ9hmUbm-0K","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250611-c5be4b42-d40b-4c64-b83b-36cc630f51f9.blob","copyright":{
+                    "description":"2수수수수수수수수수수수수수수수수수수수수수수수수수수수수수수수수수수수수수수수수수","holder":"2정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정정"}}
+            ]},
+            { "id":"f7C6iPHokcYJHUTsQ5Vfl","type":"IMAGES","images":[
+                {"id":"QG-GfxAdecwBV4BnCd7Yx","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250611-fe164257-b589-469d-96dc-5722ad649341.blob","copyright":{
+                    "description":"1줄입니다","holder":"1줄입니다"}},
+                {"id":"UWNBQv7lzlKTq57N70IDx","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250611-49006c58-bc97-4a03-86a9-35d24f37010f.blob","copyright":{
+                    "description":"2줄2줄입니다2줄입니다2줄입니다2줄입니다2줄입니다2줄입니다","holder":"2줄2줄입니다2줄입니다2줄입니다2줄입니다2줄입니다2줄입니다"}},
+                {"id":"Wm-xxRVZD_-YotMHpjowh","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250611-b1215880-7ab8-484f-ae78-ef4b9c1a8ef8.blob","copyright":{
+                    "description":"3줄입니다3줄입니다3줄입니다3줄입니다3줄입니다3줄입니다3줄입니다3줄입니다3줄입니다3줄입니다3","holder":"니다3줄입니다3줄입니다3줄입니다3줄입니다3줄입니다3줄입니다3줄입니다3줄입니다"}}
+            ]},
+            { "id":"Gsbl4DLASNM4De6lL1Z-n","type":"PARAGRAPH","children":[{"text":"아래부터는 본문 내 링크 타입별 테스트입니다."}]},
+            { "id":"PSbK_zhGolKi0GRJWCPLw","type":"IMAGES","images":[
+                {"id":"iGoBWo670CQIYQNSAfFQU","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250616-4cc1e08e-b0f7-46ae-85e1-434e481c50c9.gif","copyright":{
+                    "description":"gif 테스트","holder":"우왕"}},
+                {"id":"lxooF4isoVo6ktt4ZfKyI","imageUrl":"https://sandbox-content-image.kakaopaysec.com/research-contents/20250616-e0700307-1b99-43ab-b3eb-904df96192b3.blob","copyright":{
+                    "description":"","holder":""}}
+            ]},
+            { "id":"KDEhqUZT0HTfkSKtAOPS3","type":"PARAGRAPH","children":[
+                {"text":""},
+                {"type":"STOCK_LINK","id":"6HwiP1OXT1TQdpGhHAAav","stockId":"AAPL","isinCode":"US0378331005","exchangeId":"201","children":[{"text":"종목 링크"}]},
+                {"text":"입니다"}
+            ]},
+            { "id":"WRNt1PhSIvAA21wMIab5V","type":"PARAGRAPH","children":[
+                {"text":""},
+                {"type":"NEWS_LINK","id":"VEEQp8ThFtjoPdfAS3FAi","newsId":"BZNS45890905","children":[{"text":"뉴스 링크"}]},
+                {"text":"입니다"}
+            ]},
+            { "id":"g4kg69CATcqIX07j-lnGd","type":"PARAGRAPH","children":[
+                {"text":""},
+                {"type":"CONTENTS_LINK","id":"IFqW5PKyhi7f3VLGQVrag","url":"https://contents.kakaopaysec.com/2025/03/28_01/","children":[{"text":"콘텐츠 링크"}]},
+                {"text":"입니다"}
+            ]},
+            { "id":"y0ZqEkz4eSOU3Ou8dPdAV","type":"PARAGRAPH","children":[
+                {"text":""},
+                {"type":"SCHEME_LINK","id":"opk7p5O3PYuCA150rgf_R","openScheme":"mts/tax/estimated","children":[{"text":"스킴 링크"}]},
+                {"text":"입니다 : 백버튼시 전 화면으로 돌아가지 못함"}
+            ]},
+            { "id":"TBpGSlcnBzxE2MP2pjAxK","type":"PARAGRAPH","children":[
+                {"text":""},
+                {"type":"EXTERNAL_LINK","id":"q6kNw0EwQZy44s-JZeX4n","url":"https://sandbox-fest.kakao.com/securities-customer-center/inquiry/form","navigationType":"default","children":[{"text":"외부 링크"}]},
+                {"text":"입니다. : 완전 외부 링크(구글이라거나)는 경우의 수에 없음"}
+            ]},
+            { "id":"9ThhMmKNdidokF-2SSQmA","type":"PARAGRAPH","children":[
+                {"text":"샌박"},
+                {"type":"CONTENTS_LINK","id":"jRmJD8gSwWTJwObWsk8DT","url":"https://sandbox-content.kakaopaysec.com/details/684930aebf3d576554a4a976","children":[{"text":" 콘텐츠 링크"}]},
+                {"text":" 입니다."}
+            ]}
+        ]
+    """.trimIndent()
+
+    "역직렬화 후 직렬화→재역직렬화 라운드트립 시 동일 객체여야 한다" {
+        // 1) 원본 JSON -> 객체
+        val doc1: Document = mapper.readValue(sourceJson)
+
+        // 2) 객체 -> JSON
+        val jsonRound = mapper.writeValueAsString(doc1)
+
+        // 3) JSON -> 객체
+        val doc2: Document = mapper.readValue(jsonRound)
+
+        // 4) 구조/값 비교
+        doc2 shouldBe doc1
+    }
+
+    "직렬화된 JSON을 다시 읽어도 의미적 동일성 보장(텍스트 런 type=TEXT 자동 추가 포함)" {
+        // 위 테스트로 충분하지만, TEXT 기본형 다형성(defaultImpl) 동작을 명시적으로 재확인
+        val doc: Document = mapper.readValue(sourceJson)
+        val json = mapper.writeValueAsString(doc)
+        val docAgain: Document = mapper.readValue(json)
+
+        docAgain shouldBe doc
+    }
+})
