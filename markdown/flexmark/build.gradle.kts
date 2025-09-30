@@ -23,13 +23,19 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+    implementation("com.vladsch.flexmark:flexmark:0.64.8")
+    implementation("com.vladsch.flexmark:flexmark-ext-tables:0.64.8")
+    implementation("com.vladsch.flexmark:flexmark-ext-gfm-strikethrough:0.64.8")
+    implementation("com.vladsch.flexmark:flexmark-ext-superscript:0.64.8")
+    implementation("com.vladsch.flexmark:flexmark-ext-ins:0.64.8")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-    implementation("com.vladsch.flexmark:flexmark:0.64.8")
-    implementation("com.vladsch.flexmark:flexmark-ext-gfm-strikethrough:0.64.8")
-    implementation("com.vladsch.flexmark:flexmark-ext-tables:0.64.8")
+    testImplementation(kotlin("test"))
+    testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
+    testImplementation("io.kotest:kotest-assertions-core:5.9.1")
 }
 
 kotlin {

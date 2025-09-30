@@ -1,4 +1,4 @@
-package jhkim105.flexmark
+package jhkim105.flexmark.content
 
 // 최상위 문서
 data class ContentDocument(

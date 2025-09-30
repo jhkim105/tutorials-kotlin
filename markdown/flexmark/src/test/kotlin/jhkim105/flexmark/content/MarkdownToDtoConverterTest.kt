@@ -1,6 +1,7 @@
-package jhkim105.flexmark
+package jhkim105.flexmark.content
 
-import jhkim105.flexmark.MarkdownToDtoConverter.convert
+import jhkim105.flexmark.content.MarkdownToContentConverter.convert
+import kotlin.collections.get
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue

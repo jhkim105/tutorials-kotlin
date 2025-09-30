@@ -1,11 +1,11 @@
-package jhkim105.flexmark
+package jhkim105.flexmark.content
 
 import com.vladsch.flexmark.ast.*
 import com.vladsch.flexmark.parser.Parser
 import com.vladsch.flexmark.util.ast.Node
 import com.vladsch.flexmark.util.data.MutableDataSet
 
-object MarkdownToDtoConverter {
+object MarkdownToContentConverter {
     private const val DEFAULT_MARGIN_HEIGHT = "40"
 
     fun convert(markdown: String): ContentDocument {
