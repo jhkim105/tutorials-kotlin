@@ -1,12 +1,11 @@
 package jhkim105.flexmark.content
 
 import jhkim105.flexmark.content.MarkdownToContentConverter.convert
-import kotlin.collections.get
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class MarkdownToDtoConverterTest {
+class MarkdownToContentConverterTest {
 
     @Test
     fun `H1 제목이 TitleBlock level 1로 변환된다`() {
