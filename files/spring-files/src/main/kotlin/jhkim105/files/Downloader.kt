@@ -2,6 +2,7 @@ package jhkim105.files
 
 import org.springframework.http.HttpMethod
 import org.springframework.util.StreamUtils
+import org.springframework.web.client.RestClient
 import org.springframework.web.client.RestTemplate
 import java.io.BufferedInputStream
 import java.io.File
@@ -53,6 +54,29 @@ object Downloader {
             }
             targetFile
         }!!
+    }
+    fun downloadByRestClient(url: String, dirPath: String): File? {
+        val restClient = RestClient.create()
+
+        return restClient.method(HttpMethod.GET)
+            .uri(url)
+            .exchange { request, response ->
+                val headers = response.headers
+                var fileName = headers.contentDisposition?.filename
+                if (fileName.isNullOrBlank()) {
+                    // URL 마지막 path 에서 파일명 추출 시도, 없으면 UUID 사용
+                    val pathFileName = url.substringAfterLast("/").takeIf { it.isNotBlank() }
+                    fileName = pathFileName ?: UUID.randomUUID().toString()
+                }
+
+                val targetFile = File(dirPath, fileName)
+                response.body?.use { inputStream ->
+                    FileOutputStream(targetFile).use { outputStream ->
+                        StreamUtils.copy(inputStream, outputStream)
+                    }
+                }
+                targetFile
+            }
     }
 
     fun downloadWithJavaIO(urlStr: String, localFilename: String) {
