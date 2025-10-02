@@ -15,7 +15,6 @@ object MarkdownToContentConverter {
 
         val blocks = mutableListOf<Block>()
 
-        // 빈 줄 2개 이상이면 마진을 한 번 넣는 간단 규칙
         val marginSpots = detectMarginSpots(markdown)
 
         var node: Node? = doc.firstChild
