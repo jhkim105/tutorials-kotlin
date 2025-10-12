@@ -1,0 +1,14 @@
+= User API Docs
+:toc: left
+:toclevels: 2
+:sectnums:
+
+== Create User
+include::{snippets}/users-create/http-request.adoc[]
+include::{snippets}/users-create/request-fields.adoc[]
+include::{snippets}/users-create/http-response.adoc[]
+include::{snippets}/users-create/response-fields.adoc[]
+
+== List Users
+include::{snippets}/users-list/http-request.adoc[]
+include::{snippets}/users-list/http-response.adoc[]
