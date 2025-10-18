@@ -18,6 +18,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    runtimeOnly("org.mariadb.jdbc:mariadb-java-client:3.4.1")
 
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -36,8 +38,7 @@ tasks.test {
 }
 
 tasks.asciidoctor {
-
-    dependsOn(tasks.test) // 테스트 후 생성된 스니펫을 사용
+    dependsOn(tasks.test)
     inputs.dir("build/generated-snippets")
     baseDirFollowsSourceFile()
     sources {
@@ -46,15 +47,9 @@ tasks.asciidoctor {
     setOutputDir(layout.buildDirectory.dir("docs/asciidoc"))
 }
 
-// ✅ HTML 복사 작업
-tasks.register<Copy>("copyDocs") {
-    dependsOn(tasks.asciidoctor)
-    from("build/docs/asciidoc")
-    into("src/main/resources/static/docs")
-}
-
-// bootJar 빌드 시 문서 포함
 tasks.bootJar {
-    dependsOn(tasks.asciidoctor)
-    from(layout.buildDirectory.dir("docs/asciidoc")) { into("static/docs") }
+    dependsOn(tasks.named("asciidoctor"))
+    from("build/docs/asciidoc") {
+        into("static/docs")
+    }
 }

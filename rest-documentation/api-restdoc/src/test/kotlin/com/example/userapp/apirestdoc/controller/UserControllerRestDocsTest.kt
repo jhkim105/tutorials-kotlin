@@ -7,13 +7,9 @@ import com.example.userapp.core.domain.User
 import com.example.userapp.core.domain.UserId
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
-import io.mockk.mockk
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentMatchers.any
-import org.mockito.BDDMockito.given
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
@@ -25,7 +21,6 @@ import org.springframework.test.web.servlet.post
 import java.time.Instant
 
 @WebMvcTest(UserController::class)
-@AutoConfigureMockMvc
 @AutoConfigureRestDocs
 class UserControllerRestDocsTest(
     @Autowired val mockMvc: MockMvc
