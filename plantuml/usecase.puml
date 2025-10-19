@@ -1,0 +1,9 @@
+@startuml
+actor Customer
+actor Admin
+rectangle "E-commerce System" {
+  Customer --> (Browse Products)
+  Customer --> (Place Order)
+  Admin --> (Manage Inventory)
+}
+@enduml

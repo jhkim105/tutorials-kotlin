@@ -1,0 +1,55 @@
+@startuml
+' === 스타일 설정 ===
+!theme plain
+hide methods
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    FontStyle bold
+}
+
+' === 클래스 정의 ===
+class User {
+    +id: Long
+    +name: String
+    +email: String
+    +createdAt: LocalDateTime
+    --
+    +orders: List<Order>
+}
+
+class Product {
+    +id: Long
+    +name: String
+    +price: BigDecimal
+    +stock: Int
+    --
+    +orderItems: List<OrderItem>
+}
+
+class Order {
+    +id: Long
+    +orderDate: LocalDateTime
+    +totalAmount: BigDecimal
+    --
+    +user: User
+    +items: List<OrderItem>
+}
+
+class OrderItem {
+    +id: Long
+    +quantity: Int
+    +price: BigDecimal
+    --
+    +order: Order
+    +product: Product
+}
+
+' === 관계 정의 ===
+User "1" --> "0..*" Order : places >
+Order "1" --> "0..*" OrderItem : includes >
+Product "1" --> "0..*" OrderItem : appears in >
+
+@enduml
