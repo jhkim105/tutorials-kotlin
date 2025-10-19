@@ -1,5 +1,8 @@
 package com.example.userapp.apirestdoc.controller
 
+import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
+import com.epages.restdocs.apispec.ResourceSnippetParameters
+import com.epages.restdocs.apispec.Schema
 import com.example.userapp.core.application.port.`in`.CreateUserUseCase
 import com.example.userapp.core.application.port.`in`.DeleteUserUseCase
 import com.example.userapp.core.application.port.`in`.GetUserUseCase
@@ -12,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
 import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.test.web.servlet.MockMvc

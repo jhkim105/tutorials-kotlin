@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication(scanBasePackages = ["com.example.userapp"])
-class ApiRestdocApplication
+class ApiRestdoc2OpenapiApplication
 
 fun main(args: Array<String>) {
-    runApplication<ApiRestdocApplication>(*args)
+    runApplication<ApiRestdoc2OpenapiApplication>(*args)
 }
