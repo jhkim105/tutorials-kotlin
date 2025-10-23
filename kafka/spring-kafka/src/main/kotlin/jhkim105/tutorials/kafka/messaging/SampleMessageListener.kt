@@ -21,6 +21,7 @@ class SampleMessageListener(
     @KafkaListener(topics = [SAMPLE_TOPIC])
     fun handle(@Payload message: String, @Header(KafkaHeaders.RECEIVED_PARTITION) partition: Int) {
         log.debug{"message received. message: $message, partition: $partition"}
+        Thread.sleep(5000)
         val sampleMessage = objectMapper.readValue(message, SampleMessage::class.java)
         messageService.saveMessage(sampleMessage.key, sampleMessage.createdAt)
     }
