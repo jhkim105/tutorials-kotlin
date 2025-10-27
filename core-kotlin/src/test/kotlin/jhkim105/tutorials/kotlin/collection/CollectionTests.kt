@@ -1,4 +1,4 @@
-package jhkim105.tutorials.kotlin
+package jhkim105.tutorials.kotlin.collection
 
 import org.junit.jupiter.api.Test
 
