@@ -1,0 +1,19 @@
+### Global cache warm-up
+GET http://localhost:8080/cache/global/sample
+Accept: application/json
+
+### Global cache hit (Redis)
+GET http://localhost:8080/cache/global/sample
+Accept: application/json
+
+### Global list warm-up
+GET http://localhost:8080/cache/global/sample/list
+Accept: application/json
+
+### Global list hit
+GET http://localhost:8080/cache/global/sample/list
+Accept: application/json
+
+### Global cache miss with different key
+GET http://localhost:8080/cache/global/sample2
+Accept: application/json

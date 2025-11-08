@@ -1,0 +1,19 @@
+### Local cache warm-up
+GET http://localhost:8080/cache/local/sample
+Accept: application/json
+
+### Local cache hit (should reuse value)
+GET http://localhost:8080/cache/local/sample
+Accept: application/json
+
+### Local list warm-up
+GET http://localhost:8080/cache/local/sample/list
+Accept: application/json
+
+### Local list hit
+GET http://localhost:8080/cache/local/sample/list
+Accept: application/json
+
+### Local cache miss with different key
+GET http://localhost:8080/cache/local/sample2
+Accept: application/json

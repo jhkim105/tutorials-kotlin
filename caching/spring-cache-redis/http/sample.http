@@ -1,0 +1,11 @@
+### Retrieve a single sample (cached by id)
+GET http://localhost:8080/api/samples/42
+Accept: application/json
+
+### Retrieve cached list for a category
+GET http://localhost:8080/api/samples?category=general&limit=5
+Accept: application/json
+
+### Change parameters to create a different cache entry
+GET http://localhost:8080/api/samples?category=premium&limit=2
+Accept: application/json
