@@ -18,11 +18,9 @@ class LocalCacheAspect(
 	@Around("@annotation(localCache)")
 	fun applyLocalCache(joinPoint: ProceedingJoinPoint, localCache: LocalCache): Any? {
 		val method = resolveMethod(joinPoint)
-		val cacheName = if (localCache.cacheName.isNotBlank()) {
-			localCache.cacheName
-		} else {
-			"${method.declaringClass.name}.${method.name}"
-		}
+		val cacheName = localCache.cacheName.ifBlank {
+            "${method.declaringClass.name}.${method.name}"
+        }
 		val cache = localCacheRegistry.resolve(
 			LocalCacheSpec(cacheName, localCache.ttlSeconds, localCache.maximumSize)
 		)

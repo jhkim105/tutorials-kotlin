@@ -22,11 +22,9 @@ class GlobalCacheAspect(
 	@Around("@annotation(globalCache)")
 	fun applyGlobalCache(joinPoint: ProceedingJoinPoint, globalCache: GlobalCache): Any? {
 		val method = resolveMethod(joinPoint)
-		val cacheName = if (globalCache.cacheName.isNotBlank()) {
-			globalCache.cacheName
-		} else {
-			"${method.declaringClass.name}.${method.name}"
-		}
+		val cacheName = globalCache.cacheName.ifBlank {
+            "${method.declaringClass.name}.${method.name}"
+        }
 		val cacheKey = cacheKeyGenerator.generate(cacheName, joinPoint.target, method, joinPoint.args)
 		val returnType = method.genericReturnType
 		val cachedPayload = redisTemplate.opsForValue().get(cacheKey)
