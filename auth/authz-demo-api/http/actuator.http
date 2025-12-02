@@ -1,0 +1,5 @@
+### Actuator health check (unauthenticated)
+GET http://localhost:8080/actuator/health
+
+### Actuator info endpoint
+GET http://localhost:8080/actuator/info
