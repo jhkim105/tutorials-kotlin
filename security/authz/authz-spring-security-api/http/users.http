@@ -1,0 +1,42 @@
+### List users as admin
+GET http://localhost:8080/users
+X-User-Id: admin
+
+### List users as standard user (read-only allowed)
+GET http://localhost:8080/users
+X-User-Id: alice
+
+### Get single user
+GET http://localhost:8080/users/bob
+X-User-Id: alice
+
+### Create user as admin
+POST http://localhost:8080/users
+Content-Type: application/json
+X-User-Id: admin
+
+{
+  "id": "charlie",
+  "name": "Charlie",
+  "role": "USER"
+}
+
+### Update user as admin
+PUT http://localhost:8080/users/bob
+Content-Type: application/json
+X-User-Id: admin
+
+{
+  "name": "Bobby",
+  "role": "USER"
+}
+
+### Forbidden update as standard user
+PUT http://localhost:8080/users/bob
+Content-Type: application/json
+X-User-Id: alice
+
+{
+  "name": "Malicious",
+  "role": "ADMIN"
+}
