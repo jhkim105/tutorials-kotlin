@@ -1,9 +1,9 @@
 plugins {
-    id("org.springframework.boot") version "3.3.13"
-    id("io.spring.dependency-management") version "1.1.6"
-    kotlin("jvm") version "1.9.24"
-    kotlin("plugin.spring") version "1.9.24"
-    kotlin("plugin.jpa") version "1.9.24"
+    id("org.springframework.boot") version "3.5.8"
+    id("io.spring.dependency-management") version "1.1.7"
+    kotlin("jvm") version "1.9.25"
+    kotlin("plugin.spring") version "1.9.25"
+    kotlin("plugin.jpa") version "1.9.25"
 }
 
 group = "jhkim105"
@@ -27,11 +27,10 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("com.auth0:java-jwt:4.4.0")
-    implementation("org.apache.commons:commons-lang3")
-    implementation("com.nimbusds:nimbus-jose-jwt:10.3")
-    implementation("org.bouncycastle:bcpkix-jdk18on:1.80")
+    implementation("com.auth0:java-jwt:4.5.0")
+    implementation("org.apache.commons:commo1ns-lang3")
+    implementation("com.nimbusds:nimbus-jose-jwt:10.6")
+    implementation("org.bouncycastle:bcpkix-jdk18on:1.83")
 
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

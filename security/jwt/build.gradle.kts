@@ -1,9 +1,9 @@
 plugins {
-    id("org.springframework.boot") version "3.3.13"
-    id("io.spring.dependency-management") version "1.1.6"
-    kotlin("jvm") version "1.9.24"
-    kotlin("plugin.spring") version "1.9.24"
-    kotlin("kapt") version "1.9.24"
+    id("org.springframework.boot") version "3.5.8"
+    id("io.spring.dependency-management") version "1.1.7"
+    kotlin("jvm") version "1.9.25"
+    kotlin("plugin.spring") version "1.9.25"
+    kotlin("kapt") version "1.9.25"
 }
 
 group = "jhkim105.tutorials"
@@ -24,14 +24,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("io.jsonwebtoken:jjwt-api:0.12.6")
-    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
-    implementation("commons-codec:commons-codec:1.15")
-    implementation("com.nimbusds:nimbus-jose-jwt:10.3")
-    implementation("com.auth0:java-jwt:4.4.0")
+    implementation("io.jsonwebtoken:jjwt-api:0.13.0")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.13.0")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.13.0")
+    implementation("commons-codec:commons-codec:1.20.0")
+    implementation("com.nimbusds:nimbus-jose-jwt:10.6")
+    implementation("com.auth0:java-jwt:4.5.0")
     implementation("com.google.crypto.tink:tink:1.19.0")
-    implementation("org.bouncycastle:bcpkix-jdk18on:1.80")
+    implementation("org.bouncycastle:bcpkix-jdk18on:1.83")
 
     kapt("org.springframework.boot:spring-boot-configuration-processor")
 
