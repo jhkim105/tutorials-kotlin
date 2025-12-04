@@ -26,9 +26,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("io.github.oshai:kotlin-logging-jvm:7.0.6")
 
     implementation("com.auth0:java-jwt:4.5.0")
-    implementation("org.apache.commons:commo1ns-lang3")
+    implementation("org.apache.commons:commons-lang3")
     implementation("com.nimbusds:nimbus-jose-jwt:10.6")
     implementation("org.bouncycastle:bcpkix-jdk18on:1.83")
 

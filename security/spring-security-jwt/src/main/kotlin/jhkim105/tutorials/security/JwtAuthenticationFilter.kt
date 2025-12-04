@@ -1,5 +1,6 @@
 package jhkim105.tutorials.security
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.ServletRequest
@@ -7,23 +8,20 @@ import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import jhkim105.tutorials.jwt.JwtService
-import org.apache.commons.lang3.StringUtils
-import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.InternalAuthenticationServiceException
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import java.io.IOException
 
 class JwtAuthenticationFilter(
     defaultFilterProcessesUrl: String,
     private val tokenService: JwtService,
     securityErrorHandler: SecurityErrorHandler,
-) : AbstractAuthenticationProcessingFilter(AntPathRequestMatcher(defaultFilterProcessesUrl)) {
+) : AbstractAuthenticationProcessingFilter(defaultFilterProcessesUrl) {
 
-    private val logger = LoggerFactory.getLogger(JwtAuthenticationFilter::class.java)
+    private val log = KotlinLogging.logger {}
 
     init {
         setAuthenticationSuccessHandler(TokenAuthenticationSuccessHandler())
@@ -32,9 +30,9 @@ class JwtAuthenticationFilter(
 
     @Throws(AuthenticationException::class)
     override fun attemptAuthentication(request: HttpServletRequest, response: HttpServletResponse): Authentication? {
-        logger.debug("attemptAuthentication")
+        log.debug { "attemptAuthentication" }
         val token = getToken(request)
-        if (StringUtils.isBlank(token)) {
+        if (token.isNullOrBlank()) {
             return null
         }
 
@@ -49,11 +47,11 @@ class JwtAuthenticationFilter(
 
     @Throws(IOException::class, ServletException::class)
     override fun doFilter(req: ServletRequest, res: ServletResponse, chain: FilterChain) {
-        logger.debug("doFilter")
+        log.debug { "doFilter" }
         val request = req as HttpServletRequest
         val response = res as HttpServletResponse
         val token = getToken(request)
-        if (StringUtils.isBlank(token)) {
+        if (token.isNullOrBlank()) {
             chain.doFilter(request, response)
             return
         }

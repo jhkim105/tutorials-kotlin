@@ -94,8 +94,5 @@ class SecurityConfig(
     private fun jwtAuthenticationProvider() = JwtAuthenticationProvider()
 
     private fun daoAuthenticationProvider(): DaoAuthenticationProvider =
-        DaoAuthenticationProvider().apply {
-            setUserDetailsService(userDetailsService())
-            setPasswordEncoder(passwordEncoder())
-        }
+        DaoAuthenticationProvider(userDetailsService())
 }
