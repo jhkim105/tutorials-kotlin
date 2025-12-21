@@ -20,10 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class TradeController(
-    private val tradeService: TradeService,
-    private val eventBus: TradeEventBus
-) {
+class TradeController(private val tradeService: TradeService, private val eventBus: TradeEventBus) {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     @PostMapping("/api/trades")
@@ -32,19 +29,16 @@ class TradeController(
         return ResponseEntity.accepted().build()
     }
 
-    @GetMapping("/sse/trades", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    @GetMapping("/stream/trades", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun streamTrades(@RequestParam symbol: String): Flow<ServerSentEvent<TradeTick>> {
         logger.info("New SSE subscription for symbol: {}", symbol)
-        
+
         return eventBus.events
-            .filter { it.symbol == symbol }
-            .map { tick ->
-                ServerSentEvent.builder(tick)
-                    .id(tick.tradeId)
-                    .event("trade")
-                    .build()
-            }
-            .onStart { logger.info("SSE stream started for symbol: {}", symbol) }
-            .onCompletion { logger.info("SSE stream completed for symbol: {}", symbol) }
+                .filter { it.symbol == symbol }
+                .map { tick ->
+                    ServerSentEvent.builder(tick).id(tick.tradeId).event("trade").build()
+                }
+                .onStart { logger.info("SSE stream started for symbol: {}", symbol) }
+                .onCompletion { logger.info("SSE stream completed for symbol: {}", symbol) }
     }
 }

@@ -59,7 +59,7 @@ curl -X POST "http://localhost:8080/api/trades" \
 
 **Subscribe (GET)**
 ```bash
-curl -N "http://localhost:8080/sse/trades?symbol=META"
+curl -N "http://localhost:8080/stream/trades?symbol=META"
 ```
 
 ## 예상 로그

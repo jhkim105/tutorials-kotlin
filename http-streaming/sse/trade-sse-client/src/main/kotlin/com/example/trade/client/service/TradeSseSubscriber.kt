@@ -1,6 +1,7 @@
 package com.example.trade.client.service
 
 import com.example.trade.common.TradeTick
+import jakarta.annotation.PreDestroy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -21,12 +22,11 @@ import org.springframework.http.MediaType
 import org.springframework.http.codec.ServerSentEvent
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
-import jakarta.annotation.PreDestroy
 
 @Component
 class TradeSseSubscriber(
-    private val webClientBuilder: WebClient.Builder,
-    private val properties: TradeSseProperties
+        private val webClientBuilder: WebClient.Builder,
+        private val properties: TradeSseProperties
 ) {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -40,54 +40,57 @@ class TradeSseSubscriber(
     private fun startSubscription() {
         if (subscriptionJob?.isActive == true) return
         val webClient = webClientBuilder.baseUrl(properties.serverBaseUrl).build()
-        subscriptionJob = scope.launch {
-            while (isActive) {
-                try {
-                    subscribeOnce(webClient)
-                } catch (ex: Exception) {
-                    logger.warn("SSE subscription error: {}", ex.message, ex)
-                    delay(2000)
+        subscriptionJob =
+                scope.launch {
+                    while (isActive) {
+                        try {
+                            subscribeOnce(webClient)
+                        } catch (ex: Exception) {
+                            logger.warn("SSE subscription error: {}", ex.message, ex)
+                            delay(2000)
+                        }
+                    }
                 }
-            }
-        }
     }
 
     private suspend fun subscribeOnce(webClient: WebClient) {
         val typeRef = object : ParameterizedTypeReference<ServerSentEvent<TradeTick>>() {}
         logger.info(
-            "Starting SSE subscription to {}/sse/trades?symbol={}",
-            properties.serverBaseUrl,
-            properties.symbol
+                "Starting SSE subscription to {}/stream/trades?symbol={}",
+                properties.serverBaseUrl,
+                properties.symbol
         )
-        webClient.get()
-            .uri { uriBuilder ->
-                uriBuilder.path("/sse/trades")
-                    .queryParam("symbol", properties.symbol)
-                    .build()
-            }
-            .accept(MediaType.TEXT_EVENT_STREAM)
-            .retrieve()
-            .bodyToFlux(typeRef)
-            .asFlow()
-            .onStart { logger.info("SSE connected symbol={}", properties.symbol) }
-            .onCompletion { cause ->
-                val reason = cause?.message ?: "stream completed"
-                logger.info("SSE disconnected symbol={} reason={}", properties.symbol, reason)
-            }
-            .filterNotNull()
-            .collect { event ->
-                val tick = event.data()
-                if (tick != null) {
-                    logger.info(
-                        "[trade] symbol={} price={} qty={} id={} ts={}",
-                        tick.symbol,
-                        tick.price,
-                        tick.qty,
-                        tick.tradeId,
-                        tick.ts
-                    )
+        webClient
+                .get()
+                .uri { uriBuilder ->
+                    uriBuilder
+                            .path("/stream/trades")
+                            .queryParam("symbol", properties.symbol)
+                            .build()
                 }
-            }
+                .accept(MediaType.TEXT_EVENT_STREAM)
+                .retrieve()
+                .bodyToFlux(typeRef)
+                .asFlow()
+                .onStart { logger.info("SSE connected symbol={}", properties.symbol) }
+                .onCompletion { cause ->
+                    val reason = cause?.message ?: "stream completed"
+                    logger.info("SSE disconnected symbol={} reason={}", properties.symbol, reason)
+                }
+                .filterNotNull()
+                .collect { event ->
+                    val tick = event.data()
+                    if (tick != null) {
+                        logger.info(
+                                "[trade] symbol={} price={} qty={} id={} ts={}",
+                                tick.symbol,
+                                tick.price,
+                                tick.qty,
+                                tick.tradeId,
+                                tick.ts
+                        )
+                    }
+                }
     }
 
     fun shutdown() {

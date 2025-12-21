@@ -103,7 +103,7 @@ data class TradeTick(
   - EventBus에 emit (suspend)
 
 ### 3) SSE 구독 API (Subscribe)
-- Endpoint: `GET /sse/trades?symbol=META`
+- Endpoint: `GET /stream/trades?symbol=META`
 - Response Content-Type: `text/event-stream`
 - `symbol` 없으면 400
 - 반환 타입 권장(학습용으로 SSE 포맷을 드러내기):
@@ -130,7 +130,7 @@ Flow<ServerSentEvent<TradeTick>>
 ### 1) 기본 동작
 - 애플리케이션 시작 시 SSE 구독 시작
 - 기본 구독 URL:
-  - `http://localhost:8080/sse/trades?symbol=META`
+  - `http://localhost:8080/stream/trades?symbol=META`
 - 수신한 TradeTick을 콘솔 로그로 출력
 - 종료 시 구독 정리 로그
 
@@ -187,8 +187,8 @@ curl -X POST "http://localhost:8080/api/trades"   -H "Content-Type: application/
 
 ## (선택) 데모 품질을 높이는 확장 아이디어
 - 엔드포인트 2개 제공:
-  - `/sse/trades` : 원본 스트림
-  - `/sse/trades-sampled` : `sample(200ms)` 적용(차트용)
+  - `/stream/trades` : 원본 스트림
+  - `/stream/trades-sampled` : `sample(200ms)` 적용(차트용)
 - symbol을 2개 이상(META, AAPL) publish해 필터 동작 확인
 - 서버에서 초당 N개 자동 생성 API (예: `POST /api/trades/burst?symbol=META&n=1000`)로 폭주 테스트(선택)
 
