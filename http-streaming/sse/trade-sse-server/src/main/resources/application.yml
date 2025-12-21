@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: trade-sse-server
+
+logging:
+  level:
+    com.example.trade.server: INFO

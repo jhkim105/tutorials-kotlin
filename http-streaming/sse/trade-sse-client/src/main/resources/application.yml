@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: trade-sse-client
+
+trade-sse:
+  server-base-url: http://localhost:8080
+  symbol: META
+server:
+  port: 8081
