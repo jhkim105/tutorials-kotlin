@@ -1,0 +1,13 @@
+@baseUrl = http://localhost:8080
+
+### Manual execution
+POST {{baseUrl}}/api/executions/manual
+Content-Type: application/json
+
+{
+  "actionKey": "sampleCleanup",
+  "payload": "{\"source\":\"http\",\"type\":\"manual\"}"
+}
+
+### List executions
+GET {{baseUrl}}/api/executions?cursor=&limit=50

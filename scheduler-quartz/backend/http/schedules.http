@@ -1,0 +1,57 @@
+@baseUrl = http://localhost:8080
+### List schedules
+GET {{baseUrl}}/api/schedules?page=1&size=20
+
+> {%
+  const body = response.body;
+  if (body && body.items && body.items.length > 0) {
+    client.global.set("scheduleId", body.items[0].id);
+  }
+%}
+
+### Get schedule by id
+GET {{baseUrl}}/api/schedules/{{scheduleId}}
+
+### Create schedule (CRON)
+POST {{baseUrl}}/api/schedules
+Content-Type: application/json
+
+{
+  "name": "Cleanup Cron",
+  "scheduleType": "CRON",
+  "cronExpression": "0/30 * * * * ?",
+  "runAt": null,
+  "enabled": true,
+  "actionKey": "sampleCleanup",
+  "payload": "{\"source\":\"http\",\"type\":\"cron\"}"
+}
+
+> {%
+  const body = response.body;
+  if (body && body.id) {
+    client.global.set("scheduleId", body.id);
+  }
+%}
+
+### Update schedule
+PUT {{baseUrl}}/api/schedules/{{scheduleId}}
+Content-Type: application/json
+
+{
+  "name": "Cleanup Cron Updated",
+  "scheduleType": "CRON",
+  "cronExpression": "0/30 * * * * ?",
+  "runAt": null,
+  "enabled": true,
+  "actionKey": "sampleCleanup",
+  "payload": "{\"source\":\"http\",\"type\":\"cron\",\"updated\":true}"
+}
+
+### Enable schedule
+PATCH {{baseUrl}}/api/schedules/{{scheduleId}}/enable
+
+### Disable schedule
+PATCH {{baseUrl}}/api/schedules/{{scheduleId}}/disable
+
+### Delete schedule
+DELETE {{baseUrl}}/api/schedules/{{scheduleId}}
