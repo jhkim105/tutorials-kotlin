@@ -38,15 +38,15 @@ class DataSeeder(
             return
         }
 
-        val existingSchedules = scheduleUseCase.list()
-        val existing = existingSchedules.find { it.taskId == taskId }
-
-        if (existing != null) {
-            log.info { "Deleting existing schedule for task: $taskId" }
-            try {
-                scheduleUseCase.delete(existing.id)
-            } catch (e: Exception) {
-                log.warn(e) { "Failed to delete existing schedule for $taskId" }
+        val existingSchedules = scheduleUseCase.list().filter { it.taskId == taskId }
+        if (existingSchedules.isNotEmpty()) {
+            log.info { "Deleting ${existingSchedules.size} existing schedule(s) for task: $taskId" }
+            existingSchedules.forEach { schedule ->
+                try {
+                    scheduleUseCase.delete(schedule.id)
+                } catch (e: Exception) {
+                    log.warn(e) { "Failed to delete existing schedule ${schedule.id} for $taskId" }
+                }
             }
         }
 
