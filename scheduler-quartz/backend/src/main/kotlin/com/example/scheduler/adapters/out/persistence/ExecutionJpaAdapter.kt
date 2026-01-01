@@ -36,6 +36,25 @@ class ExecutionJpaAdapter(
         return executionJpaRepository.save(entity).toDomain()
     }
 
+    override fun createRunning(request: ExecutionCreateRequest, now: Instant, lockUntil: Instant): Execution {
+        val entity = ExecutionEntity(
+            executionId = com.example.scheduler.core.application.service.IdGenerator.newId(),
+            scheduleId = request.scheduleId,
+            taskId = request.taskId,
+            executionType = request.executionType,
+            status = ExecutionStatus.RUNNING,
+            payload = request.payload,
+            attemptCount = 1,
+            lockedBy = instanceId,
+            lockedUntil = lockUntil,
+            createdAt = now,
+            updatedAt = now,
+            startedAt = now,
+            completedAt = null
+        )
+        return executionJpaRepository.save(entity).toDomain()
+    }
+
     override fun findById(executionId: String): Execution? {
         return executionJpaRepository.findById(executionId).map { it.toDomain() }.orElse(null)
     }

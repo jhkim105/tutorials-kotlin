@@ -35,9 +35,6 @@ interface ScheduleJpaRepository : JpaRepository<ScheduleEntity, String> {
         SET s.lockedBy = :instanceId,
             s.lockedUntil = :lockUntil
         WHERE s.id = :id
-          AND s.enabled = true
-          AND s.nextRunAt IS NOT NULL
-          AND s.nextRunAt <= :now
           AND (s.lockedUntil IS NULL OR s.lockedUntil < :now)
         """
     )
@@ -132,4 +129,5 @@ interface ExecutionJpaRepository : JpaRepository<ExecutionEntity, String> {
         @Param("lockUntil") lockUntil: Instant,
         @Param("now") now: Instant
     ): Int
+
 }

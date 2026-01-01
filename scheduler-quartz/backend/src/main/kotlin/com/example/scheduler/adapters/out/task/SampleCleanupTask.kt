@@ -1,4 +1,4 @@
-package com.example.scheduler.adapters.out.external
+package com.example.scheduler.adapters.out.task
 
 import com.example.scheduler.core.application.port.out.TaskHandler
 import com.example.scheduler.core.domain.model.TaskDefinition
@@ -8,18 +8,18 @@ import org.springframework.stereotype.Component
 private val log = KotlinLogging.logger {}
 
 @Component
-class SampleEmailTask : TaskHandler {
-    override fun taskId(): String = "sampleEmail"
+class SampleCleanupTask : TaskHandler {
+    override fun taskId(): String = "sampleCleanup"
 
     override fun definition(): TaskDefinition {
         return TaskDefinition(
             taskId = taskId(),
-            name = "Sample Email",
-            description = "Example task that simulates sending email."
+            name = "Sample Cleanup",
+            description = "Example task that simulates cleanup work."
         )
     }
 
     override fun execute(payload: String?) {
-        log.info { "Running email task with payload=$payload" }
+        log.info { "Running cleanup task with payload=$payload" }
     }
 }

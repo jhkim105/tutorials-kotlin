@@ -6,6 +6,7 @@ import com.example.scheduler.core.application.port.out.ExecutionRepositoryPort
 import com.example.scheduler.core.application.port.out.TaskRegistryPort
 import com.example.scheduler.core.domain.model.Execution
 import com.example.scheduler.core.domain.model.ExecutionType
+import java.time.Duration
 import java.time.Clock
 
 class ExecutionService(
@@ -26,6 +27,15 @@ class ExecutionService(
             executionType = ExecutionType.MANUAL,
             payload = payload
         )
-        return executionRepository.create(request, now)
+        val lockUntil = now.plus(Duration.ofMinutes(5))
+        val execution = executionRepository.createRunning(request, now, lockUntil)
+        try {
+            handler.execute(execution.payload)
+            executionRepository.markSuccess(execution.executionId, clock.instant())
+        } catch (ex: Exception) {
+            executionRepository.markFailed(execution.executionId, clock.instant())
+            throw ex
+        }
+        return execution
     }
 }

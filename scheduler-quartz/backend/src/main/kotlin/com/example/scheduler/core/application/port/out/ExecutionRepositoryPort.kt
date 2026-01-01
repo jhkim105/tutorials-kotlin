@@ -7,6 +7,7 @@ import java.time.Instant
 
 interface ExecutionRepositoryPort {
     fun create(request: ExecutionCreateRequest, now: Instant): Execution
+    fun createRunning(request: ExecutionCreateRequest, now: Instant, lockUntil: Instant): Execution
     fun findById(executionId: String): Execution?
     fun findRunningByTaskId(taskId: String): Execution?
     fun listRecent(limit: Int): List<Execution>

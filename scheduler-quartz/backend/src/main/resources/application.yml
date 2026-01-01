@@ -16,6 +16,27 @@ spring:
       mode: always
       schema-locations: classpath:schema.sql
       continue-on-error: true
+      data-locations: classpath:data.sql
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: never
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: SchedulerClustered
+            instanceId: AUTO
+          jobStore:
+            class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            tablePrefix: QRTZ_
+            isClustered: true
+            clusterCheckinInterval: 20000
+            useProperties: false
+            misfireThreshold: 60000
+          threadPool:
+            threadCount: 10
 
 scheduler:
   lock:

@@ -10,18 +10,16 @@ import com.example.scheduler.core.application.port.`in`.ScheduleUseCase
 import com.example.scheduler.core.application.port.`in`.TaskQueryUseCase
 import com.example.scheduler.core.application.port.out.ExecutionRepositoryPort
 import com.example.scheduler.core.application.port.out.ScheduleRepositoryPort
+import com.example.scheduler.core.application.port.out.SchedulerPort
 import com.example.scheduler.core.application.port.out.TaskRegistryPort
-import com.example.scheduler.core.application.service.ExecutionCoordinator
 import com.example.scheduler.core.application.service.ExecutionQueryService
 import com.example.scheduler.core.application.service.ExecutionService
 import com.example.scheduler.core.application.service.ScheduleCalculator
 import com.example.scheduler.core.application.service.ScheduleService
 import com.example.scheduler.core.application.service.TaskQueryService
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.time.Clock
-import java.time.Duration
 import java.time.ZoneId
 import java.util.UUID
 
@@ -56,10 +54,11 @@ class AppConfig {
     fun scheduleUseCase(
         scheduleRepository: ScheduleRepositoryPort,
         taskRegistry: TaskRegistryPort,
+        schedulerPort: SchedulerPort,
         clock: Clock,
         calculator: ScheduleCalculator
     ): ScheduleUseCase {
-        return ScheduleService(scheduleRepository, taskRegistry, clock, calculator)
+        return ScheduleService(scheduleRepository, taskRegistry, schedulerPort, clock, calculator)
     }
 
     @Bean
@@ -69,31 +68,6 @@ class AppConfig {
         clock: Clock
     ): ExecutionUseCase {
         return ExecutionService(executionRepository, taskRegistry, clock)
-    }
-
-    @Bean
-    fun executionCoordinator(
-        scheduleRepository: ScheduleRepositoryPort,
-        executionRepository: ExecutionRepositoryPort,
-        taskRegistry: TaskRegistryPort,
-        calculator: ScheduleCalculator,
-        clock: Clock,
-        instanceId: String,
-        @Value("\${scheduler.lock.schedule-seconds:30}") scheduleLockSeconds: Long,
-        @Value("\${scheduler.lock.execution-seconds:300}") executionLockSeconds: Long,
-        @Value("\${scheduler.batch-size:20}") batchSize: Int
-    ): ExecutionCoordinator {
-        return ExecutionCoordinator(
-            scheduleRepository,
-            executionRepository,
-            taskRegistry,
-            calculator,
-            clock,
-            instanceId,
-            Duration.ofSeconds(scheduleLockSeconds),
-            Duration.ofSeconds(executionLockSeconds),
-            batchSize
-        )
     }
 
     @Bean

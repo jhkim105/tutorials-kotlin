@@ -1,0 +1,33 @@
+### Quartz Actuator Endpoints
+
+# Get all Quartz jobs and triggers info
+GET http://localhost:8080/actuator/quartz
+Accept: application/json
+
+###
+
+# Manually trigger a specific job (DEFAULT group, Qrtz_Job_Detail)
+POST http://localhost:8080/actuator/quartz/jobs/DEFAULT/Qrtz_Job_Detail
+Content-Type: application/json
+
+{
+  "state": "running"
+}
+
+### Dynamic Scheduling Endpoints
+
+# 1. Schedule a new job named 'custom-job' to run every 5 seconds
+POST http://localhost:8080/api/jobs/schedule?name=custom-job&intervalSeconds=5
+Content-Type: application/json
+
+###
+
+# 2. Reschedule 'custom-job' to run every 2 seconds
+POST http://localhost:8080/api/jobs/reschedule?name=custom-job&intervalSeconds=2
+Content-Type: application/json
+
+###
+
+# 3. Schedule another job 'report-job' every 10 seconds
+POST http://localhost:8080/api/jobs/schedule?name=report-job&intervalSeconds=10
+Content-Type: application/json

@@ -15,6 +15,7 @@ interface ScheduleRepositoryPort {
     fun findAll(): List<Schedule>
     fun listPage(offset: Int, limit: Int): List<Schedule>
     fun countAll(): Long
+    fun tryLockSchedule(id: String, now: Instant, lockUntil: Instant): Boolean
     fun lockDueSchedules(now: Instant, lockDuration: Duration, limit: Int): List<Schedule>
     fun releaseLock(id: String)
     fun markRunComplete(id: String, nextRunAt: Instant?, now: Instant, enabled: Boolean)

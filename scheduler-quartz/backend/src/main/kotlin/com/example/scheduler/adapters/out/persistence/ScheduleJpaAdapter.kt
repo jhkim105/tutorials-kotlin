@@ -5,7 +5,6 @@ import com.example.scheduler.core.application.port.`in`.ScheduleUpdateCommand
 import com.example.scheduler.core.application.port.out.ScheduleRepositoryPort
 import com.example.scheduler.core.domain.model.Schedule
 import com.example.scheduler.core.domain.model.ScheduleType
-import jakarta.persistence.EntityNotFoundException
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -87,6 +86,17 @@ class ScheduleJpaAdapter(
     }
 
     override fun countAll(): Long = scheduleJpaRepository.count()
+
+    @Transactional
+    override fun tryLockSchedule(id: String, now: Instant, lockUntil: Instant): Boolean {
+        val updated = scheduleJpaRepository.tryLockSchedule(
+            id = id,
+            instanceId = instanceId,
+            lockUntil = lockUntil,
+            now = now
+        )
+        return updated == 1
+    }
 
     @Transactional
     override fun lockDueSchedules(now: Instant, lockDuration: Duration, limit: Int): List<Schedule> {
