@@ -1,7 +1,7 @@
 ## 데모 프로젝트 구성 요구사항 (API)
 
 ### 프로젝트 명(확정)
-- scheduler-task-demo
+- scheduler-spring-demo
 - scheduler-quartz-demo
 
 두 프로젝트는 서로 의존하지 않는 **완전 독립 Spring Boot Kotlin 애플리케이션**이다.
@@ -13,7 +13,7 @@
 ## 목적
 동적 스케줄링 아키텍처를 비교·검증하기 위해 두 가지 방식을 각각 별도의 데모 애플리케이션으로 구현한다.
 
-- scheduler-task-demo  
+- scheduler-spring-demo  
   → Spring TaskScheduler 기반 동적 등록/취소 방식
 
 - scheduler-quartz-demo  
@@ -111,7 +111,7 @@
 
 - 동일한 scheduleId + fireTime 조합은 단 한 번만 실행된다.
 - unique 제약조건 위반 시 해당 실행은 SKIPPED 처리한다.
-- TaskScheduler / Quartz 모두 동일한 방식으로 적용한다.
+- Spring TaskScheduler / Quartz 모두 동일한 방식으로 적용한다.
 
 ---
 
@@ -136,7 +136,7 @@
 
 root/
   README.md
-  scheduler-task-demo/
+  scheduler-spring-demo/
     build.gradle.kts
     settings.gradle.kts
     src/main/kotlin/...
@@ -159,7 +159,7 @@ root/
 
 ---
 
-## scheduler-task-demo 요구사항
+## scheduler-spring-demo 요구사항
 
 ### 스케줄링 방식
 - Spring TaskScheduler 사용
@@ -197,27 +197,29 @@ root/
 ## 패키지 구조 가이드 (각 프로젝트 공통)
 
 com.example.scheduler
-  api/                # REST controllers (scheduler-*/adapters/api-*)
+  api/                # REST controllers (adapter/*)
   domain/
     model/            # JPA entities
     action/           # ActionKey
   application/
     action/           # ActionRegistry, ActionHandler
     service/          # ScheduleService, ExecutionService
-  scheduler-task/
-    adapters/         # TaskScheduler 전용 구현
-    app/              # TaskScheduler SpringBootApplication
+  scheduler-spring/
+    app/              # Spring TaskScheduler SpringBootApplication
   scheduler-quartz/
-    adapters/         # Quartz 전용 구현
     app/              # Quartz SpringBootApplication
-  infra/
+  adapter/
+    adapter-core/    # 공통 API 어댑터
+    adapter-spring/  # Spring TaskScheduler 스케줄러 어댑터
+    adapter-quartz/  # Quartz 스케줄러 어댑터
+  
     persistence/      # repositories
   bootstrap/          # SpringBootApplication, config, init data (scheduler-*/app)
 
 ---
 
 ## 구현 제약 요약
-- 스케줄러(TaskScheduler / Quartz)는 “언제 실행할지”만 책임진다.
+- 스케줄러(Spring TaskScheduler / Quartz)는 “언제 실행할지”만 책임진다.
 - “무엇을 실행할지”는 Action Registry를 통해서만 결정된다.
 - 두 데모 간 도메인/실행 모델은 동일해야 하며, 스케줄링 구현만 다르다.
 

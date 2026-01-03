@@ -1,0 +1,57 @@
+@baseUrl = http://localhost:8080
+@contentType = application/json
+@scheduleId = 1
+
+### List schedules
+GET {{baseUrl}}/schedules
+
+### Create CRON schedule
+POST {{baseUrl}}/schedules
+Content-Type: {{contentType}}
+
+{
+  "name": "demo-cron",
+  "scheduleType": "CRON",
+  "cronExpression": "0 */5 * * * *",
+  "enabled": true,
+  "actionKey": "PRINT_MESSAGE",
+  "payload": "hello from cron",
+  "timezone": "Asia/Seoul"
+}
+
+### Create ONCE schedule
+POST {{baseUrl}}/schedules
+Content-Type: {{contentType}}
+
+{
+  "name": "demo-once",
+  "scheduleType": "ONCE",
+  "runAt": "2030-01-01T00:00:00Z",
+  "enabled": true,
+  "actionKey": "HTTP_PING",
+  "payload": "https://example.com/ping",
+  "timezone": "UTC"
+}
+
+### Update schedule
+PUT {{baseUrl}}/schedules/{{scheduleId}}
+Content-Type: {{contentType}}
+
+{
+  "name": "demo-updated",
+  "scheduleType": "CRON",
+  "cronExpression": "0 */10 * * * *",
+  "enabled": true,
+  "actionKey": "CREATE_FILE",
+  "payload": "output.txt",
+  "timezone": "Asia/Seoul"
+}
+
+### Enable schedule
+POST {{baseUrl}}/schedules/{{scheduleId}}/enable
+
+### Disable schedule
+POST {{baseUrl}}/schedules/{{scheduleId}}/disable
+
+### Trigger schedule now
+POST {{baseUrl}}/schedules/{{scheduleId}}/trigger

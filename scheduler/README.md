@@ -1,20 +1,19 @@
-# Scheduler Demo: Quartz vs TaskScheduler
+# Scheduler Demo: Quartz vs Spring TaskScheduler
 
 이 프로젝트는 두 가지 스케줄링 방식(Quartz, Spring TaskScheduler)을 비교하기 위한 데모입니다.
-멀티모듈 구조로 core(domain+application)를 공유하고, infra 및 API는 방식별로 분리합니다.
+멀티모듈 구조로 core(domain+application)를 공유하고, adapters와 app은 방식별로 분리합니다.
 
 ## 구성
-- scheduler-core: 도메인 모델/규칙 + 유스케이스/포트
-- infra/scheduler-infra-persistence: 공용 JPA 영속성 어댑터
-- infra/scheduler-infra-actions: Action 외부 의존 어댑터
-- scheduler-task/adapters/task-adapters: TaskScheduler API + 스케줄러 어댑터
-- scheduler-quartz/adapters/quartz-adapters: Quartz API + 스케줄러 어댑터
-- scheduler-task/app/app-task: TaskScheduler 앱 실행 모듈
-- scheduler-quartz/app/app-quartz: Quartz 앱 실행 모듈
+- core: 도메인 모델/규칙 + 유스케이스/포트
+- adapter/adapter-core: 공통 API + persistence + action 어댑터
+- adapter/adapter-spring: Spring TaskScheduler 스케줄러 어댑터
+- adapter/adapter-quartz: Quartz 스케줄러 어댑터
+- app/scheduler-spring-app: Spring TaskScheduler 앱 실행 모듈
+- app/scheduler-quartz-app: Quartz 앱 실행 모듈
 
-## TaskScheduler 방식
+## Spring TaskScheduler 방식
 ### 개요
-Spring이 제공하는 간단한 스케줄링 추상화(TaskScheduler, @Scheduled)를 사용합니다.
+Spring이 제공하는 간단한 스케줄링 추상화(Spring TaskScheduler, @Scheduled)를 사용합니다.
 인메모리 트리거 기반이며, 애플리케이션 프로세스가 내려가면 스케줄 상태는 유지되지 않습니다.
 
 ### 장점
@@ -43,18 +42,18 @@ Quartz Scheduler를 사용하며 JDBC JobStore로 스케줄을 영속화할 수 
 - 단순 케이스에는 과도한 구성일 수 있음
 
 ## 언제 무엇을 쓰면 좋을까?
-- TaskScheduler: 단일 인스턴스, 간단한 주기 작업, 빠른 도입이 필요한 경우
+- Spring TaskScheduler: 단일 인스턴스, 간단한 주기 작업, 빠른 도입이 필요한 경우
 - Quartz: 스케줄 영속성/클러스터링/복잡한 트리거가 필요한 경우
 
 ## 실행
-TaskScheduler 버전:
+Spring TaskScheduler 버전:
 
 ```
-./gradlew :scheduler-task:app:app-task:bootRun
+./gradlew :app:scheduler-spring-app:bootRun
 ```
 
 Quartz 버전:
 
 ```
-./gradlew :scheduler-quartz:app:app-quartz:bootRun
+./gradlew :app:scheduler-quartz-app:bootRun
 ```
