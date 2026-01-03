@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/scheduler?createDatabaseIfNotExist=true
+    url: jdbc:mariadb://localhost:3306/scheduler_quartz?createDatabaseIfNotExist=true
     username: root
     password: 111111
     driver-class-name: org.mariadb.jdbc.Driver

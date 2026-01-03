@@ -3,7 +3,8 @@
 Dynamic scheduler system with a Kotlin Spring Boot backend and a React admin UI.
 
 ## Structure
-- `backend/`: Spring Boot 3.5.x (Kotlin), hexagonal architecture, MariaDB
+- `src/`: Spring Boot 3.5.x (Kotlin), hexagonal architecture, MariaDB
+- `http/`: API request examples
 - `frontend/`: Vite + React + TypeScript admin UI
 
 ## Backend
@@ -13,14 +14,13 @@ Dynamic scheduler system with a Kotlin Spring Boot backend and a React admin UI.
 - MariaDB (Docker OK)
 
 ### Configure
-- `backend/src/main/resources/application.yml`
+- `src/main/resources/application.yml`
   - `spring.datasource.*`
   - `spring.jpa.properties.hibernate.jdbc.time_zone`
   - scheduler intervals under `scheduler.*`
 
 ### Run
 ```bash
-cd backend
 ./gradlew bootRun
 ```
 
@@ -34,7 +34,7 @@ cd backend
 - Tasks
   - `GET /api/tasks`
 
-HTTP examples are in `backend/http/`.
+HTTP examples are in `http/`.
 
 ## Frontend
 
@@ -50,4 +50,4 @@ npm run dev
 
 ## Notes
 - Schedules use `next_run_at` for efficient, exactly-once triggering.
-- Sample tasks are registered under `backend/src/main/kotlin/com/example/scheduler/adapters/out/external/`.
+- Sample tasks are registered under `src/main/kotlin/com/example/scheduler/adapters/out/external/`.
