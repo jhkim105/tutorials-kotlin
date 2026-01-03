@@ -1,9 +1,0 @@
-package com.example.scheduler.infra.persistence.repository
-
-import com.example.scheduler.infra.persistence.entity.DeliveryExecutionEntity
-import org.springframework.data.jpa.repository.JpaRepository
-import java.time.Instant
-
-interface DeliveryExecutionJpaRepository : JpaRepository<DeliveryExecutionEntity, Long> {
-    fun existsByScheduleIdAndFireTime(scheduleId: Long, fireTime: Instant): Boolean
-}

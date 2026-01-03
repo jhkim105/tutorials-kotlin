@@ -1,17 +1,16 @@
 # Scheduler Demo: Quartz vs TaskScheduler
 
 이 프로젝트는 두 가지 스케줄링 방식(Quartz, Spring TaskScheduler)을 비교하기 위한 데모입니다.
-멀티모듈 구조로 domain/application은 공유하고, infra 및 API는 방식별로 분리합니다.
+멀티모듈 구조로 core(domain+application)를 공유하고, infra 및 API는 방식별로 분리합니다.
 
 ## 구성
-- scheduler-domain: 순수 도메인 모델/규칙
-- scheduler-application: 유스케이스 및 포트
-- scheduler-infra-persistence: 공용 JPA 영속성 어댑터
-- scheduler-infra-actions: Action 구현 어댑터
-- scheduler-infra-task: TaskScheduler 기반 스케줄러
-- scheduler-infra-quartz: Quartz 기반 스케줄러
-- scheduler-api-task: TaskScheduler 앱 실행 모듈
-- scheduler-api-quartz: Quartz 앱 실행 모듈
+- scheduler-core: 도메인 모델/규칙 + 유스케이스/포트
+- infra/scheduler-infra-persistence: 공용 JPA 영속성 어댑터
+- infra/scheduler-infra-actions: Action 외부 의존 어댑터
+- scheduler-task/adapters/task-adapters: TaskScheduler API + 스케줄러 어댑터
+- scheduler-quartz/adapters/quartz-adapters: Quartz API + 스케줄러 어댑터
+- scheduler-task/app/app-task: TaskScheduler 앱 실행 모듈
+- scheduler-quartz/app/app-quartz: Quartz 앱 실행 모듈
 
 ## TaskScheduler 방식
 ### 개요
@@ -51,11 +50,11 @@ Quartz Scheduler를 사용하며 JDBC JobStore로 스케줄을 영속화할 수 
 TaskScheduler 버전:
 
 ```
-./gradlew :scheduler-api-task:bootRun
+./gradlew :scheduler-task:app:app-task:bootRun
 ```
 
 Quartz 버전:
 
 ```
-./gradlew :scheduler-api-quartz:bootRun
+./gradlew :scheduler-quartz:app:app-quartz:bootRun
 ```

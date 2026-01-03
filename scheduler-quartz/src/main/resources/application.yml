@@ -42,6 +42,5 @@ scheduler:
   lock:
     schedule-seconds: 30
     execution-seconds: 300
-  batch-size: 20
-  trigger-interval-ms: 1000
-  execution-interval-ms: 1000
+  quartz:
+    job-class: com.example.scheduler.adapters.in.scheduler.TaskExecutionJob

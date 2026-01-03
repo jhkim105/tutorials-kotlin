@@ -1,18 +1,19 @@
 package com.example.scheduler.adapters.out.quartz
 
-import com.example.scheduler.core.application.port.out.ScheduleRepositoryPort
 import com.example.scheduler.core.application.port.out.SchedulerPort
 import com.example.scheduler.core.domain.model.Schedule
 import com.example.scheduler.core.domain.model.ScheduleType
+import com.example.scheduler.adapters.out.quartz.QuartzIdentifiers
 import io.github.oshai.kotlinlogging.KotlinLogging
-import jakarta.annotation.PostConstruct
 import org.quartz.CronScheduleBuilder
+import org.quartz.Job
 import org.quartz.JobBuilder
 import org.quartz.ObjectAlreadyExistsException
 import org.quartz.Scheduler
 import org.quartz.SimpleScheduleBuilder
 import org.quartz.Trigger
 import org.quartz.TriggerBuilder
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.time.Instant
 import java.util.Date
@@ -22,8 +23,11 @@ private val log = KotlinLogging.logger {}
 @Component
 class QuartzSchedulerAdapter(
     private val scheduler: Scheduler,
-    private val scheduleRepository: ScheduleRepositoryPort
+    @Value("\${scheduler.quartz.job-class:com.example.scheduler.adapters.in.scheduler.quartz.TaskExecutionJob}")
+    private val jobClassName: String
 ) : SchedulerPort {
+
+    private val jobClass: Class<out Job> = resolveJobClass(jobClassName)
 
     override fun schedule(schedule: Schedule) {
         if (!schedule.enabled) {
@@ -36,9 +40,9 @@ class QuartzSchedulerAdapter(
             scheduler.rescheduleJob(triggerKey, trigger)
             return
         }
-        val jobDetail = JobBuilder.newJob(TaskExecutionJob::class.java)
+        val jobDetail = JobBuilder.newJob(jobClass)
             .withIdentity(jobKey)
-            .usingJobData(JOB_TASK_ID_KEY, schedule.taskId)
+            .usingJobData(QuartzIdentifiers.JOB_TASK_ID_KEY, schedule.taskId)
             .build()
         try {
             scheduler.scheduleJob(jobDetail, trigger)
@@ -58,18 +62,6 @@ class QuartzSchedulerAdapter(
         if (scheduler.checkExists(jobKey)) {
             scheduler.unscheduleJob(triggerKey)
             scheduler.deleteJob(jobKey)
-        }
-    }
-
-    @PostConstruct
-    fun scheduleExisting() {
-        val schedules = scheduleRepository.findAll().filter { it.enabled }
-        schedules.forEach { schedule ->
-            try {
-                schedule(schedule)
-            } catch (ex: Exception) {
-                log.error(ex) { "Failed to schedule ${schedule.id}" }
-            }
         }
     }
 
@@ -97,13 +89,17 @@ class QuartzSchedulerAdapter(
         }
     }
 
-    private fun jobKey(scheduleId: String) = org.quartz.JobKey(SCHEDULE_JOB_PREFIX + scheduleId)
+    private fun jobKey(scheduleId: String) = org.quartz.JobKey(QuartzIdentifiers.SCHEDULE_JOB_PREFIX + scheduleId)
 
-    private fun triggerKey(scheduleId: String) = org.quartz.TriggerKey(SCHEDULE_TRIGGER_PREFIX + scheduleId)
+    private fun triggerKey(scheduleId: String) =
+        org.quartz.TriggerKey(QuartzIdentifiers.SCHEDULE_TRIGGER_PREFIX + scheduleId)
 
-    companion object {
-        const val JOB_TASK_ID_KEY = "taskId"
-        const val SCHEDULE_JOB_PREFIX = "schedule-job-"
-        const val SCHEDULE_TRIGGER_PREFIX = "schedule-"
+    private fun resolveJobClass(className: String): Class<out Job> {
+        return try {
+            Class.forName(className).asSubclass(Job::class.java)
+        } catch (ex: Exception) {
+            log.error(ex) { "Failed to load Quartz job class: $className" }
+            throw IllegalStateException("Invalid Quartz job class: $className", ex)
+        }
     }
 }

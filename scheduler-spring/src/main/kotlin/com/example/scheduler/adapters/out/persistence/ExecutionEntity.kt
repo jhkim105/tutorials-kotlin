@@ -1,0 +1,57 @@
+package com.example.scheduler.adapters.out.persistence
+
+import com.example.scheduler.core.domain.model.ExecutionStatus
+import com.example.scheduler.core.domain.model.ExecutionType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.Id
+import jakarta.persistence.Table
+import java.time.Instant
+
+@Entity
+@Table(name = "executions")
+data class ExecutionEntity(
+    @Id
+    @Column(name = "execution_id", length = 36)
+    val executionId: String,
+
+    @Column(name = "schedule_id", length = 36)
+    val scheduleId: String?,
+
+    @Column(name = "task_id", nullable = false, length = 100)
+    val taskId: String,
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "execution_type", nullable = false, length = 10)
+    val executionType: ExecutionType,
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 10)
+    val status: ExecutionStatus,
+
+    @Column(name = "payload", columnDefinition = "TEXT")
+    val payload: String?,
+
+    @Column(name = "attempt_count", nullable = false)
+    val attemptCount: Int,
+
+    @Column(name = "locked_by", length = 64)
+    val lockedBy: String?,
+
+    @Column(name = "locked_until")
+    val lockedUntil: Instant?,
+
+    @Column(name = "created_at", nullable = false)
+    val createdAt: Instant,
+
+    @Column(name = "updated_at", nullable = false)
+    val updatedAt: Instant,
+
+    @Column(name = "started_at")
+    val startedAt: Instant?,
+
+    @Column(name = "completed_at")
+    val completedAt: Instant?
+)

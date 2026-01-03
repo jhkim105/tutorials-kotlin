@@ -197,16 +197,22 @@ root/
 ## 패키지 구조 가이드 (각 프로젝트 공통)
 
 com.example.scheduler
-  api/                # REST controllers
+  api/                # REST controllers (scheduler-*/adapters/api-*)
   domain/
     model/            # JPA entities
-    action/           # ActionKey, ActionHandler, ActionRegistry
+    action/           # ActionKey
   application/
+    action/           # ActionRegistry, ActionHandler
     service/          # ScheduleService, ExecutionService
+  scheduler-task/
+    adapters/         # TaskScheduler 전용 구현
+    app/              # TaskScheduler SpringBootApplication
+  scheduler-quartz/
+    adapters/         # Quartz 전용 구현
+    app/              # Quartz SpringBootApplication
   infra/
     persistence/      # repositories
-    scheduler/        # TaskScheduler or Quartz 전용 구현
-  bootstrap/          # config, init data
+  bootstrap/          # SpringBootApplication, config, init data (scheduler-*/app)
 
 ---
 

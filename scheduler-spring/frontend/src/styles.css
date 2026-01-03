@@ -1,0 +1,266 @@
+:root {
+  color-scheme: light;
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  --ink: #14121b;
+  --muted: #5c5866;
+  --accent: #ff6f3d;
+  --accent-2: #1fc7b6;
+  --surface: #ffffff;
+  --surface-soft: #f6f3f8;
+  --border: #e5e0ee;
+  --shadow: 0 16px 40px rgba(20, 18, 27, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top left, #ffe6d5 0%, transparent 45%),
+    radial-gradient(circle at 30% 40%, #d8fff9 0%, transparent 40%),
+    radial-gradient(circle at bottom right, #e0d9ff 0%, transparent 45%),
+    #f9f8fb;
+  color: var(--ink);
+}
+
+.app {
+  min-height: 100vh;
+  padding: 32px 24px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: #ffffff;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.nav-pill {
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--ink);
+}
+
+.nav-pill.active {
+  border-color: var(--accent);
+  background: #fff6f0;
+  color: #b43a0b;
+}
+
+main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.panel {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: rise 0.45s ease;
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.panel h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table th,
+.table td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.table th {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.table td code {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+}
+
+.form-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+}
+
+input,
+select,
+textarea {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  font-family: inherit;
+  font-size: 14px;
+  background: #fff;
+}
+
+textarea {
+  min-height: 90px;
+  resize: vertical;
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+button {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: var(--ink);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+button.secondary {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--border);
+}
+
+button.ghost {
+  background: transparent;
+  color: var(--muted);
+}
+
+button.tone {
+  background: #fff1ea;
+  color: #b43a0b;
+  border-color: #ffd5c4;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status.RUNNING {
+  background: #e3f9f6;
+  color: #0a7b72;
+}
+
+.status.SUCCESS {
+  background: #e9f4ff;
+  color: #1b5ea9;
+}
+
+.status.FAILED {
+  background: #ffeaea;
+  color: #b83b3b;
+}
+
+.status.PENDING {
+  background: #f2f1f6;
+  color: #5c5866;
+}
+
+.notice {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.card-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@media (max-width: 960px) {
+  .app {
+    padding: 24px 16px 36px;
+  }
+
+  header {
+    gap: 8px;
+  }
+}

@@ -6,7 +6,6 @@ import com.example.scheduler.adapters.out.persistence.SchedulePersistenceAdapter
 import com.example.scheduler.adapters.out.persistence.ScheduleJpaRepository
 import com.example.scheduler.core.application.port.`in`.ExecutionQueryUseCase
 import com.example.scheduler.core.application.port.`in`.ExecutionUseCase
-import com.example.scheduler.core.application.port.`in`.ScheduleBootstrapUseCase
 import com.example.scheduler.core.application.port.`in`.ScheduleExecutionUseCase
 import com.example.scheduler.core.application.port.`in`.ScheduleUseCase
 import com.example.scheduler.core.application.port.`in`.TaskQueryUseCase
@@ -16,7 +15,6 @@ import com.example.scheduler.core.application.port.out.SchedulerPort
 import com.example.scheduler.core.application.port.out.TaskRegistryPort
 import com.example.scheduler.core.application.service.ExecutionQueryService
 import com.example.scheduler.core.application.service.ExecutionService
-import com.example.scheduler.core.application.service.ScheduleBootstrapService
 import com.example.scheduler.core.application.service.ScheduleCalculator
 import com.example.scheduler.core.application.service.ScheduleExecutionService
 import com.example.scheduler.core.application.service.ScheduleService
@@ -83,7 +81,8 @@ class AppConfig {
         calculator: ScheduleCalculator,
         clock: Clock,
         @Value("\${scheduler.lock.execution-seconds:300}") executionLockSeconds: Long,
-        @Value("\${scheduler.lock.schedule-seconds:30}") scheduleLockSeconds: Long
+        @Value("\${scheduler.lock.schedule-seconds:30}") scheduleLockSeconds: Long,
+        @Value("\${scheduler.batch-size:20}") batchSize: Int
     ): ScheduleExecutionUseCase {
         return ScheduleExecutionService(
             scheduleRepository,
@@ -92,16 +91,9 @@ class AppConfig {
             calculator,
             clock,
             executionLockSeconds,
-            scheduleLockSeconds
+            scheduleLockSeconds,
+            batchSize
         )
-    }
-
-    @Bean
-    fun scheduleBootstrapUseCase(
-        scheduleRepository: ScheduleRepositoryPort,
-        schedulerPort: SchedulerPort
-    ): ScheduleBootstrapUseCase {
-        return ScheduleBootstrapService(scheduleRepository, schedulerPort)
     }
 
     @Bean
