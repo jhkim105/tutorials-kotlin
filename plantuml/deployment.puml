@@ -1,9 +1,0 @@
-@startuml
-node "AWS EC2" {
-  [Spring Boot App]
-}
-node "RDS MySQL" {
-  [Database]
-}
-[Spring Boot App] --> [Database]
-@enduml

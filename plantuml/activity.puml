@@ -1,7 +1,0 @@
-@startuml
-[*] --> Created
-Created --> Paid : payment received
-Paid --> Shipped : delivery started
-Shipped --> Delivered : customer received
-Delivered --> [*]
-@enduml

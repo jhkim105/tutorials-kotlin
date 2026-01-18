@@ -1,8 +1,0 @@
-@startuml
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
-
-Person(user, "User", "사용자")
-System(system, "E-commerce System", "온라인 주문 시스템")
-
-user -> system : 주문하기
-@enduml
