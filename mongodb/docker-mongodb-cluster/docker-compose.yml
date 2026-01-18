@@ -13,7 +13,13 @@ services:
       - 27017:27017
     volumes:
       - ./mongodb.key:/mongodb.key
-    command: [ "--replSet", "rs1", "--bind_ip_all","--port","27017","--keyFile","/mongodb.key" ]
+    command: [ "--replSet", "rs1", "--bind_ip_all", "--port", "27017", "--keyFile", "/mongodb.key" ]
+    healthcheck:
+      test: echo "db.runCommand('ping').ok" | mongosh --port 27017 --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
 
   mongo2:
     image: mongo:7
@@ -27,7 +33,13 @@ services:
       - 27018:27018
     volumes:
       - ./mongodb.key:/mongodb.key
-    command: [ "--replSet", "rs1", "--bind_ip_all","--port","27018","--keyFile","/mongodb.key" ]
+    command: [ "--replSet", "rs1", "--bind_ip_all", "--port", "27018", "--keyFile", "/mongodb.key" ]
+    healthcheck:
+      test: echo "db.runCommand('ping').ok" | mongosh --port 27018 --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
 
   mongo3:
     image: mongo:7
@@ -41,20 +53,62 @@ services:
       - 27019:27019
     volumes:
       - ./mongodb.key:/mongodb.key
-    command: [ "--replSet", "rs1", "--bind_ip_all","--port","27019","--keyFile","/mongodb.key" ]
+    command: [ "--replSet", "rs1", "--bind_ip_all", "--port", "27019", "--keyFile", "/mongodb.key" ]
+    healthcheck:
+      test: echo "db.runCommand('ping').ok" | mongosh --port 27019 --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
 
   mongosetup:
     image: mongo:7
     container_name: mongosetup
     depends_on:
-      - mongo1
-      - mongo2
-      - mongo3
+      mongo1:
+        condition: service_healthy
+      mongo2:
+        condition: service_healthy
+      mongo3:
+        condition: service_healthy
     networks:
       - mongo-cluster
     volumes:
-      - ./mongo_setup.sh:/scripts/mongo_setup.sh
-    entrypoint: [ "sh", "/scripts/mongo_setup.sh" ]
+      - ./mongodb.key:/mongodb.key
+    entrypoint: >
+      mongosh --host mongo1:27017 -u root -p rootpass --authenticationDatabase admin --eval " try {
+        var status = rs.status();
+        if (status.ok === 1) {
+          print('Replica Set already initiated.');
+        } else {
+          print('Initiating Replica Set...');
+          rs.initiate({
+            _id: 'rs1',
+            members: [
+              { _id: 0, host: 'mongo1:27017' },
+              { _id: 1, host: 'mongo2:27018' },
+              { _id: 2, host: 'mongo3:27019' }
+            ]
+          });
+          print('Replica Set initiated.');
+        }
+      } catch (err) {
+        print('Error checking/initiating Replica Set: ' + err);
+        print('Attempting initiate...');
+        try {
+          rs.initiate({
+             _id: 'rs1',
+             members: [
+               { _id: 0, host: 'mongo1:27017' },
+               { _id: 1, host: 'mongo2:27018' },
+               { _id: 2, host: 'mongo3:27019' }
+             ]
+           });
+           print('Replica Set initiated inside catch block.');
+        } catch (e) {
+          print('Final fail: ' + e);
+        }
+      } "
 
 networks:
   mongo-cluster:
