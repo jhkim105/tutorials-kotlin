@@ -4,7 +4,7 @@ Spring Boot(Kotlin)와 React Admin UI를 사용한 동적 스케줄러 시스템
 
 ## 구조 (Structure)
 - `src/`: Spring Boot 3.5.x (Kotlin), 헥사고널 아키텍처, MariaDB
-- `http/`: API 요청 예시 파일
+- `../http/`: API 요청 예시 파일
 - `../frontend/`: 상위 디렉토리에 위치한 통합 Vite + React + TypeScript Admin UI
 
 ## 백엔드 (Backend)
