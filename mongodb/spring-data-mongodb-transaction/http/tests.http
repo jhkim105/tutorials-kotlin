@@ -1,0 +1,7 @@
+### Create Order (Success)
+POST http://localhost:8080/orders?name=success-order
+Content-Type: application/json
+
+### Create Order (Fail - Rollback)
+POST http://localhost:8080/orders?name=fail-order&fail=true
+Content-Type: application/json
