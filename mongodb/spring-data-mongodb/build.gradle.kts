@@ -1,9 +1,9 @@
 plugins {
-    kotlin("jvm") version "1.9.25"
-    kotlin("plugin.spring") version "1.9.25"
-    kotlin("kapt") version "1.9.21"
-    id("org.springframework.boot") version "3.4.0"
-    id("io.spring.dependency-management") version "1.1.6"
+    kotlin("jvm") version "2.1.0"
+    kotlin("plugin.spring") version "2.1.0"
+    kotlin("kapt") version "2.1.0"
+    id("org.springframework.boot") version "3.5.9"
+    id("io.spring.dependency-management") version "1.1.7"
 }
 
 group = "jhkim105.tutorials"
@@ -27,7 +27,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation("com.ninja-squad:springmockk:4.0.0")
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
     testImplementation("io.kotest:kotest-runner-junit5-jvm:5.9.1")
 }
 
