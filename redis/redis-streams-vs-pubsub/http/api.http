@@ -1,0 +1,134 @@
+### Redis Streams vs Pub/Sub 데모 API
+### 서버: localhost:8080
+### 사전 조건: Docker Redis 실행 (docker run -d -p 6379:6379 redis:latest)
+
+@baseUrl = http://localhost:8080
+
+#################################################################
+# Redis Pub/Sub — 실시간 알림 컨셉
+# 특성: 구독자가 없으면 메시지 유실 (Fire & Forget)
+#################################################################
+
+### [PubSub Step 1] SSE 구독 시작 (브라우저나 별도 클라이언트에서 실행)
+# text/event-stream 으로 연결하면 이후 발행된 메시지를 실시간으로 수신
+# → 터미널: curl -N http://localhost:8080/pubsub/subscribe
+GET {{baseUrl}}/pubsub/subscribe
+Accept: text/event-stream
+
+###
+
+### [PubSub Step 2] 채널에 메시지 발행
+# 현재 연결된 모든 SSE 구독자에게 즉시 전달됨
+# 구독자가 없으면 메시지 유실 → Streams와의 핵심 차이
+POST {{baseUrl}}/pubsub/publish
+Content-Type: application/json
+
+{
+  "message": "안녕하세요! Pub/Sub 메시지입니다."
+}
+
+###
+
+### [PubSub Step 3] 추가 메시지 발행 (SSE 탭에서 실시간 수신 확인)
+POST {{baseUrl}}/pubsub/publish
+Content-Type: application/json
+
+{
+  "message": "실시간 알림 테스트 — 구독 전 발행된 메시지는 수신 불가"
+}
+
+
+#################################################################
+# Redis Streams — 작업 큐 / 이력 저장 컨셉
+# 특성: Consumer 오프라인이어도 메시지 보존, ACK 기반 재처리 보장
+#################################################################
+
+### [Streams Step 1] 스트림에 메시지 추가 (XADD)
+# 반환된 messageId를 Step 2 consume, Step 3 ack에서 사용
+POST {{baseUrl}}/streams/produce
+Content-Type: application/json
+
+{
+  "message": "주문 생성 이벤트 #1001"
+}
+
+###
+
+### [Streams Step 2] 새 메시지 읽기 - fromId=>(기본값): 아직 전달 안 된 새 메시지
+# 읽힌 메시지 → PENDING 상태 전환 (ACK 전까지 재처리 가능)
+# 응답의 messageId를 Step 3 ack에서 사용
+GET {{baseUrl}}/streams/consume
+
+###
+
+### [Streams Step 2-B] PENDING 메시지 재조회 - fromId=0: ACK 안 된 메시지 목록
+# consumer-1이 crash 납을 때, fromId=0으로 재시작하면 미처리 메시지 재수신 가능
+GET {{baseUrl}}/streams/consume?fromId=0
+
+###
+
+### [Streams Step 2-C] 특정 ID 이후부터 읽기 (Replay)
+# Pub/Sub과 달리 과거 이력 재생 가능 - fromId에 Step 1에서 받은 messageId 입력
+# GET {{baseUrl}}/streams/consume?fromId=<Step1-messageId>
+GET {{baseUrl}}/streams/consume?fromId=0-0
+
+###
+
+### [Streams Step 3] 메시지 처리 완료 ACK (XACK)
+# PENDING → 처리 완료 상태로 전환 (PENDING 목록에서 제거)
+# 스트림 로그(XREAD)에서는 삭제되지 않으므로 Replay는 여전히 가능
+# messageId: Step 2 응답의 messages[0].messageId 값 입력
+POST {{baseUrl}}/streams/ack
+Content-Type: application/json
+
+{
+  "messageId": "{{messageId}}"
+}
+
+###
+
+### [Streams Step 4] 여러 메시지 일괄 추가
+POST {{baseUrl}}/streams/produce
+Content-Type: application/json
+
+{
+  "message": "결제 완료 이벤트 #2001"
+}
+
+###
+
+POST {{baseUrl}}/streams/produce
+Content-Type: application/json
+
+{
+  "message": "배송 시작 이벤트 #3001"
+}
+
+###
+
+POST {{baseUrl}}/streams/produce
+Content-Type: application/json
+
+{
+  "message": "배송 완료 이벤트 #3001"
+}
+
+###
+
+### [Streams Step 5] 일괄 소비 후 전체 ACK 흐름 확인
+GET {{baseUrl}}/streams/consume
+
+
+#################################################################
+# 비교 시나리오: 오프라인 중 메시지 발행
+#
+# [Pub/Sub 실험]
+# 1. GET /pubsub/subscribe 연결 해제 (SSE 탭 닫기)
+# 2. POST /pubsub/publish 실행 → 메시지 유실
+# 3. GET /pubsub/subscribe 재연결 → 과거 메시지 수신 불가 ❌
+#
+# [Streams 실험]
+# 1. POST /streams/produce 여러 번 실행
+# 2. GET /streams/consume?fromId=0-0 으로 처음부터 전부 읽기 ✅
+# 3. 이미 ACK한 것도 GET /streams/consume?fromId=0-0 으로 Replay 가능 ✅
+#################################################################
