@@ -27,7 +27,6 @@ ClickHouse는 대규모 데이터 분석을 위한 OLAP(온라인 분석 처리)
     flyway:
       enabled: true
       clean-disabled: false           # 로컬 환경에서 편의성을 위해 clean 허용
-      clean-on-validation-error: true  # 스키마 유효성 검증 실패 시 자동 초기화 후 재마이그레이션
   ```
 * **마이그레이션 스크립트:** [V1__create_product_view_events_table.sql](file:///Users/jihwankim/dev/my/tutorials-kotlin/clickhouse/spring-clickhouse/src/main/resources/db/migration/V1__create_product_view_events_table.sql)을 통해 테이블 형상을 제어합니다.
 

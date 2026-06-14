@@ -26,7 +26,7 @@
   ```bash
   ./gradlew test
   ```
-  * 테스트 실행 시 DB 클린(`clean-on-validation-error`) 후 `product_view_events` 테이블 스키마 마이그레이션이 자동 실행되며, Kotest 스펙을 통해 CRUD 및 OLAP 인기 상품 순위 집계 로직의 무결성을 검증합니다.
+  * 테스트 실행 시 `product_view_events` 테이블 스키마 마이그레이션이 자동 실행되며, Kotest 스펙을 통해 CRUD 및 OLAP 인기 상품 순위 집계 로직의 무결성을 검증합니다.
 
 * **2. 로컬 어플리케이션 실행:**
   ```bash
