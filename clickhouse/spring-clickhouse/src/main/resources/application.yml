@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: spring-clickhouse
+  datasource:
+    url: jdbc:ch://localhost:8123/default
+    username: default
+    password: "default"
+    driver-class-name: com.clickhouse.jdbc.ClickHouseDriver
+  flyway:
+    enabled: true
+    clean-disabled: false # 로컬/테스트 단계에서 스키마 재개발 편의성을 위해 clean 허용
+    clean-on-validation-error: true # 유효성 검증 실패 시 자동 clean 후 마이그레이션 실행

@@ -69,3 +69,9 @@ node_modules/
 *.war
 *.dmg
 *.exe
+
+# ===========================
+# Tooling
+# ===========================
+.antigravitycli/
+

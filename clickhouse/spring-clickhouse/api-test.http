@@ -1,0 +1,59 @@
+### 1. 새로운 상품 조회 클릭스트림 로그 등록 (A 상품)
+POST http://localhost:8080/api/events
+Content-Type: application/json
+
+{
+  "productId": "PROD-A",
+  "userId": "user-100",
+  "price": 12000.00,
+  "urlPath": "/products/PROD-A",
+  "referrer": "google"
+}
+
+### 2. 새로운 상품 조회 클릭스트림 로그 등록 (A 상품 - 추가 유입)
+POST http://localhost:8080/api/events
+Content-Type: application/json
+
+{
+  "productId": "PROD-A",
+  "userId": "user-200",
+  "price": 12000.00,
+  "urlPath": "/products/PROD-A",
+  "referrer": "naver"
+}
+
+### 3. 새로운 상품 조회 클릭스트림 로그 등록 (B 상품)
+POST http://localhost:8080/api/events
+Content-Type: application/json
+
+{
+  "productId": "PROD-B",
+  "userId": "user-300",
+  "price": 25000.00,
+  "urlPath": "/products/PROD-B",
+  "referrer": "direct"
+}
+
+### 4. 새로운 상품 조회 클릭스트림 로그 등록 (C 상품)
+POST http://localhost:8080/api/events
+Content-Type: application/json
+
+{
+  "productId": "PROD-C",
+  "userId": "user-400",
+  "price": 38000.00,
+  "urlPath": "/products/PROD-C",
+  "referrer": "google"
+}
+
+### 5. 등록된 전체 조회 로그 리스트 조회
+GET http://localhost:8080/api/events
+
+### 6. 실시간 가장 많이 조회된 인기 상품 상위 OLAP 통계 집계 (ClickHouse 강점 시연)
+GET http://localhost:8080/api/events/top?limit=3
+
+### 7. 특정 로그 상세 조회 (상단 1~4번 요청에서 생성된 UUID 값을 id 자리에 넣어 호출하세요)
+GET http://localhost:8080/api/events/c197dda1-ec36-407f-a68e-c5385e42ab72
+
+### 8. 특정 로그 삭제 (UUID 값을 id 자리에 넣어 호출하세요)
+DELETE http://localhost:8080/api/events/c197dda1-ec36-407f-a68e-c5385e42ab72
