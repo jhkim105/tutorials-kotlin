@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Databricks IoT Device Manager</title>
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0b0d13;
+            --panel-bg: rgba(22, 28, 45, 0.4);
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --font-outfit: 'Outfit', sans-serif;
+            --font-inter: 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-inter);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.07) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Header Style */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        .logo-section h1 {
+            font-family: var(--font-outfit);
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa 0%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.03em;
+        }
+
+        .logo-section p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.2rem;
+            font-weight: 400;
+        }
+
+        .actions-bar {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            font-family: var(--font-outfit);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border-color: var(--panel-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Dashboard Overview Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .stat-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+        }
+
+        .stat-card.success::before { background: var(--success); }
+        .stat-card.warning::before { background: var(--warning); }
+        .stat-card.danger::before { background: var(--danger); }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-family: var(--font-outfit);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
+
+        /* Device Section Grid */
+        .device-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .device-section-header h2 {
+            font-family: var(--font-outfit);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Glassmorphic Device Card */
+        .device-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 250px;
+        }
+
+        .device-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .device-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .device-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .device-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.6rem;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .badge-online {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+        }
+
+        .badge-offline {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .badge-maintenance {
+            background: rgba(245, 94, 11, 0.1);
+            color: var(--warning);
+            border: 1px solid rgba(245, 94, 11, 0.2);
+        }
+
+        .device-info {
+            margin-top: 1rem;
+            flex-grow: 1;
+        }
+
+        .device-info h3 {
+            font-family: var(--font-outfit);
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.3rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .device-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .device-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .heartbeat-text {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-icon-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .action-icon-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .action-icon-btn.delete-btn:hover {
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(11, 13, 19, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: #151a26;
+            border: 1px solid var(--panel-border);
+            border-radius: 1.5rem;
+            width: 100%;
+            max-width: 480px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            font-family: var(--font-outfit);
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--panel-border);
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: white;
+            font-family: var(--font-inter);
+            font-size: 0.95rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+
+        /* Toasts */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 2000;
+        }
+
+        .toast {
+            background: rgba(21, 26, 38, 0.95);
+            border: 1px solid var(--panel-border);
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            min-width: 250px;
+        }
+
+        .toast-success { border-left: 4px solid var(--success); }
+        .toast-error { border-left: 4px solid var(--danger); }
+
+        /* Keyframes */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--panel-bg);
+            border: 1px dashed var(--panel-border);
+            border-radius: 1.25rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            color: rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        /* Loading Skeletons */
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+            background-size: 200% 100%;
+            animation: skeletonLoading 1.5s infinite;
+        }
+
+        @keyframes skeletonLoading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo-section">
+                <h1>Databricks IoT Manager</h1>
+                <p>Spring Boot Kotlin & Databricks Delta Lake SQL CRUD Demo</p>
+            </div>
+            <div class="actions-bar">
+                <button class="btn btn-secondary" onclick="fetchDevices()">
+                    <!-- Refresh Icon -->
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                    새로고침
+                </button>
+                <button class="btn btn-primary" onclick="openAddModal()">
+                    <!-- Plus Icon -->
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    디바이스 등록
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Overview -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">전체 장치</div>
+                <div class="stat-value" id="stat-total">-</div>
+            </div>
+            <div class="stat-card success">
+                <div class="stat-label">정상 (ONLINE)</div>
+                <div class="stat-value" id="stat-online">-</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="stat-label">점검 중 (MAINTENANCE)</div>
+                <div class="stat-value" id="stat-maintenance">-</div>
+            </div>
+            <div class="stat-card danger">
+                <div class="stat-label">장애 (OFFLINE)</div>
+                <div class="stat-value" id="stat-offline">-</div>
+            </div>
+        </section>
+
+        <!-- Device List -->
+        <section class="device-list-section">
+            <div class="device-section-header">
+                <h2>등록된 디바이스 목록</h2>
+            </div>
+            <div class="device-grid" id="device-grid">
+                <!-- Skeletons will appear here initially -->
+                <div class="device-card skeleton"></div>
+                <div class="device-card skeleton"></div>
+                <div class="device-card skeleton"></div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Add/Edit Device Modal -->
+    <div class="modal-overlay" id="device-modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modal-title">디바이스 등록</h3>
+                <button class="action-icon-btn" onclick="closeModal()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <form id="device-form" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="form-device-id">
+                <div class="form-group">
+                    <label class="form-label" for="form-device-name">장치 이름</label>
+                    <input type="text" id="form-device-name" class="form-control" placeholder="예: Smart-Sensor-Temp-1" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="form-device-type">장치 유형</label>
+                    <select id="form-device-type" class="form-control" required>
+                        <option value="TEMPERATURE">TEMPERATURE (온도계)</option>
+                        <option value="PRESSURE">PRESSURE (압력계)</option>
+                        <option value="FLOW">FLOW (유량계)</option>
+                        <option value="HUMIDITY">HUMIDITY (습도계)</option>
+                        <option value="VIBRATION">VIBRATION (진동센서)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="form-device-status">초기 상태</label>
+                    <select id="form-device-status" class="form-control" required>
+                        <option value="ONLINE">ONLINE (가동중)</option>
+                        <option value="MAINTENANCE">MAINTENANCE (정비중)</option>
+                        <option value="OFFLINE">OFFLINE (종료)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="form-device-location">설치 위치</label>
+                    <input type="text" id="form-device-location" class="form-control" placeholder="예: Server Room A" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">취소</button>
+                    <button type="submit" class="btn btn-primary" id="form-submit-btn">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        const API_URL = '/api/devices';
+        let devicesData = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchDevices();
+        });
+
+        // Toast Messages
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            const icon = type === 'success' 
+                ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`
+                : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
+
+            toast.innerHTML = `${icon}<span>${message}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Fetch all devices
+        async function fetchDevices() {
+            renderSkeletons();
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error('데이터 로드 실패');
+                devicesData = await response.json();
+                renderDevices(devicesData);
+                updateStats(devicesData);
+            } catch (err) {
+                console.error(err);
+                showToast(err.message, 'error');
+                document.getElementById('device-grid').innerHTML = `
+                    <div class="empty-state">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <p>디바이스 목록을 불러오는 도중 오류가 발생했습니다.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Render Skeletons
+        function renderSkeletons() {
+            const grid = document.getElementById('device-grid');
+            grid.innerHTML = `
+                <div class="device-card skeleton"></div>
+                <div class="device-card skeleton"></div>
+                <div class="device-card skeleton"></div>
+            `;
+        }
+
+        // Render Dashboard Stats
+        function updateStats(devices) {
+            document.getElementById('stat-total').innerText = devices.length;
+            document.getElementById('stat-online').innerText = devices.filter(d => d.status === 'ONLINE').length;
+            document.getElementById('stat-maintenance').innerText = devices.filter(d => d.status === 'MAINTENANCE').length;
+            document.getElementById('stat-offline').innerText = devices.filter(d => d.status === 'OFFLINE').length;
+        }
+
+        // Get SVG icon based on device type
+        function getDeviceIcon(type) {
+            switch(type) {
+                case 'TEMPERATURE':
+                    return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>`;
+                case 'PRESSURE':
+                    return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l3 3"/></svg>`;
+                case 'FLOW':
+                    return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`;
+                case 'HUMIDITY':
+                    return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>`;
+                default:
+                    return `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>`;
+            }
+        }
+
+        // Format Date Time
+        function formatRelativeTime(isoString) {
+            const date = new Date(isoString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            
+            if (diffMins < 1) return '방금 전';
+            if (diffMins < 60) return `${diffMins}분 전`;
+            
+            const diffHours = Math.floor(diffMins / 60);
+            if (diffHours < 24) return `${diffHours}시간 전`;
+            
+            return date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Render Cards
+        function renderDevices(devices) {
+            const grid = document.getElementById('device-grid');
+            if (devices.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/></svg>
+                        <p>등록된 IoT 디바이스가 없습니다. 새 디바이스를 등록해 보세요.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = devices.map(device => {
+                const badgeClass = `badge-${device.status.toLowerCase()}`;
+                const icon = getDeviceIcon(device.deviceType);
+                const relativeTime = formatRelativeTime(device.lastHeartbeat);
+                
+                return `
+                    <div class="device-card" id="card-${device.deviceId}">
+                        <div class="device-card-header">
+                            <div class="device-icon-wrapper">${icon}</div>
+                            <span class="device-badge ${badgeClass}" onclick="toggleStatus('${device.deviceId}', '${device.status}')" style="cursor: pointer;" title="클릭하여 상태 변경">
+                                <span class="status-dot"></span>${device.status}
+                            </span>
+                        </div>
+                        <div class="device-info">
+                            <h3 title="${device.deviceName}">${device.deviceName}</h3>
+                            <div class="device-meta">
+                                <div class="meta-item">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                                    <span>${device.deviceType}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    <span>${device.location}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="device-card-footer">
+                            <span class="heartbeat-text">최근 수신: ${relativeTime}</span>
+                            <div class="card-actions">
+                                <button class="action-icon-btn" onclick="openEditModal('${device.deviceId}')" title="수정">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z"/></svg>
+                                </button>
+                                <button class="action-icon-btn delete-btn" onclick="deleteDevice('${device.deviceId}')" title="삭제">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Modal Helpers
+        function openAddModal() {
+            document.getElementById('modal-title').innerText = '신규 디바이스 등록';
+            document.getElementById('form-device-id').value = '';
+            document.getElementById('device-form').reset();
+            document.getElementById('device-modal').classList.add('active');
+        }
+
+        function openEditModal(id) {
+            const device = devicesData.find(d => d.deviceId === id);
+            if (!device) return;
+            
+            document.getElementById('modal-title').innerText = '디바이스 정보 수정';
+            document.getElementById('form-device-id').value = device.deviceId;
+            document.getElementById('form-device-name').value = device.deviceName;
+            document.getElementById('form-device-type').value = device.deviceType;
+            document.getElementById('form-device-status').value = device.status;
+            document.getElementById('form-device-location').value = device.location;
+            
+            document.getElementById('device-modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('device-modal').classList.remove('active');
+        }
+
+        // Save (Create or Update)
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const id = document.getElementById('form-device-id').value;
+            const payload = {
+                deviceName: document.getElementById('form-device-name').value,
+                deviceType: document.getElementById('form-device-type').value,
+                status: document.getElementById('form-device-status').value,
+                location: document.getElementById('form-device-location').value
+            };
+
+            const isEdit = id !== '';
+            const url = isEdit ? `${API_URL}/${id}` : API_URL;
+            const method = isEdit ? 'PUT' : 'POST';
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error('저장 중 오류 발생');
+                
+                showToast(isEdit ? '장치 정보가 수정되었습니다.' : '신규 장치가 등록되었습니다.');
+                closeModal();
+                fetchDevices();
+            } catch (err) {
+                console.error(err);
+                showToast(err.message, 'error');
+            }
+        }
+
+        // Delete device
+        async function deleteDevice(id) {
+            if (!confirm('정말로 이 디바이스를 삭제하시겠습니까?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('삭제 처리 실패');
+                
+                showToast('성공적으로 삭제되었습니다.');
+                fetchDevices();
+            } catch (err) {
+                console.error(err);
+                showToast(err.message, 'error');
+            }
+        }
+
+        // Fast status cycle toggle
+        async function toggleStatus(id, currentStatus) {
+            const device = devicesData.find(d => d.deviceId === id);
+            if (!device) return;
+            
+            const statuses = ['ONLINE', 'MAINTENANCE', 'OFFLINE'];
+            const currentIndex = statuses.indexOf(currentStatus);
+            const nextStatus = statuses[(currentIndex + 1) % statuses.length];
+
+            const payload = {
+                deviceName: device.deviceName,
+                deviceType: device.deviceType,
+                status: nextStatus,
+                location: device.location
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) throw new Error('상태 업데이트 실패');
+                
+                showToast(`디바이스 상태가 ${nextStatus}(으)로 변경되었습니다.`);
+                fetchDevices();
+            } catch (err) {
+                console.error(err);
+                showToast(err.message, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

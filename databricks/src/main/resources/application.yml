@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: databricks-crud-demo
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
