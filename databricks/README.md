@@ -38,8 +38,8 @@ graph TD
     A[Client UI] --> B[DeviceController]
     B --> C[DeviceService]
     C --> D{Active Profile}
-    D -- local --[x] E[H2DeviceRepository]
-    D -- databricks --[x] F[DatabricksDeviceRepository]
+    D -->|local| E[H2DeviceRepository]
+    D -->|databricks| F[DatabricksDeviceRepository]
     E --> G[(Local H2 DB)]
     F --> H[(Databricks Delta Table)]
 ```
