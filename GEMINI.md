@@ -15,15 +15,17 @@ This repository is a comprehensive collection of Kotlin and Spring Boot tutorial
 The repository is structured by topic:
 - `batch/`: Spring Batch examples (`spring-batch`, `spring-batch-beanio`, `spring-batch-hexagonal`)
 - `caching/`: Redis, Caffeine, dual-cache tutorials (`dual-cache`, `spring-cache-caffeine`, `spring-cache-redis`)
+- `clickhouse/`: ClickHouse integration with Docker and Spring (`docker-clickhouse`, `spring-clickhouse`)
 - `concurrency/`: Coroutines, WebFlux, Virtual Threads (`spring-web-vt`, `spring-webflux-coroutines`)
+- `databricks/`: Databricks integration examples
 - `docker/`: Docker Compose configurations (`docker-kafka`)
 - `http-streaming/`: JSONL, SSE (`jsonl`, `sse`)
 - `io/`: File, JSON, BeanIO, Image, Markdown processing (`beanio`, `files`, `image-modules`, `json`, `markdown`)
 - `kafka/`: Spring Kafka, Kafka Streams, DLQ (`spring-kafka`, `spring-kafka-dlq`, `spring-kafka-dynamic`, `kafka-streams-vs-consumer`)
 - `kotlin-core/`: Pure Kotlin tutorials (`core-kotlin`, `coroutines`, `id-generator`)
+- `mongo/`: Spring Data MongoDB and transactions (`spring-data-mongodb`, `spring-data-mongodb-transaction`)
 - `multi-project/`: Gradle multi-project build examples (`multi-build-logic`, `multi-buildSrc`)
-- `persistence/`: Spring JPA, JDBC, Envers, Listeners (`spring-jpa`, `spring-jdbc`, `spring-jpa-envers`, `spring-jpa-listener`)
-- `persistence-mongo/`: Spring Data MongoDB and transactions (`spring-data-mongodb`, `spring-data-mongodb-transaction`)
+- `persistence/`: Spring JPA, JDBC, Envers, Listeners, PostgreSQL (`spring-jpa`, `spring-jdbc`, `spring-jpa-envers`, `spring-jpa-listener`, `spring-jpa-postgresql`)
 - `redis/`: Redis Pub/Sub, Distributed Lock, Streams (`spring-data-redis`, `spring-data-redis-pubsub`, `spring-data-redis-reactive`, `spring-data-redisson-pubsub`, `redis-distributed-lock`, `redis-streams`, `redis-streams-vs-pubsub`)
 - `scheduling/`: Spring Scheduler, Quartz (`scheduler`, `scheduler-quartz`, `scheduler-spring`, `spring-quartz-schedule`)
 - `security/`: Spring Security, JWT, AuthZ (`spring-security`, `spring-security-jwt`, `jwt`, `authz/authz-demo-api`, `authz/authz-spring-security-api`)
@@ -63,3 +65,5 @@ Since each subdirectory is an independent project, you must navigate into the sp
 - `web/spring-web/`: For basic Spring Boot web application structure.
 - `multi-project/`: For Gradle multi-project build configuration examples.
 - `concurrency/`: For Coroutines and Virtual Threads usage.
+- `graphify-out/graph.json`: AST-based code knowledge graph (classes, functions, call/dependency graph). When analyzing cross-module dependencies, class hierarchies, or call flows across this monorepo, prioritize querying/inspecting `graphify-out/graph.json` first before performing broad file scans to minimize token usage.
+

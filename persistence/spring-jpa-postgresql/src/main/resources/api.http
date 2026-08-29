@@ -1,0 +1,28 @@
+### 1. Product 대량 Batch Insert 성능 테스트 (1,000건)
+POST http://localhost:8080/api/products/batch?count=1000
+Content-Type: application/json
+
+### 2. Product JSONB 필드 검색 (brand = Apple)
+GET http://localhost:8080/api/products/search/jsonb?key=brand&value=Apple
+Accept: application/json
+
+### 3. Product Native Array (text[]) 검색 (tag = apple)
+GET http://localhost:8080/api/products/search/tag?tag=apple
+Accept: application/json
+
+### -------------------------------------------------------------
+### 4. JobTask 테스트 데이터 30개 생성 (Seed)
+POST http://localhost:8080/api/jobs/seed?count=30
+Content-Type: application/json
+
+### 5. JobTask 선점 (Worker-1) - SKIP LOCKED 동작 확인
+POST http://localhost:8080/api/jobs/claim?workerName=Worker-1
+Content-Type: application/json
+
+### 6. JobTask 선점 (Worker-2) - 동시 호출 시 다른 task_id 획득
+POST http://localhost:8080/api/jobs/claim?workerName=Worker-2
+Content-Type: application/json
+
+### 7. JobTask 전체 상태 요약 조회
+GET http://localhost:8080/api/jobs/status
+Accept: application/json
