@@ -1,0 +1,29 @@
+### 1. Write Routing Check (Master 접속 검증)
+GET http://localhost:8080/api/routing/write-check
+
+### 2. Read-Only Routing Check 1차 (Slave1 접속 검증)
+GET http://localhost:8080/api/routing/read-check
+
+### 3. Read-Only Routing Check 2차 (Slave2 라운드로빈 접속 검증)
+GET http://localhost:8080/api/routing/read-check
+
+### 4. Read-Only Routing Check 3차 (Slave1 순환 접속 검증)
+GET http://localhost:8080/api/routing/read-check
+
+### 5. Member 생성 (Write -> Master DB:3306 에 저장)
+POST http://localhost:8080/api/members
+Content-Type: application/json
+
+{
+  "username": "alice",
+  "email": "alice@example.com"
+}
+
+### 6. Member 단건 조회 (Read -> Slave DB:3307 또는 3308 에서 조회)
+GET http://localhost:8080/api/members/1
+
+### 7. Member 목록 조회 (Read -> Slave DB 에서 조회)
+GET http://localhost:8080/api/members
+
+### 8. HikariCP 커넥션 풀 실시간 상태 조회 (Master / Slave1 / Slave2)
+GET http://localhost:8080/api/routing/pool-status

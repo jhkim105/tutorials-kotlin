@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: spring-routing-datasource
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+datasource:
+  master:
+    url: jdbc:mysql://localhost:3306/testdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    pool-name: HikariPool-Master
+    maximum-pool-size: 10
+    minimum-idle: 2
+  slaves:
+    slave1:
+      url: jdbc:mysql://localhost:3307/testdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      username: root
+      password: password
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      pool-name: HikariPool-Slave1
+      maximum-pool-size: 10
+      minimum-idle: 2
+    slave2:
+      url: jdbc:mysql://localhost:3308/testdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      username: root
+      password: password
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      pool-name: HikariPool-Slave2
+      maximum-pool-size: 10
+      minimum-idle: 2
+
+logging:
+  level:
+    jhkim105.tutorials.routing: DEBUG
+    org.springframework.jdbc.datasource: DEBUG
+    org.springframework.transaction: DEBUG
+    org.hibernate.SQL: DEBUG
