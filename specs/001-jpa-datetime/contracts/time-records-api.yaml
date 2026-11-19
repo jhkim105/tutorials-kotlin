@@ -1,0 +1,175 @@
+openapi: 3.0.3
+info:
+  title: Time Record Comparison API
+  version: 1.0.0
+  description: REST API for creating, querying, and inspecting JPA Date & Time type persistence.
+
+paths:
+  /api/time-records:
+    get:
+      summary: List all time records
+      responses:
+        '200':
+          description: List of time records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimeRecordResponse'
+    post:
+      summary: Create a new time record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTimeRecordRequest'
+      responses:
+        '201':
+          description: Created time record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeRecordResponse'
+
+  /api/time-records/{id}:
+    get:
+      summary: Get a time record by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Time record found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeRecordResponse'
+        '404':
+          description: Record not found
+
+  /api/time-records/{id}/db-raw:
+    get:
+      summary: Inspect raw database column types and physical stored values alongside entity representation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detailed comparative raw view
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeRecordRawView'
+
+  /api/time-records/search:
+    get:
+      summary: Search time records within a time range
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Filtered list of time records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimeRecordResponse'
+
+components:
+  schemas:
+    CreateTimeRecordRequest:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          example: "Seoul Now"
+        localDateTime:
+          type: string
+          example: "2026-10-09T08:30:00.123456"
+        localDate:
+          type: string
+          format: date
+          example: "2026-10-09"
+        localTime:
+          type: string
+          example: "08:30:00.123456"
+        instant:
+          type: string
+          format: date-time
+          example: "2026-10-08T23:30:00.123456Z"
+        zonedDateTime:
+          type: string
+          example: "2026-10-09T08:30:00.123456+09:00[Asia/Seoul]"
+        offsetDateTime:
+          type: string
+          example: "2026-10-09T08:30:00.123456+09:00"
+        offsetTime:
+          type: string
+          example: "08:30:00.123456+09:00"
+
+    TimeRecordResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        localDateTime:
+          type: string
+        localDate:
+          type: string
+        localTime:
+          type: string
+        instant:
+          type: string
+        zonedDateTime:
+          type: string
+        offsetDateTime:
+          type: string
+        offsetTime:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    TimeRecordRawView:
+      type: object
+      properties:
+        entity:
+          $ref: '#/components/schemas/TimeRecordResponse'
+        dbEngine:
+          type: string
+          example: "MySQL 8.4"
+        columnTypes:
+          type: object
+          additionalProperties:
+            type: string
+        rawValues:
+          type: object
+          additionalProperties:
+            type: string
+            nullable: true
