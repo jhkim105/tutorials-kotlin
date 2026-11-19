@@ -75,4 +75,5 @@ node_modules/
 # ===========================
 .antigravitycli/
 graphify-out/
+intent.md
 
