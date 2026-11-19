@@ -1,0 +1,37 @@
+# Prometheus + Grafana 모니터링 스택 (호스트에서 실행 중인 Spring Boot 앱의 Actuator 지표를 수집)
+# 실행: docker compose -f docker/monitoring/docker-compose.yml up -d
+# Prometheus: http://localhost:9090 / Grafana: http://localhost:3000 (admin / admin)
+services:
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    container_name: monitoring-prometheus
+    profiles: ["monitoring", "all"]
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=7d
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # Linux 에서도 host.docker.internal 사용
+
+  grafana:
+    image: grafana/grafana:11.3.1
+    container_name: monitoring-grafana
+    profiles: ["monitoring", "all"]
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
+volumes:
+  grafana-data:

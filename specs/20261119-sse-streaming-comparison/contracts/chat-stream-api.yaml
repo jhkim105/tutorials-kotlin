@@ -1,0 +1,114 @@
+openapi: 3.0.3
+info:
+  title: SSE Compare - Chat Stream API
+  version: 1.0.0
+  description: |
+    모든 비교 구성(A, B, C1, C2, D, E)이 동일하게 제공해야 하는 외부 계약.
+    공통 계약 테스트(`ChatStreamContractSpec`)의 기준이다.
+paths:
+  /chat/stream:
+    post:
+      summary: POST SSE 스트림
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StreamRequest'
+      responses:
+        '200':
+          description: |
+            SSE 스트림. `message` 이벤트 `events`개 후 `done` 이벤트로 종료.
+            오류 발생 시 `error` 이벤트 후 종료. heartbeat는 주석 행 `: ping`.
+          content:
+            text/event-stream:
+              schema:
+                type: string
+              example: |
+                event: message
+                data: {"seq":1,"content":"xxxxxxxx","serverTs":1763536000000}
+
+                : ping
+
+                event: done
+                data: {"total":1,"serverTs":1763536000100}
+        '400':
+          description: 검증 실패 (스트림 시작 전)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /stream:
+    get:
+      summary: GET SSE 기준선 (바디 처리 비용 분리용)
+      parameters:
+        - { name: prompt, in: query, required: true, schema: { type: string } }
+        - { name: events, in: query, required: true, schema: { type: integer } }
+        - { name: intervalMs, in: query, required: true, schema: { type: integer, format: int64 } }
+        - { name: persist, in: query, required: false, schema: { type: boolean, default: false } }
+        - { name: failAt, in: query, required: false, schema: { type: integer, minimum: 1 } }
+      responses:
+        '200':
+          description: POST와 동일한 이벤트 형식의 SSE 스트림
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        '400':
+          description: 검증 실패
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    StreamRequest:
+      type: object
+      required: [prompt, events, intervalMs]
+      properties:
+        prompt:
+          type: string
+          minLength: 1
+          maxLength: 4000
+        events:
+          type: integer
+          minimum: 1
+          maximum: 100000
+        intervalMs:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 60000
+        persist:
+          type: boolean
+          default: false
+          description: 요청 단위 DB 저장 여부 (DB 프로파일에서만 유효)
+        failAt:
+          type: integer
+          minimum: 1
+          description: 테스트·벤치마크 전용. 해당 순번 직전에 SIMULATED_ERROR 유발
+    ErrorResponse:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          example: INVALID_REQUEST
+        message:
+          type: string
+    MessageEventData:
+      type: object
+      properties:
+        seq: { type: integer }
+        content: { type: string }
+        serverTs: { type: integer, format: int64 }
+    DoneEventData:
+      type: object
+      properties:
+        total: { type: integer }
+        serverTs: { type: integer, format: int64 }
+    ErrorEventData:
+      type: object
+      properties:
+        code: { type: string }
+        message: { type: string }

@@ -1,0 +1,72 @@
+[
+  {
+    "id": "S1",
+    "name": "Ramp-up Concurrent Connections",
+    "mode": "RAMP_UP",
+    "stages": [100, 1000, 5000, 10000],
+    "events": 20,
+    "intervalMs": 500,
+    "holdSeconds": 15,
+    "persist": false,
+    "dropRatio": 0.0,
+    "readDelayMs": 0
+  },
+  {
+    "id": "S2",
+    "name": "Short Streams Fixed Arrival Rate",
+    "mode": "ARRIVAL_RATE",
+    "arrivalRatePerSec": 100,
+    "durationSeconds": 30,
+    "events": 10,
+    "intervalMs": 100,
+    "persist": false,
+    "dropRatio": 0.0,
+    "readDelayMs": 0
+  },
+  {
+    "id": "S3",
+    "name": "Long Hold Stability",
+    "mode": "LONG_HOLD",
+    "connections": 500,
+    "events": 60,
+    "intervalMs": 2000,
+    "holdSeconds": 120,
+    "persist": false,
+    "dropRatio": 0.0,
+    "readDelayMs": 0
+  },
+  {
+    "id": "S4",
+    "name": "DB Persistence Included",
+    "mode": "RAMP_UP",
+    "stages": [50, 200, 500, 1000],
+    "events": 10,
+    "intervalMs": 200,
+    "holdSeconds": 15,
+    "persist": true,
+    "dropRatio": 0.0,
+    "readDelayMs": 0
+  },
+  {
+    "id": "S5",
+    "name": "Client Mid-Stream Disconnect",
+    "mode": "DROP",
+    "connections": 300,
+    "events": 30,
+    "intervalMs": 200,
+    "dropRatio": 0.5,
+    "persist": false,
+    "readDelayMs": 0
+  },
+  {
+    "id": "S6",
+    "name": "Slow Client Backpressure",
+    "mode": "SLOW_CLIENT",
+    "connections": 200,
+    "events": 20,
+    "intervalMs": 100,
+    "persist": false,
+    "dropRatio": 0.0,
+    "readDelayMs": 500
+  }
+]

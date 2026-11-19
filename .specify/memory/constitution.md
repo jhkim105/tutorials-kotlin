@@ -30,9 +30,10 @@
   1. **Objective / Hypothesis**: Why are we evaluating this technology or pattern?
   2. **Acceptance Criteria**: What behavior proves that this PoC succeeded?
   3. **Verification**: Executable tests or demo endpoints confirming the behavior.
+- **Spec Directory Naming**: Feature directories under `specs/` MUST be named `<yyyyMMdd>-<short-name>` (e.g. `20261009-jpa-datetime`), where the prefix is the creation date. Sequential numbers (`001-`, `002-`) and time suffixes (`HHmmss`) MUST NOT be used. If two features share a date, the short name distinguishes them.
 
 ## Governance & Maintenance
 - All new modules and specifications generated through Spec Kit should adhere to the rules above.
 - Amendments to this constitution can be made as the repository evolves or adopts newer Kotlin/Spring standards.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-09
+**Version**: 1.1.0 | **Ratified**: 2026-10-09 | **Last Amended**: 2026-11-19

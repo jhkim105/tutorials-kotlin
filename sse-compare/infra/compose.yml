@@ -1,0 +1,85 @@
+# SSE Compare 인프라 (MySQL + 4개 앱 서비스)
+# 모니터링(Prometheus + Grafana)은 저장소 공용 docker/monitoring/docker-compose.yml 을 별도로 실행한다.
+# 공정성 조건: 모든 앱은 cpus=2, memory=1g, -Xmx512m -XX:+UseG1GC 로 제한하며 한 번에 하나만 실행한다.
+
+x-app-common: &app-common
+  deploy:
+    resources:
+      limits:
+        cpus: "2.0"
+        memory: 1g
+  environment:
+    JAVA_OPTS: "-Xmx512m -Xms512m -XX:+UseG1GC"
+    SPRING_PROFILES_ACTIVE: "${SPRING_PROFILES_ACTIVE:-}"
+    DB_HOST: mysql
+    DB_PORT: "3306"
+    DB_NAME: sse_compare
+    DB_USER: sse
+    DB_PASS: ssepass
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: sse-compare-mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: sse_compare
+      MYSQL_USER: sse
+      MYSQL_PASSWORD: ssepass
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-usse", "-pssepass"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+
+  app-mvc-sseemitter:
+    <<: *app-common
+    profiles: ["app-mvc-sseemitter"]
+    container_name: sse-compare-app-mvc-sseemitter
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+      args:
+        MODULE: app-mvc-sseemitter
+    ports:
+      - "8081:8081"
+
+  app-mvc-flow:
+    <<: *app-common
+    profiles: ["app-mvc-flow"]
+    container_name: sse-compare-app-mvc-flow
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+      args:
+        MODULE: app-mvc-flow
+    ports:
+      - "8082:8082"
+
+  app-webflux-flux:
+    <<: *app-common
+    profiles: ["app-webflux-flux"]
+    container_name: sse-compare-app-webflux-flux
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+      args:
+        MODULE: app-webflux-flux
+    ports:
+      - "8083:8083"
+
+  app-webflux-flow:
+    <<: *app-common
+    profiles: ["app-webflux-flow"]
+    container_name: sse-compare-app-webflux-flow
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+      args:
+        MODULE: app-webflux-flow
+    ports:
+      - "8084:8084"
