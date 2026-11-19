@@ -1,0 +1,93 @@
+{
+  "combination" : "D",
+  "scenario" : "S1",
+  "run" : 1,
+  "timestamp" : "2026-11-19T08:33:50.547819Z",
+  "targetUrl" : "http://localhost:8083/chat/stream",
+  "stages" : [ {
+    "stageName" : "c=50",
+    "targetConnections" : 50,
+    "client" : {
+      "ttfbMs" : {
+        "p50" : 35.0,
+        "p95" : 40.0,
+        "p99" : 46.0,
+        "avg" : 32.36,
+        "max" : 46.0
+      },
+      "eventGapMs" : {
+        "p50" : 506.0,
+        "p95" : 514.0,
+        "p99" : 519.0,
+        "avg" : 505.4484210526316,
+        "max" : 522.0
+      },
+      "errorRate" : 0.0,
+      "throughputEventsPerSec" : 103.56255178127589,
+      "throughputStreamsPerSec" : 5.178127589063794,
+      "completionRate" : 1.0,
+      "totalStreams" : 50,
+      "completedStreams" : 50,
+      "failedStreams" : 0,
+      "totalEvents" : 1000,
+      "durationMs" : 9656
+    },
+    "server" : {
+      "activeConnections" : null,
+      "liveThreads" : null,
+      "tomcatBusyThreads" : null,
+      "cpuPct" : null,
+      "heapMb" : null,
+      "gcPauseSecPerSec" : null,
+      "hikariActive" : null,
+      "hikariPending" : null,
+      "r2dbcAcquired" : null
+    },
+    "limitReached" : false,
+    "limitReason" : null
+  }, {
+    "stageName" : "c=200",
+    "targetConnections" : 200,
+    "client" : {
+      "ttfbMs" : {
+        "p50" : 99.0,
+        "p95" : 151.0,
+        "p99" : 170.0,
+        "avg" : 100.87,
+        "max" : 171.0
+      },
+      "eventGapMs" : {
+        "p50" : 502.0,
+        "p95" : 517.0,
+        "p99" : 520.0,
+        "avg" : 503.1639473684211,
+        "max" : 523.0
+      },
+      "errorRate" : 0.0,
+      "throughputEventsPerSec" : 410.71978642571105,
+      "throughputStreamsPerSec" : 20.53598932128555,
+      "completionRate" : 1.0,
+      "totalStreams" : 200,
+      "completedStreams" : 200,
+      "failedStreams" : 0,
+      "totalEvents" : 4000,
+      "durationMs" : 9739
+    },
+    "server" : {
+      "activeConnections" : null,
+      "liveThreads" : null,
+      "tomcatBusyThreads" : null,
+      "cpuPct" : null,
+      "heapMb" : null,
+      "gcPauseSecPerSec" : null,
+      "hikariActive" : null,
+      "hikariPending" : null,
+      "r2dbcAcquired" : null
+    },
+    "limitReached" : false,
+    "limitReason" : null
+  } ],
+  "limitStage" : null,
+  "recovery" : null,
+  "trendSamples" : [ ]
+}

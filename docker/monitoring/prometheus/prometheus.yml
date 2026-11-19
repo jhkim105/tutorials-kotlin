@@ -1,0 +1,23 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+# 호스트에서 실행 중인 앱(bootRun 또는 포트 매핑된 컨테이너)을 수집한다.
+# sse-compare 는 한 번에 한 앱만 기동하므로 내려가 있는 타깃은 DOWN 으로 표시된다.
+scrape_configs:
+  - job_name: sse-compare-mvc-sseemitter      # 구성 A, B
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["host.docker.internal:8081"]
+  - job_name: sse-compare-mvc-flow            # 구성 C1, C2
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["host.docker.internal:8082"]
+  - job_name: sse-compare-webflux-flux        # 구성 D
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["host.docker.internal:8083"]
+  - job_name: sse-compare-webflux-flow        # 구성 E
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["host.docker.internal:8084"]

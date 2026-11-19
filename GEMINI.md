@@ -18,7 +18,7 @@ The repository is structured by topic:
 - `clickhouse/`: ClickHouse integration with Docker and Spring (`docker-clickhouse`, `spring-clickhouse`)
 - `concurrency/`: Coroutines, WebFlux, Virtual Threads (`spring-web-vt`, `spring-webflux-coroutines`)
 - `databricks/`: Databricks integration examples
-- `docker/`: Docker Compose configurations (`docker-kafka`)
+- `docker/`: Docker Compose configurations (`docker-kafka`, `monitoring`, etc.)
 - `http-streaming/`: JSONL, SSE (`jsonl`, `sse`)
 - `io/`: File, JSON, BeanIO, Image, Markdown processing (`beanio`, `files`, `image-modules`, `json`, `markdown`)
 - `kafka/`: Spring Kafka, Kafka Streams, DLQ (`spring-kafka`, `spring-kafka-dlq`, `spring-kafka-dynamic`, `kafka-streams-vs-consumer`)
@@ -31,6 +31,7 @@ The repository is structured by topic:
 - `security/`: Spring Security, JWT, AuthZ (`spring-security`, `spring-security-jwt`, `jwt`, `authz/authz-demo-api`, `authz/authz-spring-security-api`)
 - `spring-cloud/`: Spring Cloud (`spring-cloud-aws`)
 - `spring-core/`: AOP, Logging, Profiles, Properties, Retry, Resilience4j (`spring-aop`, `spring-boot-2`, `spring-logging`, `spring-profiles`, `spring-properties`, `spring-resilience4j`, `spring-retry`)
+- `sse-compare/`: Multi-module Kotlin POST SSE streaming comparison & benchmark (MVC SseEmitter/VT, MVC Flow, WebFlux Flux/Flow, JPA/R2DBC, loadgen)
 - `testing/`: Kotest, Testcontainers, Test Coverage (`spring-kotest`, `testcontainers`, `testcontainers-mariadb`, `test-coverage`)
 - `web/`: Spring MVC, WebFlux, Validation, HTTP Client, REST Documentation (`spring-mvc`, `spring-mvc-validation`, `spring-web`, `spring-webflux`, `httpclient`, `rest-documentation`)
 - `websocket/`: STOMP, WebSocket examples (`websocket`, `websocket-stomp`)

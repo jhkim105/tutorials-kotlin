@@ -1,0 +1,14 @@
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration
+  r2dbc:
+    url: r2dbc:mysql://${DB_HOST:localhost}:${DB_PORT:3307}/${DB_NAME:sse_compare}?serverZoneId=UTC
+    username: ${DB_USER:sse}
+    password: ${DB_PASS:ssepass}
+    pool:
+      initial-size: 10
+      max-size: 10
+      max-acquire-time: 5s

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "A",
+    "module": "app-mvc-sseemitter",
+    "profiles": [],
+    "port": 8081,
+    "stack": "TOMCAT",
+    "concurrency": "PLATFORM",
+    "returnType": "SseEmitter",
+    "prometheusJob": "sse-compare-mvc-sseemitter"
+  },
+  {
+    "id": "B",
+    "module": "app-mvc-sseemitter",
+    "profiles": ["vt"],
+    "port": 8081,
+    "stack": "TOMCAT",
+    "concurrency": "VIRTUAL",
+    "returnType": "SseEmitter",
+    "prometheusJob": "sse-compare-mvc-sseemitter"
+  },
+  {
+    "id": "C1",
+    "module": "app-mvc-flow",
+    "profiles": [],
+    "port": 8082,
+    "stack": "TOMCAT",
+    "concurrency": "COROUTINE_DEFAULT",
+    "returnType": "Flow",
+    "prometheusJob": "sse-compare-mvc-flow"
+  },
+  {
+    "id": "C2",
+    "module": "app-mvc-flow",
+    "profiles": ["vt"],
+    "port": 8082,
+    "stack": "TOMCAT",
+    "concurrency": "COROUTINE_VT",
+    "returnType": "Flow",
+    "prometheusJob": "sse-compare-mvc-flow"
+  },
+  {
+    "id": "D",
+    "module": "app-webflux-flux",
+    "profiles": [],
+    "port": 8083,
+    "stack": "NETTY",
+    "concurrency": "REACTOR",
+    "returnType": "Flux",
+    "prometheusJob": "sse-compare-webflux-flux"
+  },
+  {
+    "id": "E",
+    "module": "app-webflux-flow",
+    "profiles": [],
+    "port": 8084,
+    "stack": "NETTY",
+    "concurrency": "COROUTINE_SUSPEND",
+    "returnType": "Flow",
+    "prometheusJob": "sse-compare-webflux-flow"
+  }
+]

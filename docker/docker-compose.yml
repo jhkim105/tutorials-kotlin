@@ -1,0 +1,22 @@
+name: tutorials-infra
+
+# ==============================================================================
+# 기본 표준 인프라 (단독 Standalone 환경)
+# ==============================================================================
+include:
+  - path: mysql/docker-compose.yml
+  - path: postgresql/docker-compose.yml
+  - path: redis/docker-compose.yml
+  - path: kafka/docker-compose.yml
+  - path: mongodb/docker-compose.yml
+  - path: clickhouse/docker-compose.yml
+  - path: monitoring/docker-compose.yml
+
+# ==============================================================================
+# 특수 클러스터/복제 환경 (필요 시 주석을 해제하거나 해당 디렉토리에서 단독 실행)
+# ※ 주의: mysql-replication, redis-cluster, mongodb-cluster는 기본 포트(3306, 6379, 27017)가
+#         위의 단독 인스턴스와 충돌하므로 단독 인스턴스를 내린 후 실행해야 합니다.
+# ==============================================================================
+#  - path: mysql-replication/docker-compose.yml
+#  - path: redis-cluster/docker-compose.yml
+#  - path: mongodb-cluster/docker-compose.yml

@@ -1,0 +1,4 @@
+sse:
+  compare:
+    mvc-flow:
+      dispatcher: vt
